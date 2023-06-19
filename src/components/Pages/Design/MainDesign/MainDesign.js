@@ -107,10 +107,6 @@ const MainDesign = () => {
   setSelectedItems([]);
  };
 
- const handleCategoryChange = (category) => {
-  setSelectedCategory(category);
- };
-
  const handleFilterChange = (filters) => {
   setSelectedFilters(filters);
  };

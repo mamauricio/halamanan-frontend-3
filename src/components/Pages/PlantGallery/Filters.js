@@ -121,7 +121,7 @@ const Filters = ({ onFilterChange }) => {
         labelId="category-label"
         id="category-selector"
         value={selectedCategory}
-        // defaultValue={'all'}
+        defaultValue={'all'}
         label={selectedCategory}
         onChange={handleCategoryChange}
        >
@@ -132,14 +132,14 @@ const Filters = ({ onFilterChange }) => {
          All
         </MenuItem>
         <MenuItem
-         key="Softscape"
-         value="Softscape"
+         key="softscape"
+         value="softscape"
         >
          Softscape
         </MenuItem>
         <MenuItem
-         key="Hardscape"
-         value="Hardscape"
+         key="hardscape"
+         value="hardscape"
         >
          Hardscape
         </MenuItem>

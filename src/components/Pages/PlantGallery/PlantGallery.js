@@ -382,6 +382,7 @@ const PlantGallery = () => {
                  <strong>Item Information: </strong>
                  {item.itemInformation}
                 </div>
+
                 <div className="itemType">
                  <strong>Item type: </strong>
                  <span>
