@@ -132,14 +132,14 @@ const Filters = ({ onFilterChange }) => {
          All
         </MenuItem>
         <MenuItem
-         key="softscape"
-         value="softscape"
+         key="Softscape"
+         value="Softscape"
         >
          Softscape
         </MenuItem>
         <MenuItem
-         key="hardscape"
-         value="hardscape"
+         key="Hardscape"
+         value="Hardscape"
         >
          Hardscape
         </MenuItem>
