@@ -77,7 +77,7 @@ const AddNewItemButton = ({ handleSuccess }) => {
           method: 'POST',
           body: JSON.stringify(newItem),
           headers: {
-            'Content-type': 'application/json',
+            // 'Content-type': 'application/json',
           },
         }
       );

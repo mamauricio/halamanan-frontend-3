@@ -23,7 +23,7 @@ const ApproveButton = (itemData) => {
         method: 'POST',
         body: JSON.stringify(item),
         headers: {
-          'Content-type': 'application/json',
+          // 'Content-type': 'application/json',
         },
       }
     );

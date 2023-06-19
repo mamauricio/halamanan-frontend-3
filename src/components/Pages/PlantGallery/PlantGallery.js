@@ -114,7 +114,7 @@ const PlantGallery = () => {
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
             token: sessionStorage.getItem('token'),
           },
           body: JSON.stringify({ itemId }),
@@ -145,7 +145,7 @@ const PlantGallery = () => {
         {
           method: 'DELETE',
           headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
             token: sessionStorage.getItem('token'),
           },
           body: JSON.stringify({ itemId }),

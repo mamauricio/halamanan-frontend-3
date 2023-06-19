@@ -20,7 +20,7 @@ const UserDesigns = ({ handleSelectedDesign }) => {
         `https://halamanan-197e9734b120.herokuapp.com/designs`,
         {
           headers: {
-            'content-type': 'text/json',
+            // 'content-type': 'text/json',
             token: `${sessionStorage.getItem('token')}`,
           },
         }

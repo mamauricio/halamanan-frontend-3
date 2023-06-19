@@ -69,7 +69,7 @@ const SaveDesignButton = ({
               method: 'POST',
               body: JSON.stringify(design),
               headers: {
-                'Content-type': 'application/json',
+                // 'Content-type': 'application/json',
               },
             }
           )
