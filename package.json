@@ -1,0 +1,62 @@
+{
+  "proxy": "https://halamanan-197e9734b120.herokuapp.com/",
+  "name": "halamanan",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.11.13",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
+    "canvas-toBlob": "^1.0.0",
+    "dependencies": "0.0.1",
+    "file-saver": "^2.0.5",
+    "framer-motion": "^10.12.16",
+    "html2canvas": "^1.4.1",
+    "immutability-helper": "^3.1.1",
+    "mui": "0.0.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.6.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.35.0",
+    "react-responsive-carousel": "^3.2.23",
+    "react-rnd": "^10.4.1",
+    "react-router-dom": "^6.10.0",
+    "react-scripts": "5.0.1",
+    "react-slideshow-image": "^4.2.1",
+    "react-snap-carousel": "^0.3.2",
+    "react-transition-group": "^4.4.5",
+    "react-uuid": "^2.0.0",
+    "uuidv4": "^6.2.13",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

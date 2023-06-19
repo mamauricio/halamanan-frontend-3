@@ -1,0 +1,8 @@
+.container{
+    display: flex;
+    direction: row;
+    width: 100%;
+
+    /* background-color:rgb(169, 168, 131); */
+
+}

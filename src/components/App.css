@@ -1,0 +1,48 @@
+/* * {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18px;
+} */
+
+/* :any-link {
+    text-decoration: none;
+    color: white;
+} */
+
+div {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: justify;
+    color: white;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: white;
+    padding-right: 2px;
+    border-radius: 10px 10px 10px 0px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #1F2B39;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 5px;
+}   
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    border-radius: 0px 10px 10px 0px;
+}
+
+div{
+    user-select: none;
+}
+
+img{
+    user-select: none;
+}

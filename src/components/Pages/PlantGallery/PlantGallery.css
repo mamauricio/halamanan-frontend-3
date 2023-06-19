@@ -1,0 +1,120 @@
+.itemContainer{
+    cursor: pointer;
+    position:relative;
+    height: 100%;
+    width: 220px;
+    background-color: #264933;
+    margin: 15px;
+    padding: 15px;
+    text-align: center;
+    border-width: 1px;
+    border-radius: 20px;
+    transition: max-height 1s ease-in-out, width 1s ease-in-out, height 1s ease-in-out;
+    max-height: 300px;
+    overFlow: contain;
+}
+
+.itemContainer.active{
+    z-index: 1;
+    max-height: 1000px;
+    text-align: left;
+}
+
+.active{
+    max-height:800px;
+    width:800px;
+}
+
+.imageContainerContainer{
+    transition: background-color 0.5s ease-in-out;
+    border-radius: 10px;
+    
+}
+.imageContainerContainer.active {
+    background-color: orange;    
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.imageContainerContainer.active .itemLabel{
+    margin-left: 6%;
+    border: solid;
+    border-width: 1px;
+    border-color: #264933;
+    
+}
+.imageContainer{
+    background-color: orange;
+    border-radius: 10px;
+    height: 250px;
+    width: 220px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-height: 250px;
+    transition: max-height 1s ease-in-out, width 1s ease-in-out;
+}
+
+.imageContainer.active{
+    max-height: 800px;
+    height: 400px;
+    width: 400px;
+    border: solid;
+    border-width: 1px;
+    border-color: #264933;
+}
+
+.imageContainer img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    float: center;
+    bottom: 0;
+    left: 0;
+}
+
+.informationContainer{
+    transition: max-height 1s ease-in, width 1s ease-in-out, height 1s ease-in-out, position 1s ease-in-out, opacity 2s ease;
+    opacity: 0;
+    border-radius: 10px;
+    color: white;   
+    width: 200px;
+    margin-right: 5px;
+    max-height: 200px;
+}
+
+.informationContainer.active {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 10px;
+    margin-top: 30px;
+    padding-right: 10px;
+    padding-left: 5px;
+    text-align:left;
+    width: 350px;
+    max-height: 800px;
+    opacity: 1;
+    background-color: #264933;
+    box-shadow: 0px 1px 15px #162939;
+}
+
+.itemLabel {
+    margin-top: 3px;
+    width: 80%;
+    max-width: 300px;
+    background-color: rgba(255, 255, 255, 1);
+    color: #264933;
+    text-align: center;
+    position: static;
+    border-radius: 5px;
+    font-size: 18px;
+    margin-left: 10%;
+}
+
+.informationContainer.active div{
+    margin-top: 10px;
+    padding-bottom: 5px;
+}
