@@ -29,7 +29,12 @@ const Item = (props) => {
 
  useEffect(() => {
   if (imageLoaded) {
-   const newData = { width, height, x, y };
+   const newData = {
+    width: width || props.width,
+    height: height || props.height,
+    x,
+    y,
+   };
    dispatch({
     type: 'RESIZE_ITEM',
     payload: {
