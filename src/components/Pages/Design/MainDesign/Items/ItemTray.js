@@ -91,7 +91,7 @@ const ItemTray = ({ handleAddItem }) => {
    <ImageList
     cols={2}
     rowHeight={250}
-    gap={2}
+    gap={10}
     sx={{
      height: '80vh',
      width: '100%',
