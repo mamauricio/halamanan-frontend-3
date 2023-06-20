@@ -117,8 +117,8 @@ const Item = (props) => {
        key={props.itemKey}
        label={props.itemName}
        src={props.imageUrl}
-       width={initialSize.width}
-       height={initialSize.height}
+       width={width}
+       height={height}
        onClick={() => handleClick(props.itemKey)}
        style={{ zIndex: selectedItem === props.itemKey ? 1 : 0 }}
       />
