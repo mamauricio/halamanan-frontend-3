@@ -81,7 +81,7 @@ const SaveDesignButton = ({
       })
       .then((data) => {
        try {
-        window.location.href = `'http://halamanan.netlify.app/designs/${data}`;
+        window.location.href = `http://halamanan.netlify.app/designs/${data}`;
        } catch {
         setError(data.error.message);
        }
