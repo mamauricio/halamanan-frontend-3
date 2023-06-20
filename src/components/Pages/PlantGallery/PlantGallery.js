@@ -100,7 +100,6 @@ const PlantGallery = () => {
   ) {
    return false;
   }
-
   return true;
  });
 
