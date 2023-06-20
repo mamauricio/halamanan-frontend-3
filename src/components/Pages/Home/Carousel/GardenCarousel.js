@@ -29,7 +29,7 @@ const images = [
   infromationSource: 'https://gardencenterohio.com/butterfly-garden/',
   imageSource:
    'https://www.twulasso.com/butterfly-garden-dedicated-to-enthusiast-and-professor-jeff-robb/',
-  imgUrl: '/Sample_landscapes/butterfly.jpeg',
+  imgUrl: '/Sample_landscapes/butterfly.jpg',
  },
  {
   name: 'Client Project',

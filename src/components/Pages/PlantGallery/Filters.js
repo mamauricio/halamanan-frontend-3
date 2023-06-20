@@ -55,7 +55,6 @@ const Filters = ({ onFilterChange }) => {
   setSelectedCategory(event.target.value);
   setSelectedFilters([]);
   setShowFilters(false);
-  //console.log((event.target.value);
  };
 
  const handleFilterChange = (event) => {
@@ -87,7 +86,6 @@ const Filters = ({ onFilterChange }) => {
    className="categories-filters"
    sx={{ display: 'flex', flexWrap: 'true' }}
   >
-   {console.log(subCategories)}
    <Button
     onClick={handleShowFilters}
     aria-controls={open ? 'basic-menu' : undefined}
@@ -197,4 +195,3 @@ const Filters = ({ onFilterChange }) => {
 };
 
 export default Filters;
-
