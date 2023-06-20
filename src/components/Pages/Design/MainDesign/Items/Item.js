@@ -30,8 +30,8 @@ const Item = (props) => {
  useEffect(() => {
   if (imageLoaded) {
    const newData = {
-    width: width || props.width,
-    height: height || props.height,
+    width: props.width ? props.width : width,
+    height: props.height ? props.height : height,
     x,
     y,
    };
