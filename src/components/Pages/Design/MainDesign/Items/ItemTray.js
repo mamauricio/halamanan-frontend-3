@@ -73,8 +73,9 @@ const ItemTray = ({ handleAddItem }) => {
          src={item.imageUrl}
          style={{
           boxSizing: 'border-box',
-          height: '170px',
+          height: '100%',
           maxWidth: '100%',
+          objectFit: 'cover',
          }}
         />
        </Box>
@@ -101,7 +102,7 @@ const ItemTray = ({ handleAddItem }) => {
       {selectedItem && selectedItem._id === item._id && (
        <ImageListItem
         key={`${item._id}-details`}
-        rows={1}
+        rows={2}
         cols={2}
         sx={{ height: '400px', bgcolor: 'orange' }}
        >
