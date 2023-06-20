@@ -74,6 +74,7 @@ const ItemTray = ({ handleAddItem }) => {
          style={{
           boxSizing: 'border-box',
           height: '170px',
+          maxWidth: '100%',
          }}
         />
        </Box>
