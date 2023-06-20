@@ -59,7 +59,7 @@ const MainDesign = () => {
    const fetchItem = async () => {
     try {
      const response = await axios.get(
-      `https://https://halamanan-197e9734b120.herokuapp.com/designs/${id}`
+      `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`
      );
      const fetchedItem = response.data;
 
