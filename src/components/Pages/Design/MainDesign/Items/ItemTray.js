@@ -87,11 +87,11 @@ const ItemTray = ({ handleAddItem }) => {
 
  return (
   <>
-   <Filters onFilterChange={handleFilterChange} />;
+   <Filters onFilterChange={handleFilterChange} />
    <ImageList
     cols={2}
-    rowHeight={230}
-    gap={1}
+    rowHeight={250}
+    gap={2}
     sx={{
      height: '80vh',
      width: '100%',
