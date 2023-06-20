@@ -15,7 +15,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Fade from '@mui/material/Fade';
 
 import DesignArea from './DesignArea/DesignArea';
-import Filters from '../../PlantGallery/Filters';
 import ReplaceImageButton from './Buttons/ReplaceImageButton';
 import SaveDesignButton from './Buttons/SaveDesignButton';
 import ResetButton from './Buttons/ResetButton';
@@ -58,24 +57,21 @@ const MainDesign = () => {
  useEffect(() => {
   if (isValidObjectId(id)) {
    const fetchItem = async () => {
-    //console.log(('main design editing');
     try {
      const response = await axios.get(
-      `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`
+      `https://halamanan-197e9734b120.herokuapp.com/${id}`
      );
      const fetchedItem = response.data;
 
      setDesignName(fetchedItem.designName);
      dispatch({ type: 'GET_ITEMS', payload: fetchedItem.items });
      setBackgroundImage(fetchedItem.backgroundImage);
-     //console.log((fetchedItem);
      setShowDesign(true);
     } catch (error) {}
    };
 
    fetchItem();
   } else {
-   //console.log(('main design hello world');
   }
  }, [id]);
 
@@ -114,6 +110,7 @@ const MainDesign = () => {
     itemKey: items.length + 1,
     itemName: designAreaItem.itemName,
     width: '200px',
+    height: '200px',
     x: 200,
     y: 200,
     imageUrl: designAreaItem.imageUrl,
