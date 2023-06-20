@@ -54,7 +54,6 @@ const PlantGallery = () => {
     setItems(fetchedItems);
    })
    .catch((error) => {
-    //console.log(('Error fetching items: ', error.message);
     setError(error.message);
    });
  };
@@ -73,9 +72,7 @@ const PlantGallery = () => {
 
    const data = await response.json();
    setFavorites(data);
-   //console.log((favorites);
   } catch (error) {
-   //console.log(('Error fetching user favorites:', error);
    setError(error.message);
   }
  };
@@ -97,7 +94,10 @@ const PlantGallery = () => {
    return false;
   }
 
-  if (selectedFilters.length > 0 && !selectedFilters.includes(item.type)) {
+  if (
+   selectedFilters.length > 0 &&
+   item.type.some((type) => !selectedFilters.includes(type))
+  ) {
    return false;
   }
 
@@ -119,7 +119,6 @@ const PlantGallery = () => {
      body: JSON.stringify({ itemId }),
     }
    );
-   //console.log((response);
 
    if (response.ok) {
     const updated = [...favorites, { itemId }];
@@ -128,12 +127,8 @@ const PlantGallery = () => {
     openAlert();
     closeAlert();
    } else {
-    //console.log(('Error adding item to favorites');
    }
-  } catch (error) {
-   //console.log(('Error adding item to favorites:', error);
-  }
-  //console.log(('adding to favorites: ' + itemId);
+  } catch (error) {}
  };
 
  const removeFromFavorites = async (event, itemId) => {
@@ -158,7 +153,6 @@ const PlantGallery = () => {
     openAlert();
     closeAlert();
    }
-   //console.log((response);
   } catch {}
  };
 
@@ -177,11 +171,9 @@ const PlantGallery = () => {
  };
 
  const handleSuccess = () => {
-  // setShowAlert(true);
   setAlertMessage('Successfully Added Iten');
   openAlert();
   closeAlert();
-  // <CustomAlert showAlert={true} closeAlert/>
  };
 
  const CustomAlert = ({ showAlert, closeAlert }) => {
