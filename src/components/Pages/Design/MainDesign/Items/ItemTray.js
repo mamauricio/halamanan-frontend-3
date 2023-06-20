@@ -46,9 +46,7 @@ const ItemTray = ({ handleAddItem }) => {
 
    const data = await response.json();
    setFavorites(data);
-  } catch (error) {
-   setError(error.message);
-  }
+  } catch (error) {}
  };
 
  useEffect(() => {
