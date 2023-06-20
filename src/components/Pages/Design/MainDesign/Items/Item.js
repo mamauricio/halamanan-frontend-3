@@ -9,8 +9,8 @@ import RemoveIcon from '@mui/icons-material/Remove';
 
 const Item = (props) => {
  const [imageLoaded, setImageLoaded] = useState(false);
- const [width, setWidth] = useState(0);
- const [height, setHeight] = useState(0);
+ const [width, setWidth] = useState(props.width);
+ const [height, setHeight] = useState(props.height);
  const [x, setX] = useState(props.x);
  const [y, setY] = useState(props.y);
  const [selectedItem, setSelectedItem] = useState(null);
