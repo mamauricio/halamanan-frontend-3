@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import InfoIcon from '@mui/icons-material/Info';
+import Filters from '../../../PlantGallery/Filters';
 
 import axios from 'axios';
 
@@ -16,6 +17,7 @@ const ItemTray = ({ handleAddItem }) => {
  const [selectedItem, setSelectedItem] = useState('');
  const [selectedFilters, setSelectedFilters] = useState([]);
  const [selectedCategory, setSelectedCategory] = useState();
+ const [favorites, setFavorites] = useState([]);
 
  const handleFilterChange = (filters, category) => {
   setSelectedCategory(category);
@@ -30,6 +32,25 @@ const ItemTray = ({ handleAddItem }) => {
   }
  };
 
+ const fetchUserFavorites = async () => {
+  try {
+   const token = sessionStorage.getItem('token');
+   const response = await fetch(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites',
+    {
+     headers: {
+      token: token,
+     },
+    }
+   );
+
+   const data = await response.json();
+   setFavorites(data);
+  } catch (error) {
+   setError(error.message);
+  }
+ };
+
  useEffect(() => {
   axios
    .get('https://halamanan-197e9734b120.herokuapp.com/gallery')
@@ -39,6 +60,10 @@ const ItemTray = ({ handleAddItem }) => {
    })
    .catch((error) => {});
  }, []);
+
+ const isItemInFavorites = (itemId) => {
+  return favorites.some((favorite) => favorite.itemId === itemId);
+ };
 
  const filteredItems = items.filter((item) => {
   if (selectedCategory === 'favorites' && isItemInFavorites(item._id)) {
