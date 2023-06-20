@@ -13,7 +13,6 @@ import {
 const categories = {
  softscape: [
   'Shrub',
-  'Tree',
   'Grass',
   'Flower',
   'Vegetative',
@@ -24,6 +23,7 @@ const categories = {
   'Palm',
   'Succulent',
   'Fern',
+  'Tree',
  ],
  hardscape: ['Pots', 'Lights', 'Fixtures', 'Stone', 'Pavers', 'Wood'],
 };
@@ -87,6 +87,7 @@ const Filters = ({ onFilterChange }) => {
    className="categories-filters"
    sx={{ display: 'flex', flexWrap: 'true' }}
   >
+   {console.log(subCategories)}
    <Button
     onClick={handleShowFilters}
     aria-controls={open ? 'basic-menu' : undefined}
@@ -121,7 +122,7 @@ const Filters = ({ onFilterChange }) => {
         labelId="category-label"
         id="category-selector"
         value={selectedCategory}
-        defaultValue={'all'}
+        // defaultValue={'all'}
         label={selectedCategory}
         onChange={handleCategoryChange}
        >
@@ -196,3 +197,4 @@ const Filters = ({ onFilterChange }) => {
 };
 
 export default Filters;
+
