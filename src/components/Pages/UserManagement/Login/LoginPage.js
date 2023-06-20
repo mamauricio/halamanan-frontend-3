@@ -47,7 +47,7 @@ const LoginPage = ({ handleAuthenticate }) => {
     password: password,
    },
    withCredentials: true,
-   url: 'https://halamanan-197e9734b120.herokuapp.com/signup',
+   url: 'http://localhost:3001/signup',
   })
    .then((response) => {
     setAlertMessage('Signed up succesfully. Proceed to login.');
@@ -77,7 +77,7 @@ const LoginPage = ({ handleAuthenticate }) => {
    },
    withCredentials: true,
    credentials: 'include',
-   url: 'https://halamanan-197e9734b120.herokuapp.com/login',
+   url: 'http://localhost:3001/login',
   })
    .then((response) => {
     if (response.data === 'admin') {
@@ -125,8 +125,8 @@ const LoginPage = ({ handleAuthenticate }) => {
      position: 'absolute',
      display: 'flex',
      flexDirection: 'column',
-     width: 300,
-     height: 600,
+     //  width: 300,
+     //  height: 600,
      left: '50%',
      top: '50%',
      transform: 'translate(-50%, -50%)',
@@ -139,18 +139,20 @@ const LoginPage = ({ handleAuthenticate }) => {
      backgroundColor: 'primary.main',
     }}
    >
-    <Box sx={{ color: 'inherit', mb: 2 }}>
+    {open && (
+     <Grow in={open}>
+      <Alert
+       severity={error ? 'error' : 'success'}
+       onClose={handleClose}
+       sx={{ color: 'primary.main', backgroundColor: error ? 'red' : 'orange' }}
+      >
+       {error ? error : alertMessage}
+      </Alert>
+     </Grow>
+    )}
+    <Box sx={{ color: 'inherit' }}>
      <h1>Halamanan </h1>
     </Box>
-    <Grow in={open}>
-     <Alert
-      severity={error ? 'error' : 'success'}
-      onClose={handleClose}
-      sx={{ color: 'primary.main', backgroundColor: error ? 'red' : 'orange' }}
-     >
-      {error ? error : alertMessage}
-     </Alert>
-    </Grow>
     {showLoginForm ? (
      <>
       <Box
@@ -165,7 +167,7 @@ const LoginPage = ({ handleAuthenticate }) => {
         p: 1,
         color: 'white',
         borderRadius: 2,
-        mb: 3,
+        // mb: 3,
        }}
       >
        <TextField
@@ -178,9 +180,7 @@ const LoginPage = ({ handleAuthenticate }) => {
          handleEmail(e.target.value);
         }}
         required
-        sx={{
-         py: 2,
-        }}
+        sx={{}}
        />
        <TextField
         error={passwordError}
@@ -196,7 +196,6 @@ const LoginPage = ({ handleAuthenticate }) => {
        <Box
         sx={{
          pt: 1,
-         width: '200px',
          display: 'flex',
          flexDirection: 'row',
          justifyContent: 'space-between',
@@ -244,7 +243,16 @@ const LoginPage = ({ handleAuthenticate }) => {
       <Box
        component="form"
        onSubmit={handleSignUp}
-       sx={{ bgcolor: 'orange', p: 2, borderRadius: 2 }}
+       sx={{
+        bgcolor: 'orange',
+        p: 2,
+        borderRadius: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyConent: 'center',
+        alignItems: 'center',
+        width: '400px',
+       }}
       >
        <TextField
         type="text"
@@ -283,9 +291,10 @@ const LoginPage = ({ handleAuthenticate }) => {
        <Box
         sx={{
          m: 2,
+         width: '50%',
          display: 'flex',
          flexDirection: 'row',
-         justifyContent: 'space-evenly',
+         justifyContent: 'space-between',
         }}
        >
         <Button
