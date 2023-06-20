@@ -47,8 +47,6 @@ const MainDesign = () => {
   setAnchorEl(null);
  };
 
- const [selectedFilters, setSelectedFilters] = useState([]);
- const [selectedCategory, setSelectedCategory] = useState();
  const [showDesign, setShowDesign] = useState(false);
  const [aspectRatio, setAspectRatio] = useState('');
 
@@ -107,10 +105,6 @@ const MainDesign = () => {
   setSelectedItems([]);
  };
 
- const handleFilterChange = (filters) => {
-  setSelectedFilters(filters);
- };
-
  const handleDesignName = (event) => {
   setDesignName(event);
  };
@@ -124,8 +118,6 @@ const MainDesign = () => {
     y: 200,
     imageUrl: designAreaItem.imageUrl,
    };
-
-   //console.log((newItem);
 
    dispatch({
     type: 'ADD_NEW_ITEM',
@@ -167,7 +159,7 @@ const MainDesign = () => {
        <Grid
         item
         md={12}
-        xl={9}
+        xl={8}
        >
         <Box sx={{ mb: 1 }}>
          <TextField
@@ -242,7 +234,7 @@ const MainDesign = () => {
        <Grid
         item
         xs={3}
-        xl={3}
+        xl={4}
        >
         <Box
          sx={{
@@ -251,7 +243,6 @@ const MainDesign = () => {
           pt: 1,
          }}
         >
-         <Filters onFilterChange={handleFilterChange} />
          <Box
           sx={{
            bgcolor: 'background.default',

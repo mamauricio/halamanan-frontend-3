@@ -14,7 +14,13 @@ import axios from 'axios';
 const ItemTray = ({ handleAddItem }) => {
  const [items, setItems] = useState([]);
  const [selectedItem, setSelectedItem] = useState('');
+ const [selectedFilters, setSelectedFilters] = useState([]);
+ const [selectedCategory, setSelectedCategory] = useState();
 
+ const handleFilterChange = (filters, category) => {
+  setSelectedCategory(category);
+  setSelectedFilters(filters);
+ };
  const showItemDetails = (event, item) => {
   event.stopPropagation();
   if (selectedItem._id === item._id) {
@@ -34,8 +40,31 @@ const ItemTray = ({ handleAddItem }) => {
    .catch((error) => {});
  }, []);
 
+ const filteredItems = items.filter((item) => {
+  if (selectedCategory === 'favorites' && isItemInFavorites(item._id)) {
+   return true;
+  }
+
+  if (
+   selectedCategory &&
+   selectedCategory !== 'all' &&
+   selectedCategory !== item.category
+  ) {
+   return false;
+  }
+
+  if (
+   selectedFilters.length > 0 &&
+   item.type.some((type) => !selectedFilters.includes(type))
+  ) {
+   return false;
+  }
+  return true;
+ });
+
  return (
   <>
+   <Filters onFilterChange={handleFilterChange} />;
    <ImageList
     cols={2}
     rowHeight={230}
@@ -46,7 +75,7 @@ const ItemTray = ({ handleAddItem }) => {
      pt: 2,
     }}
    >
-    {items.map((item, index) => (
+    {filteredItems.map((item, index) => (
      <div key={index}>
       <ImageListItem
        key={index}
