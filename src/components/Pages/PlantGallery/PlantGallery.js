@@ -313,6 +313,52 @@ const PlantGallery = () => {
                justifyContent: 'center',
               }}
              >
+              {isItemInFavorites(item._id) ? (
+               <Button
+                sx={{
+                 display: 'flex',
+                 zIndex: 1,
+                 width: '1px',
+                 alignItems: 'center',
+                 justifyContent: 'center',
+                }}
+                onClick={(event) => {
+                 removeFromFavorites(event, item._id);
+                }}
+               >
+                {' '}
+                <StarIcon
+                 sx={{
+                  color:
+                   activeItem && activeItem.index === item.index
+                    ? 'primary.main'
+                    : 'orange',
+                 }}
+                />
+               </Button>
+              ) : (
+               <Button
+                sx={{
+                 display: 'flex',
+                 zIndex: 1,
+                 width: '1px',
+                 alignItems: 'center',
+                 justifyContent: 'center',
+                }}
+                onClick={(event) => {
+                 addToFavorites(event, item._id);
+                }}
+               >
+                <StarBorderIcon
+                 sx={{
+                  color:
+                   activeItem && activeItem.index === item.index
+                    ? 'primary.main'
+                    : 'orange',
+                 }}
+                />
+               </Button>
+              )}
               <Box
                className={
                 index === activeItem
@@ -320,38 +366,6 @@ const PlantGallery = () => {
                  : 'imageContainer'
                }
               >
-               {isItemInFavorites(item._id) ? (
-                <Button
-                 sx={{
-                  top: 7,
-                  left: '-40%',
-                  width: '10px',
-                  height: '20px',
-                 }}
-                 onClick={(event) => {
-                  removeFromFavorites(event, item._id);
-                 }}
-                >
-                 {' '}
-                 <StarIcon />
-                </Button>
-               ) : (
-                <Button
-                 sx={{
-                  top: 7,
-                  left: '-40%',
-                  width: '10px',
-                  height: '20px',
-                  zIndex: 1,
-                 }}
-                 onClick={(event) => {
-                  addToFavorites(event, item._id);
-                 }}
-                >
-                 <StarBorderIcon />
-                </Button>
-               )}
-
                <img src={item.imageUrl} />
               </Box>
 

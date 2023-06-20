@@ -4,7 +4,6 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Fade from '@mui/material/Fade';
 import Modal from '@mui/material/Modal';
 
@@ -126,6 +125,7 @@ const DesignPage = () => {
         boxShadow: 5,
         mt: 2,
         mr: 2,
+        overflowY: 'auto',
        }}
       >
        {selectedDesign ? (
