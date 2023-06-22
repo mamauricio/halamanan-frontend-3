@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Box, Modal } from '@mui/material';
 import axios from 'axios';
+import { useNewItemsContext } from '../../hooks/uewNewItemsContext';
+
 const ApproveButton = (itemData) => {
  const [open, setOpen] = useState(false);
  const handleOpen = () => setOpen(true);
  const handleClose = () => setOpen(false);
+ const { newItems, dispatch } = useNewItemsContext();
 
- const handleApprove = async ({ itemData }) => {
+ const handleApprove = async ({ itemData, handleSuccess }) => {
   const item = {
    itemName: itemData.newItemName,
    scientificName: itemData.newItemScientificName,
@@ -36,13 +39,19 @@ const ApproveButton = (itemData) => {
     },
    }
   );
+  dispatch({
+   type: 'REMOVE_NEW_ITEM',
+   payload: { id: itemData._id },
+  });
   handleClose();
+
+  handleSuccess('Successfully added item to the gallery');
  };
  return (
   <>
    <Button
     onClick={handleOpen}
-    sx={{ color: 'white', bgcolor: 'primary.main' }}
+    sx={{ color: 'white', bgcolor: 'primary.main', width: 'auto' }}
    >
     Approve
    </Button>

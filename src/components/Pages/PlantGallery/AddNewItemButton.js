@@ -33,8 +33,6 @@ const AddNewItemButton = ({ handleSuccess }) => {
    ...itemData,
    [event.target.name]: event.target.value,
   });
-
-  //console.log((event.target.name + ':' + event.target.value);
  };
 
  const handleButtonClick = () => {
@@ -60,7 +58,6 @@ const AddNewItemButton = ({ handleSuccess }) => {
 
   try {
    const token = sessionStorage.getItem('token');
-   //console.log((token);
    const newItem = {
     newItemUserId: token,
     newItemName: itemData.newItemName,
@@ -70,7 +67,6 @@ const AddNewItemButton = ({ handleSuccess }) => {
     newItemScientificName: itemData.newItemScientificName,
     newItemUrl: itemData.newItemUrl,
    };
-   //console.log((newItem);
    const response = fetch(
     `https://halamanan-197e9734b120.herokuapp.com/gallery/newItem`,
     {

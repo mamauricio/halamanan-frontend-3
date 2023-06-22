@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Box, Modal } from '@mui/material';
-import './ReplaceImageButton.css';
+import FindReplaceIcon from '@mui/icons-material/FindReplace';
+
+// import './ReplaceImageButton.css';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 const ReplaceImageButton = ({ handleReplaceBackground }) => {
- const navigate = useNavigate();
+ //  const navigate = useNavigate();
  const { items, dispatch } = useItemsContext();
  const [open, setOpen] = useState(false);
  const handleOpen = () => setOpen(true);
@@ -38,7 +40,7 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
 
  return (
   <>
-   <Box
+   <Button
     sx={{
      color: 'primary.main',
      ':hover': { backgroundColor: 'orange', color: 'primary.main' },
@@ -52,8 +54,9 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
      onChange={replaceImage}
      style={{ display: 'none' }}
     />
+    <FindReplaceIcon />
     Replace Image
-   </Box>
+   </Button>
 
    <Modal
     open={open}
@@ -69,6 +72,9 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
       borderRadius: 2,
       p: 2,
       boxShadow: 2,
+      top: '40%',
+      left: '40%',
+      transform: 'translate(-50 -50)',
      }}
     >
      <Box

@@ -6,6 +6,7 @@ import {
  ThemeProvider,
  Grow,
  Alert,
+ Fade,
 } from '@mui/material/';
 import Filters from './Filters';
 import './PlantGallery.css';
@@ -38,12 +39,16 @@ const PlantGallery = () => {
  const [activeItem, setActiveItem] = useState(null);
  const [selectedFilters, setSelectedFilters] = useState([]);
  const [selectedCategory, setSelectedCategory] = useState([]);
+ const [openMain, setOpenMain] = useState(false);
  const childRef = useRef(null);
 
  useEffect(() => {
   fetchGalleryItems();
 
   fetchUserFavorites();
+  const timer = setTimeout(() => {
+   setOpenMain(true);
+  }, 100);
  }, []);
 
  const fetchGalleryItems = () => {
@@ -170,7 +175,7 @@ const PlantGallery = () => {
  };
 
  const handleSuccess = () => {
-  setAlertMessage('Successfully Added Iten');
+  setAlertMessage('Successfully sent request to admin');
   openAlert();
   closeAlert();
  };
@@ -190,235 +195,237 @@ const PlantGallery = () => {
 
  return (
   <ThemeProvider theme={theme}>
-   <Container
-    maxWidth={'xl'}
-    className="main-container"
-    disableGutters={true}
-   >
-    <Box
-     sx={{
-      mt: 2,
-      height: '90vh',
-      backgroundColor: 'primary.main',
-      borderRadius: 2,
-      boxShadow: 2,
-      overflowY: 'auto',
-      overflowWrap: 'break-word',
-      wordBreak: 'break-word',
-      hyphens: 'auto',
-     }}
+   <Fade in={openMain}>
+    <Container
+     maxWidth={'xl'}
+     className="main-container"
+     disableGutters={true}
     >
-     `
      <Box
       sx={{
-       width: 'auto',
-       display: 'flex',
-       justifyContent: 'space-between',
-       borderRadius: 1,
-       mx: 6,
+       mt: 2,
+       height: '90vh',
+       backgroundColor: 'primary.main',
+       borderRadius: 2,
+       boxShadow: 2,
+       overflowY: 'auto',
+       overflowWrap: 'break-word',
+       wordBreak: 'break-word',
+       hyphens: 'auto',
       }}
      >
+      `
       <Box
        sx={{
-        fontSize: '30px',
-        color: 'orange',
-       }}
-      >
-       Gallery
-      </Box>
-      <CustomAlert
-       showAlert={showAlert}
-       closeAlert={closeAlert}
-      />
-      <Box
-       sx={{
-        float: 'right',
+        width: 'auto',
         display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-       }}
-      >
-       <AddNewItemButton handleSuccess={handleSuccess} />
-       <Filters onFilterChange={handleFilterChange} />
-      </Box>
-     </Box>
-     <Container maxWidth={'xl'}>
-      <Box
-       sx={{
-        backgroundColor: 'background.default',
-        height: '80vh',
-        mt: 1,
-        overflowY: 'auto',
-        borderRadius: 2,
-        scrollbarColor: 'primary.main',
-        boxShadow: 2,
+        justifyContent: 'space-between',
+        borderRadius: 1,
+        mx: 6,
        }}
       >
        <Box
-        className="object-display"
-        display="flex"
-        flexWrap="wrap"
+        sx={{
+         fontSize: '30px',
+         color: 'orange',
+        }}
        >
-        {filteredItems.length === 0 ? (
-         <Box
-          sx={{
-           position: 'absolute',
-           top: '30%',
-           left: '50%',
-           transform: 'translateX(-50%) translateY(-60%)',
-           fontSize: '40px',
-           backgroundColor: 'primary.main',
-           color: 'white',
-           borderRadius: 2,
-           p: 2,
-          }}
-         >
-          No Items Found
-         </Box>
-        ) : (
-         <>
-          {filteredItems.map((item, index) => (
-           <Grow
-            in={filteredItems != null}
-            key={index}
-           >
-            <div
+        Gallery
+       </Box>
+       <CustomAlert
+        showAlert={showAlert}
+        closeAlert={closeAlert}
+       />
+       <Box
+        sx={{
+         float: 'right',
+         display: 'flex',
+         flexDirection: 'row',
+         justifyContent: 'space-around',
+        }}
+       >
+        <AddNewItemButton handleSuccess={handleSuccess} />
+        <Filters onFilterChange={handleFilterChange} />
+       </Box>
+      </Box>
+      <Container maxWidth={'xl'}>
+       <Box
+        sx={{
+         backgroundColor: 'background.default',
+         height: '80vh',
+         mt: 1,
+         overflowY: 'auto',
+         borderRadius: 2,
+         scrollbarColor: 'primary.main',
+         boxShadow: 2,
+        }}
+       >
+        <Box
+         className="object-display"
+         display="flex"
+         flexWrap="wrap"
+        >
+         {filteredItems.length === 0 ? (
+          <Box
+           sx={{
+            position: 'absolute',
+            top: '30%',
+            left: '50%',
+            transform: 'translateX(-50%) translateY(-60%)',
+            fontSize: '40px',
+            backgroundColor: 'primary.main',
+            color: 'white',
+            borderRadius: 2,
+            p: 2,
+           }}
+          >
+           No Items Found
+          </Box>
+         ) : (
+          <>
+           {filteredItems.map((item, index) => (
+            <Grow
+             in={filteredItems != null}
              key={index}
-             className={
-              index === activeItem ? 'itemContainer active' : 'itemContainer'
-             }
-             onClick={(event) => handleActiveItem(event, index)}
             >
-             <Box
+             <div
+              key={index}
               className={
-               index === activeItem
-                ? 'imageContainerContainer active'
-                : 'imageContainerContainer'
+               index === activeItem ? 'itemContainer active' : 'itemContainer'
               }
-              sx={{
-               display: 'flex',
-               flexDirection: 'column',
-               flexWrap: 'wrap',
-               width: '100%',
-               alignContent: 'left',
-               justifyContent: 'center',
-              }}
+              onClick={(event) => handleActiveItem(event, index)}
              >
-              {isItemInFavorites(item._id) ? (
-               <Button
-                sx={{
-                 display: 'flex',
-                 zIndex: 1,
-                 width: '1px',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                }}
-                onClick={(event) => {
-                 removeFromFavorites(event, item._id);
-                }}
-               >
-                {' '}
-                <StarIcon
-                 sx={{
-                  color:
-                   activeItem && activeItem.index === item.index
-                    ? 'primary.main'
-                    : 'orange',
-                 }}
-                />
-               </Button>
-              ) : (
-               <Button
-                sx={{
-                 display: 'flex',
-                 zIndex: 1,
-                 width: '1px',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                }}
-                onClick={(event) => {
-                 addToFavorites(event, item._id);
-                }}
-               >
-                <StarBorderIcon
-                 sx={{
-                  color:
-                   activeItem && activeItem.index === item.index
-                    ? 'primary.main'
-                    : 'orange',
-                 }}
-                />
-               </Button>
-              )}
               <Box
                className={
                 index === activeItem
-                 ? 'imageContainer active'
-                 : 'imageContainer'
+                 ? 'imageContainerContainer active'
+                 : 'imageContainerContainer'
+               }
+               sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexWrap: 'wrap',
+                width: '100%',
+                alignContent: 'left',
+                justifyContent: 'center',
+               }}
+              >
+               {isItemInFavorites(item._id) ? (
+                <Button
+                 sx={{
+                  display: 'flex',
+                  zIndex: 1,
+                  width: '1px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                 }}
+                 onClick={(event) => {
+                  removeFromFavorites(event, item._id);
+                 }}
+                >
+                 {' '}
+                 <StarIcon
+                  sx={{
+                   color:
+                    activeItem && activeItem.index === item.index
+                     ? 'primary.main'
+                     : 'orange',
+                  }}
+                 />
+                </Button>
+               ) : (
+                <Button
+                 sx={{
+                  display: 'flex',
+                  zIndex: 1,
+                  width: '1px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                 }}
+                 onClick={(event) => {
+                  addToFavorites(event, item._id);
+                 }}
+                >
+                 <StarBorderIcon
+                  sx={{
+                   color:
+                    activeItem && activeItem.index === item.index
+                     ? 'primary.main'
+                     : 'orange',
+                  }}
+                 />
+                </Button>
+               )}
+               <Box
+                className={
+                 index === activeItem
+                  ? 'imageContainer active'
+                  : 'imageContainer'
+                }
+               >
+                <img src={item.imageUrl} />
+               </Box>
+
+               <div className="itemLabel">
+                {item.itemName}
+                <br />
+                {item.scientificName && (
+                 <strong>
+                  <em>{item.scientificName}</em>
+                 </strong>
+                )}
+               </div>
+              </Box>
+              <Box
+               className={
+                index === activeItem
+                 ? 'informationContainer active'
+                 : 'informationContainer'
                }
               >
-               <img src={item.imageUrl} />
-              </Box>
-
-              <div className="itemLabel">
-               {item.itemName}
                <br />
-               {item.scientificName && (
-                <strong>
-                 <em>{item.scientificName}</em>
-                </strong>
-               )}
-              </div>
-             </Box>
-             <Box
-              className={
-               index === activeItem
-                ? 'informationContainer active'
-                : 'informationContainer'
-              }
-             >
-              <br />
-              {index === activeItem ? (
-               <div className="conditional">
-                <div
-                 ref={childRef}
-                 className="itemInformation"
-                >
-                 <strong>Item Information: </strong>
-                 {item.itemInformation}
-                </div>
+               {index === activeItem ? (
+                <div className="conditional">
+                 <div
+                  ref={childRef}
+                  className="itemInformation"
+                 >
+                  <strong>Item Information: </strong>
+                  {item.itemInformation}
+                 </div>
 
-                <div className="itemType">
-                 <strong>Item type: </strong>
-                 <span>
-                  {item.type.map((info, index) => (
-                   <span> {(index ? ', ' : '') + info} </span>
-                  ))}
-                 </span>
-                </div>
+                 <div className="itemType">
+                  <strong>Item type: </strong>
+                  <span>
+                   {item.type.map((info, index) => (
+                    <span> {(index ? ', ' : '') + info} </span>
+                   ))}
+                  </span>
+                 </div>
 
-                <div className="info-source">
-                 <strong>Information Source: </strong>
-                 <br />
-                 {item.informationSource}
+                 <div className="info-source">
+                  <strong>Information Source: </strong>
+                  <br />
+                  {item.informationSource}
+                 </div>
+                 <div className="image-source">
+                  <strong>Image Source: </strong>
+                  {item.imageSource}
+                 </div>
                 </div>
-                <div className="image-source">
-                 <strong>Image Source: </strong>
-                 {item.imageSource}
-                </div>
-               </div>
-              ) : null}
-             </Box>
-            </div>
-           </Grow>
-          ))}
-         </>
-        )}
+               ) : null}
+              </Box>
+             </div>
+            </Grow>
+           ))}
+          </>
+         )}
+        </Box>
        </Box>
-      </Box>
-     </Container>
-    </Box>
-   </Container>
+      </Container>
+     </Box>
+    </Container>
+   </Fade>
   </ThemeProvider>
  );
 };

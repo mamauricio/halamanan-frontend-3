@@ -180,6 +180,7 @@ const Filters = ({ onFilterChange }) => {
           }}
           variant="outlined"
           sx={{
+           width: '100%',
            backgroundColor: 'white',
            py: 0.5,
           }}

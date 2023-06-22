@@ -9,15 +9,19 @@ import {
 import Box from '@mui/material/Box';
 import InfoIcon from '@mui/icons-material/Info';
 import Filters from '../../../PlantGallery/Filters';
-
+import { useItemsContext } from '../../../../hooks/useItemsContext';
+import { useMediaQuery } from '@mui/material';
 import axios from 'axios';
 
 const ItemTray = ({ handleAddItem }) => {
- const [items, setItems] = useState([]);
+ const xs = useMediaQuery((theme) => theme.breakpoints.down('xs'));
+
+ const [itemTrayItems, setItemTrayItems] = useState([]);
  const [selectedItem, setSelectedItem] = useState('');
  const [selectedFilters, setSelectedFilters] = useState([]);
  const [selectedCategory, setSelectedCategory] = useState();
  const [favorites, setFavorites] = useState([]);
+ const { items, dispatch } = useItemsContext();
 
  const handleFilterChange = (filters, category) => {
   setSelectedCategory(category);
@@ -54,16 +58,18 @@ const ItemTray = ({ handleAddItem }) => {
    .get('https://halamanan-197e9734b120.herokuapp.com/gallery')
    .then((response) => {
     const fetchedItems = response.data;
-    setItems(fetchedItems);
+    setItemTrayItems(fetchedItems);
    })
    .catch((error) => {});
+
+  fetchUserFavorites();
  }, []);
 
  const isItemInFavorites = (itemId) => {
   return favorites.some((favorite) => favorite.itemId === itemId);
  };
 
- const filteredItems = items.filter((item) => {
+ const filteredItems = itemTrayItems.filter((item) => {
   if (selectedCategory === 'favorites' && isItemInFavorites(item._id)) {
    return true;
   }
@@ -89,7 +95,7 @@ const ItemTray = ({ handleAddItem }) => {
   <>
    <Filters onFilterChange={handleFilterChange} />
    <ImageList
-    cols={2}
+    cols={xs ? 7 : 3}
     rowHeight={250}
     gap={10}
     sx={{
@@ -99,11 +105,16 @@ const ItemTray = ({ handleAddItem }) => {
     }}
    >
     {filteredItems.map((item, index) => (
-     <div key={index}>
+     <div key={item._id + items.length + index}>
       <ImageListItem
-       key={index}
-       cols={1}
-       onClick={() => handleAddItem(item, { index })}
+       key={item._id + items.length + index}
+       cols={2}
+       onClick={() =>
+        handleAddItem({
+         designAreaItem: item,
+         itemKey: item._id + items.length + index,
+        })
+       }
        sx={{
         cursor: 'pointer',
         ':hover': { opacity: '0.8' },
@@ -155,8 +166,8 @@ const ItemTray = ({ handleAddItem }) => {
        <ImageListItem
         key={`${item._id}-details`}
         rows={2}
-        cols={2}
-        sx={{ height: '400px', bgcolor: 'orange' }}
+        col={2}
+        sx={{ height: '500px', bgcolor: 'orange' }}
        >
         <Box sx={{ color: 'primary.main', p: 2 }}>{item.itemInformation}</Box>
        </ImageListItem>

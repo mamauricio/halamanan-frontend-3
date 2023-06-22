@@ -23,7 +23,6 @@ const LoginPage = ({ handleAuthenticate }) => {
  const [alertMessage, setAlertMessage] = useState('');
 
  const handleOpen = () => {
-  //console.log(('opening alert');
   setOpen(true);
  };
  const handleClose = () => {
@@ -54,7 +53,6 @@ const LoginPage = ({ handleAuthenticate }) => {
     handleOpen();
     setShowLoginForm(true);
     handleClose();
-    console.log('signed up');
    })
    .catch((error) => {
     if (error.response) {
@@ -62,13 +60,13 @@ const LoginPage = ({ handleAuthenticate }) => {
      handleOpen();
      handleClose();
     } else {
-     console.log(error.response);
     }
    });
  };
 
  const handleLogin = async (event) => {
   event.preventDefault();
+
   const response = await axios({
    method: 'post',
    data: {
@@ -82,7 +80,7 @@ const LoginPage = ({ handleAuthenticate }) => {
    .then((response) => {
     if (response.data === 'admin') {
      handleAuthenticate('admin');
-    } else if (response.data.userId) {
+    } else if (response.data) {
      const hashedUserId = response.data.userId;
      handleAuthenticate(hashedUserId);
     } else {
@@ -180,7 +178,7 @@ const LoginPage = ({ handleAuthenticate }) => {
          handleEmail(e.target.value);
         }}
         required
-        sx={{}}
+        sx={{ my: 2 }}
        />
        <TextField
         error={passwordError}

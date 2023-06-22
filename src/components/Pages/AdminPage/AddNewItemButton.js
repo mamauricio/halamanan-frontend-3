@@ -61,7 +61,6 @@ const AddNewItemButton = () => {
 
  const handleEdit = async (event, itemData) => {
   event.preventDefault();
-  //console.log((itemData);
   const item = {
    itemName: itemData.itemName,
    scientificName: itemData.scientificName,

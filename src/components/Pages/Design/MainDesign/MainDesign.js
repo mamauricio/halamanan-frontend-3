@@ -10,8 +10,6 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Fade from '@mui/material/Fade';
 
 import DesignArea from './DesignArea/DesignArea';
@@ -19,10 +17,7 @@ import ReplaceImageButton from './Buttons/ReplaceImageButton';
 import SaveDesignButton from './Buttons/SaveDesignButton';
 import ResetButton from './Buttons/ResetButton';
 import ItemTray from './Items/ItemTray';
-import ParkIcon from '@mui/icons-material/Park';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import FindReplaceIcon from '@mui/icons-material/FindReplace';
 const MainDesign = () => {
  const { id } = useParams();
  const theme = useTheme();
@@ -104,10 +99,10 @@ const MainDesign = () => {
  const handleDesignName = (event) => {
   setDesignName(event);
  };
- const handleAddItem = (designAreaItem) => {
+ const handleAddItem = ({ designAreaItem, itemKey }) => {
   if (designAreaItem) {
    const newItem = {
-    itemKey: items.length + 1,
+    itemKey: itemKey,
     itemName: designAreaItem.itemName,
     width: '200px',
     height: '200px',
@@ -115,7 +110,6 @@ const MainDesign = () => {
     y: 200,
     imageUrl: designAreaItem.imageUrl,
    };
-
    dispatch({
     type: 'ADD_NEW_ITEM',
     payload: newItem,
@@ -158,7 +152,7 @@ const MainDesign = () => {
         md={12}
         xl={8}
        >
-        <Box sx={{ mb: 1 }}>
+        <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
          <TextField
           required
           label="Design Name"
@@ -168,57 +162,28 @@ const MainDesign = () => {
           }}
          />
 
-         <Box sx={{ float: 'right' }}>
+         <Box sx={{ display: 'flex' }}>
           <SaveDesignButton
            designName={designName}
            backgroundImage={backgroundImage}
            items={items}
            aspectRatio={aspectRatio}
           />
-
+          <ReplaceImageButton
+           handleReplaceBackground={handleReplaceBackground}
+          />
+          <ResetButton />
           <Button
-           id="menu-button"
-           aria-controls={open ? 'basic-menu' : undefined}
-           aria-haspopup="true"
-           aria-expanded={open ? 'true' : undefined}
-           onClick={handleClick}
-           sx={{}}
-          >
-           <ParkIcon fontSize="large" />
-          </Button>
-          <Menu
-           id="options-menu"
-           anchorEl={anchorEl}
-           open={open}
-           onClose={handleClose}
-           MenuListProps={{
-            'aria-labelledby': 'menu-button',
+           onClick={handleSaveToDevice}
+           sx={{
+            color: 'primary.main',
+            display: 'flex',
+            justifyContent: 'center',
            }}
           >
-           <MenuItem></MenuItem>
-           <MenuItem>
-            <FindReplaceIcon />
-            <ReplaceImageButton
-             handleReplaceBackground={handleReplaceBackground}
-            />
-           </MenuItem>
-           <MenuItem>
-            <RestartAltIcon /> <ResetButton />
-           </MenuItem>
-           <MenuItem>
-            <Box
-             onClick={handleSaveToDevice}
-             sx={{
-              color: 'primary.main',
-              display: 'flex',
-              justifyContent: 'center',
-             }}
-            >
-             <SaveAltIcon />
-             Download
-            </Box>
-           </MenuItem>
-          </Menu>
+           <SaveAltIcon />
+           Download
+          </Button>
          </Box>
         </Box>
 

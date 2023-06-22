@@ -9,10 +9,14 @@ import Grow from '@mui/material/Grow';
 import CreateNewDesignButton from '../MainDesign/Buttons/CreateNewDesignButton';
 import './UserDesigns.css';
 import { useDesignContext } from '../../../hooks/useDesignContext';
-
-const UserDesigns = ({ handleSelectedDesign }) => {
+import html2canvas from 'html2canvas';
+const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
  const navigate = useNavigate();
  const { designs, dispatch } = useDesignContext();
+ const [designName, setDesignName] = useState();
+ const [error, setError] = useState();
+ //  const [open, handleOpen]
+ const [aspectRatio, setAspectRatio] = useState();
  const [show, setShow] = useState(false);
  useEffect(() => {
   const fetchDesigns = async () => {
@@ -41,21 +45,71 @@ const UserDesigns = ({ handleSelectedDesign }) => {
   fetchDesigns();
  }, []);
 
+ const imageListItemStyle = {
+  backgroundColor: 'white',
+  borderRadius: 2,
+  p: 1,
+  mb: 1,
+  cursor: 'pointer',
+ };
+
+ const renderAtHomeStyle = {
+  cursor: 'cursor',
+  backgroundColor: 'white',
+  borderRadius: 2,
+  p: 1,
+  mb: 1,
+ };
+
  const handleClick = (design) => {
   handleSelectedDesign(design);
  };
 
- const handleCreateNewDesign = async ({ designName }) => {
-  navigate(`/designs/create`, {
-   state: {
-    backgroundImage: localStorage.getItem('backgroundImage'),
-    showDesign: true,
-    designName: designName,
-   },
-  });
- };
+ const handleCreateNewDesign = async () => {
+  const backgroundImage = localStorage.getItem('backgroundImage');
 
- //console.log((designs);
+  const image = new Image();
+  image.src = backgroundImage;
+  image.onload = () => {
+   const aspectRatio = image.width / image.height;
+   setAspectRatio(aspectRatio);
+  };
+
+  const designThumbnail = backgroundImage;
+
+  try {
+   const user_id = sessionStorage.getItem('token');
+   const design = {
+    designThumbnail,
+    user_id,
+    designName: `Design-${designs ? designs.length + 1 : 1}`,
+    items: [],
+    backgroundImage,
+    aspectRatio,
+   };
+   const response = await fetch(
+    `https://halamanan-197e9734b120.herokuapp.com/designs/create`,
+    {
+     method: 'POST',
+     body: JSON.stringify(design),
+     headers: {
+      'Content-type': 'application/json',
+     },
+    }
+   );
+   console.log(response);
+   if (!response.ok) {
+    return;
+   }
+
+   const data = await response.json();
+   navigate(`/designs/${data}`);
+  } catch (error) {
+   console.error(error);
+   setError(error);
+   setError(null);
+  }
+ };
 
  return (
   <Container
@@ -108,14 +162,7 @@ const UserDesigns = ({ handleSelectedDesign }) => {
           className="image"
           key={index}
           onClick={() => handleClick(design)}
-          sx={{
-           backgroundColor: 'white',
-           borderRadius: 2,
-           p: 1,
-           mb: 1,
-           cursor: 'pointer',
-           ':hover': { opacity: 0.8 },
-          }}
+          sx={renderAtHome ? renderAtHomeStyle : imageListItemStyle}
          >
           <img
            src={design.designThumbnail}

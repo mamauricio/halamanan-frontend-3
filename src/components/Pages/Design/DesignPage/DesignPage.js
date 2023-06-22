@@ -10,6 +10,8 @@ import Modal from '@mui/material/Modal';
 import UserDesigns from '../UserDesigns/UserDesigns';
 import axios from 'axios';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteOutline';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+
 import ModeEditRoundedIcon from '@mui/icons-material/ModeEditRounded';
 import { useDesignContext } from '../../../hooks/useDesignContext';
 
@@ -17,12 +19,11 @@ const DesignPage = () => {
  const navigate = useNavigate();
  const [selectedDesign, setSelectedDesign] = useState();
  const [itemList, setItemList] = useState({});
- const [descriptionEdited, setDescriptionEdited] = useState(false);
  const { designs, dispatch } = useDesignContext();
- const [designDescription, setDescription] = useState(null);
  const [open, setOpen] = useState(false);
  const [openDesign, setOpenDesign] = useState(false);
  const [error, setError] = useState(null);
+ const [openMain, setOpenMain] = useState(false);
 
  const handleOpen = () => {
   setOpen(true);
@@ -30,6 +31,12 @@ const DesignPage = () => {
  const handleClose = () => {
   setOpen(false);
  };
+
+ useEffect(() => {
+  const timer = setTimeout(() => {
+   setOpenMain(true);
+  }, 100);
+ }, []);
 
  useEffect(() => {
   const countItems = () => {
@@ -45,12 +52,7 @@ const DesignPage = () => {
   countItems();
  }, [selectedDesign]);
 
- useEffect(() => {
-  setDescriptionEdited(false);
- }, [selectedDesign]);
-
  const handleEditDesign = (design) => {
-  //console.log((design._id);
   navigate(`/designs/${design._id}`, { state: { design } });
  };
 
@@ -87,8 +89,15 @@ const DesignPage = () => {
    });
  };
 
+ const handleSaveToDevice = (selectedDesign) => {
+  const link = document.createElement('a');
+  link.href = selectedDesign.designThumbnail;
+  link.download = `${selectedDesign.designName}.png`; // Specify the desired filename here
+  link.click();
+ };
+
  return (
-  <>
+  <Fade in={openMain}>
    <Container
     disableGutters={true}
     maxWidth="xl"
@@ -138,15 +147,35 @@ const DesignPage = () => {
             justifyContent: 'space-between',
            }}
           >
-           <Box sx={{ ml: 2, py: 2, fontSize: '20px' }}>
-            {selectedDesign.designName}
+           <Box sx={{ ml: 2, py: 2, fontSize: '25px' }}>
+            Design Name: {selectedDesign.designName}
            </Box>
-           <Box>
+           <Box
+            sx={{
+             display: 'flex',
+             flexDirection: 'row',
+             height: '40px',
+             //  bgcolor: 'yellow',
+             width: '220px',
+             mt: 1,
+             mr: 1,
+             justifyContent: 'space-evenly',
+            }}
+           >
+            <Button
+             onClick={() => handleSaveToDevice(selectedDesign)}
+             sx={{
+              color: 'primary.main',
+              bgcolor: 'white',
+              ':hover': { bgcolor: 'green', color: 'white' },
+             }}
+            >
+             <SaveAltIcon />
+            </Button>
             <Button
              sx={{
               backgroundColor: 'white',
-              my: 1,
-              mr: 2,
+
               ':hover': {
                color: 'primary.main',
                backgroundColor: 'orange',
@@ -159,8 +188,7 @@ const DesignPage = () => {
             <Button
              sx={{
               backgroundColor: 'white',
-              my: 1,
-              mr: 2,
+
               ':hover': {
                color: 'white',
                backgroundColor: 'red',
@@ -308,7 +336,7 @@ const DesignPage = () => {
      </Grid>
     </Grid>
    </Container>
-  </>
+  </Fade>
  );
 };
 

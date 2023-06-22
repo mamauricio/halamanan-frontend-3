@@ -12,11 +12,14 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
+import { useNewItemsContext } from '../../hooks/uewNewItemsContext';
+
 const EditButton = ({ newItemData }) => {
  const [itemData, setItemData] = useState(newItemData);
  const [open, setOpen] = useState(false);
  const handleOpen = () => setOpen(true);
  const handleClose = () => setOpen(false);
+ const { newItems, dispatch } = useNewItemsContext();
  const handleFormChange = (event) => {
   setItemData({
    ...itemData,
@@ -74,10 +77,19 @@ const EditButton = ({ newItemData }) => {
    }
   );
   handleClose();
+  dispatch({
+   type: 'REMOVE_NEW_ITEM',
+   payload: itemData._id,
+  });
  };
  return (
-  <Box>
-   <Button onClick={handleOpen}>Edit</Button>
+  <Box sx={{ mx: 2 }}>
+   <Button
+    onClick={handleOpen}
+    sx={{ bgcolor: 'primary.main', color: 'orange' }}
+   >
+    Edit
+   </Button>
    <Modal
     open={open}
     onClose={handleClose}

@@ -21,15 +21,8 @@ const SaveDesignButton = ({
  const { id } = useParams();
  const [error, setError] = useState(null);
 
- const isValidObjectId = (objectId) => {
-  const objectIdPattern = /^[0-9a-fA-F]{24}$/; // Regex pattern for a valid ObjectId
-
-  return objectIdPattern.test(objectId);
- };
-
  const handleOpen = () => {
   setOpen(true);
-  //console.log((open);
  };
 
  const handleClose = () => {
@@ -50,88 +43,36 @@ const SaveDesignButton = ({
    document.querySelector('#backgroundImageContainer')
   );
   const designThumbnail = (await canvas).toDataURL('image/png');
+
   try {
-   if (!isValidObjectId(id)) {
-    try {
-     const user_id = sessionStorage.getItem('token');
-     const design = {
-      designThumbnail,
-      user_id,
-      designName,
-      items,
-      backgroundImage,
-      aspectRatio,
-      designDescription,
-     };
-     const response = fetch(
-      `https://halamanan-197e9734b120.herokuapp.com/designs/create`,
-      {
-       method: 'POST',
-       body: JSON.stringify(design),
-       headers: {
-        'Content-type': 'application/json',
-       },
-      }
-     )
-      .then((response) => {
-       if (!response.ok) {
-        setError('Error Saving. Enter design name');
-       }
-       return response.json();
-      })
-      .then((data) => {
-       try {
-        window.location.href = `http://halamanan.netlify.app/designs/${data}`;
-       } catch {
-        setError(data.error.message);
-       }
+   const newData = {
+    designName,
+    backgroundImage,
+    designThumbnail,
+    items,
+   };
+   const response2 = axios.patch(
+    `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
+    newData
+   );
 
-       handleOpen();
-       handleClose();
-      });
-    } catch (error) {
-     setError(error);
-     setError(null);
-    }
+   dispatch({
+    type: 'UPDATE_DESIGN',
+    payload: {
+     designId: id,
+     newData,
+    },
+   });
+
+   if (!response2.ok) {
+    setError(response2.error);
    }
 
-   //----------------------------------------------END OF CREATING NEW DESIGN-------------------------------------------------
-   else {
-    //console.log(('Save Button:  editing');
-
-    try {
-     const newData = {
-      designName,
-      backgroundImage,
-      designThumbnail,
-      items,
-     };
-     const response2 = axios.patch(
-      `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
-      newData
-     );
-
-     dispatch({
-      type: 'UPDATE_DESIGN',
-      payload: {
-       designId: id,
-       newData,
-      },
-     });
-
-     if (!response2.ok) {
-      setError(response2.error);
-     }
-
-     handleOpen();
-     handleClose();
-    } catch (error) {
-     setError(error);
-     setError(null);
-    }
-   }
+   handleOpen();
+   handleClose();
   } catch (error) {
    setError(error);
+   setError(null);
   }
  };
 
@@ -145,8 +86,6 @@ const SaveDesignButton = ({
    {/* {useAutoSave()}; */}
    <Button
     sx={{
-     bgcolor: 'primary.main',
-     color: 'white',
      ':hover': {
       backgroundColor: 'white',
       border: 'solid',

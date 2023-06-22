@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './MuiTheme';
+import { TransitionGroup } from 'react-transition-group';
 import NavBar from './Navbar/NavBar';
 import LoginPage from './Pages/UserManagement/Login/LoginPage';
 import HomePage from './Pages/Home/Home';
@@ -17,13 +18,22 @@ import GalleryPage from './Pages/PlantGallery/PlantGallery';
 import AboutPage from './Pages/About/AboutPage';
 import MainDesignPage from './Pages/Design/MainDesign/MainDesign';
 import DesignPage from './Pages/Design//DesignPage/DesignPage';
-import AdminPage2 from './Pages/AdminPage/AdminPage2';
-
 import InvalidURL from './Pages/InvalidURL';
+//------------------------------ADMIN------------------------------//
+import AdminNavBar from './Pages/AdminPage/AdminNavBar';
+import Users from './Pages/AdminPage/Users';
+import ItemManagement from './Pages/AdminPage/ItemRequests';
+import DesignQuotes from './Pages/AdminPage/DesignQuotes';
+import AdminDashboard from './Pages/AdminPage/AdminDashboard';
+
+//-------------------------CONTEXT REDUCERS------------------------//
 import { ItemsContextProvider } from './context/ItemsContext';
 import { DesignsContextProvider } from './context/DesignContext';
 import UserProfile from './Pages/UserManagement/Profile/UserProfile';
-
+import { NewItemsContextProvider } from './context/NewItemsContext';
+import AdminRoutes from './Routes/AdminRoutes';
+import GuestRoutes from './Routes/GuestRoutes';
+import UserRoutes from './Routes/UserRoutes';
 const App = () => {
  const navigate = useNavigate();
  const [isAuthenticated, setAuthenticated] = useState(
@@ -33,7 +43,7 @@ const App = () => {
   if (id === 'admin') {
    sessionStorage.setItem('adminAuth', true);
    sessionStorage.setItem('authenticated', true);
-   window.location.href = 'https://halamanan.netlify.app/admin';
+   window.location.href = 'https://halamanan.netlify.app/admin/dashboard';
    return;
   }
 
@@ -62,127 +72,27 @@ const App = () => {
 
  return (
   <>
-   <ThemeProvider theme={theme}>
-    {sessionStorage.getItem('adminAuth') ? (
-     <>
-      <Routes>
-       <Route
-        path={'/admin'}
-        element={<AdminPage2 />}
-       />
-       <Route
-        path={'/login'}
-        element={<LoginPage />}
-       />
-      </Routes>
-     </>
-    ) : (
-     <>
-      {isAuthenticated && !sessionStorage.getItem('adminAuth') ? (
-       <>
-        <NavBar handleLogout={handleLogout} />
-        <Routes>
-         {/* Route for home */}
-         <Route
-          exact
-          path="/"
-          element={<Navigate to="/home" />}
-         ></Route>
-         <Route
-          path={`/home`}
-          element={
-           <DesignsContextProvider>
-            <HomePage />
-           </DesignsContextProvider>
-          }
-         />
-         {/* Item Gallery */}
-         <Route
-          path="/gallery"
-          element={<GalleryPage />}
-         />
-
-         {/* Design page */}
-
-         <Route
-          path="/designs/"
-          element={
-           <DesignsContextProvider>
-            <DesignPage />
-           </DesignsContextProvider>
-          }
-         />
-         {/* Edit design page */}
-         <Route
-          path="/designs/:id"
-          element={
-           <DesignsContextProvider>
-            <ItemsContextProvider>
-             <MainDesignPage />
-            </ItemsContextProvider>
-           </DesignsContextProvider>
-          }
-         />
-
-         {/* creating new design page */}
-         <Route
-          path="/designs/create"
-          element={
-           <ItemsContextProvider>
-            <DesignsContextProvider>
-             <MainDesignPage />
-            </DesignsContextProvider>
-           </ItemsContextProvider>
-          }
-         />
-         <Route
-          path="/profile"
-          element={<UserProfile />}
-         />
-
-         <Route
-          path="/about"
-          element={<AboutPage />}
-         />
-         <Route
-          path="/invalid"
-          element={<InvalidURL />}
-         />
-         <Route
-          path="*"
-          element={<Navigate to="/invalid" />}
-         />
-        </Routes>
-       </>
-      ) : (
-       <Routes>
-        <Route
-         exact
-         path="/login"
-         element={<LoginPage handleAuthenticate={handleAuthenticate} />}
-        />
-        <Route
-         path="*"
-         element={
-          <Navigate
-           replace
-           to="/login"
-          />
-         }
-        />
-        <Route
-         path="/home"
-         element={
-          <DesignsContextProvider>
-           <HomePage />
-          </DesignsContextProvider>
-         }
-        />
-       </Routes>
-      )}
-     </>
-    )}
-   </ThemeProvider>
+   <TransitionGroup>
+    <ThemeProvider theme={theme}>
+     {sessionStorage.getItem('adminAuth') ? (
+      <>
+       <AdminNavBar handleLogout={handleLogout} />
+       <AdminRoutes />
+      </>
+     ) : (
+      <>
+       {isAuthenticated && !sessionStorage.getItem('adminAuth') ? (
+        <>
+         <NavBar handleLogout={handleLogout} />
+         <UserRoutes />
+        </>
+       ) : (
+        <GuestRoutes handleAuthenticate={handleAuthenticate} />
+       )}
+      </>
+     )}
+    </ThemeProvider>
+   </TransitionGroup>
   </>
  );
 };

@@ -4,7 +4,7 @@ import { Rnd } from 'react-rnd';
 import Button from '@mui/material/Button';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 import RemoveIcon from '@mui/icons-material/Remove';
-
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 const Item = (props) => {
  const [width, setWidth] = useState(props.width);
  const [height, setHeight] = useState(props.height);
@@ -52,7 +52,6 @@ const Item = (props) => {
  };
 
  const removeItem = (itemKey) => {
-  //console.log((itemKey);
   dispatch({
    type: 'REMOVE_ITEM',
    payload: { itemKey },
@@ -65,7 +64,7 @@ const Item = (props) => {
     className="item"
     size={{ width, height }}
     position={{ x, y }}
-    enableResizing={{ bottomRight: true, topLeft: true, bottomLeft: true }}
+    enableResizing={{ bottomRight: true, topRight: true, bottomLeft: true }}
     minWidth={100}
     minHeight={100}
     disableDragging={false}
@@ -77,13 +76,50 @@ const Item = (props) => {
     onMouseLeave={() => setIsHovered(false)}
    >
     {isHovered && (
-     <Button
-      onClick={() => removeItem(props.itemKey)}
-      sx={{ position: 'absolute', bgcolor: 'orange', zIndex: 2 }}
-     >
-      <RemoveIcon />
-     </Button>
+     <>
+      <Button
+       onClick={() => removeItem(props.itemKey)}
+       sx={{ position: 'absolute', bgcolor: 'orange', zIndex: 2 }}
+      >
+       <RemoveIcon />
+      </Button>
+
+      <KeyboardArrowRightIcon
+       fontSize="large"
+       sx={{
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        color: 'primary.main',
+        zIndex: 0,
+        transform: 'rotate(45deg)',
+       }}
+      />
+      <KeyboardArrowRightIcon
+       fontSize="large"
+       sx={{
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        color: 'primary.main',
+        zIndex: 0,
+        transform: 'rotate(-45deg)',
+       }}
+      />
+      <KeyboardArrowRightIcon
+       fontSize="large"
+       sx={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        color: 'primary.main',
+        zIndex: 0,
+        transform: 'rotate(135deg)',
+       }}
+      />
+     </>
     )}
+
     <img
      className="image"
      key={props.itemKey}
