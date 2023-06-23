@@ -15,11 +15,12 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import Button from '@mui/material/Button';
 import AddNewItemButton from './AddNewItemButton';
-
+import FadeLoader from 'react-spinners/FadeLoader';
 const PlantGallery = () => {
  const theme = useTheme();
  const [showAlert, setShowAlert] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
+ const [fetching, setFetching] = useState(true);
  const openAlert = () => {
   setShowAlert(true);
  };
@@ -41,6 +42,7 @@ const PlantGallery = () => {
  const [selectedCategory, setSelectedCategory] = useState([]);
  const [openMain, setOpenMain] = useState(false);
  const childRef = useRef(null);
+ const [color, setColor] = useState('#ECAB00');
 
  useEffect(() => {
   fetchGalleryItems();
@@ -57,6 +59,7 @@ const PlantGallery = () => {
    .then((response) => {
     const fetchedItems = response.data;
     setItems(fetchedItems);
+    setFetching(false);
    })
    .catch((error) => {
     setError(error.message);
@@ -66,17 +69,16 @@ const PlantGallery = () => {
  const fetchUserFavorites = async () => {
   try {
    const token = sessionStorage.getItem('token');
-   const response = await fetch(
+   const response = await axios(
     'https://halamanan-197e9734b120.herokuapp.com/favorites',
     {
      headers: {
       token: token,
      },
     }
-   );
-
-   const data = await response.json();
-   setFavorites(data);
+   ).then((response) => {
+    setFavorites(response.data);
+   });
   } catch (error) {
    setError(error.message);
   }
@@ -185,7 +187,7 @@ const PlantGallery = () => {
    <Grow in={showAlert}>
     <Alert
      onClose={closeAlert}
-     sx={{ color: 'primary.main', backgroundColor: 'orange' }}
+     sx={{ color: 'primary.main', backgroundColor: 'DDFFBC' }}
     >
      {alertMessage}
     </Alert>
@@ -227,7 +229,7 @@ const PlantGallery = () => {
        <Box
         sx={{
          fontSize: '30px',
-         color: 'orange',
+         color: 'DDFFBC',
         }}
        >
         Gallery
@@ -260,167 +262,206 @@ const PlantGallery = () => {
          boxShadow: 2,
         }}
        >
-        <Box
-         className="object-display"
-         display="flex"
-         flexWrap="wrap"
-        >
-         {filteredItems.length === 0 ? (
+        {fetching === true ? (
+         <Box
+          sx={{
+           display: 'flex',
+           position: 'absolute',
+           top: '50%',
+           left: '50%',
+           transform: 'translate(-50%,-50%)',
+           flexDirection: 'column',
+           alignItems: 'center',
+          }}
+         >
           <Box
            sx={{
-            position: 'absolute',
-            top: '30%',
-            left: '50%',
-            transform: 'translateX(-50%) translateY(-60%)',
-            fontSize: '40px',
-            backgroundColor: 'primary.main',
-            color: 'white',
-            borderRadius: 2,
-            p: 2,
+            color: 'primary.main',
+            fontSize: '30px',
+            mb: 2,
+            display: 'flex',
+
+            justifyContent: 'center',
+            alignItems: 'center',
            }}
           >
-           No Items Found
+           Fetching Items
           </Box>
-         ) : (
-          <>
-           {filteredItems.map((item, index) => (
-            <Grow
-             in={filteredItems != null}
-             key={index}
-            >
-             <div
+          {/* <br /> */}
+          <FadeLoader
+           color={color}
+           loading={fetching}
+           size={200}
+           aria-label="Loading Spinner"
+           data-testid="loader"
+          />
+         </Box>
+        ) : (
+         <Box
+          className="object-display"
+          display="flex"
+          flexWrap="wrap"
+         >
+          {filteredItems.length === 0 ? (
+           <Box
+            sx={{
+             position: 'absolute',
+             top: '30%',
+             left: '50%',
+             transform: 'translateX(-50%) translateY(-60%)',
+             fontSize: '40px',
+             backgroundColor: 'primary.main',
+             color: 'white',
+             borderRadius: 2,
+             p: 2,
+            }}
+           >
+            No Items Found
+           </Box>
+          ) : (
+           <>
+            {filteredItems.map((item, index) => (
+             <Grow
+              in={filteredItems != null}
               key={index}
-              className={
-               index === activeItem ? 'itemContainer active' : 'itemContainer'
-              }
-              onClick={(event) => handleActiveItem(event, index)}
              >
-              <Box
+              <div
+               key={index}
                className={
-                index === activeItem
-                 ? 'imageContainerContainer active'
-                 : 'imageContainerContainer'
+                index === activeItem ? 'itemContainer active' : 'itemContainer'
                }
-               sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                flexWrap: 'wrap',
-                width: '100%',
-                alignContent: 'left',
-                justifyContent: 'center',
-               }}
+               onClick={(event) => handleActiveItem(event, index)}
               >
-               {isItemInFavorites(item._id) ? (
-                <Button
-                 sx={{
-                  display: 'flex',
-                  zIndex: 1,
-                  width: '1px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                 }}
-                 onClick={(event) => {
-                  removeFromFavorites(event, item._id);
-                 }}
-                >
-                 {' '}
-                 <StarIcon
-                  sx={{
-                   color:
-                    activeItem && activeItem.index === item.index
-                     ? 'primary.main'
-                     : 'orange',
-                  }}
-                 />
-                </Button>
-               ) : (
-                <Button
-                 sx={{
-                  display: 'flex',
-                  zIndex: 1,
-                  width: '1px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                 }}
-                 onClick={(event) => {
-                  addToFavorites(event, item._id);
-                 }}
-                >
-                 <StarBorderIcon
-                  sx={{
-                   color:
-                    activeItem && activeItem.index === item.index
-                     ? 'primary.main'
-                     : 'orange',
-                  }}
-                 />
-                </Button>
-               )}
                <Box
                 className={
                  index === activeItem
-                  ? 'imageContainer active'
-                  : 'imageContainer'
+                  ? 'imageContainerContainer active'
+                  : 'imageContainerContainer'
+                }
+                sx={{
+                 display: 'flex',
+                 flexDirection: 'column',
+                 flexWrap: 'wrap',
+                 width: '100%',
+                 alignContent: 'left',
+                 justifyContent: 'center',
+                }}
+               >
+                {isItemInFavorites(item._id) ? (
+                 <Button
+                  sx={{
+                   display: 'flex',
+                   zIndex: 1,
+                   width: '1px',
+                   alignItems: 'center',
+                   justifyContent: 'center',
+                  }}
+                  onClick={(event) => {
+                   removeFromFavorites(event, item._id);
+                  }}
+                 >
+                  {' '}
+                  <StarIcon
+                   sx={{
+                    color:
+                     activeItem && activeItem.index === item.index
+                      ? 'primary.main'
+                      : 'DDFFBC',
+                   }}
+                  />
+                 </Button>
+                ) : (
+                 <Button
+                  sx={{
+                   display: 'flex',
+                   zIndex: 1,
+                   width: '1px',
+                   alignItems: 'center',
+                   justifyContent: 'center',
+                  }}
+                  onClick={(event) => {
+                   addToFavorites(event, item._id);
+                  }}
+                 >
+                  <StarBorderIcon
+                   sx={{
+                    color:
+                     activeItem && activeItem.index === item.index
+                      ? 'orange'
+                      : 'orange',
+                   }}
+                  />
+                 </Button>
+                )}
+                <Box
+                 className={
+                  index === activeItem
+                   ? 'imageContainer active'
+                   : 'imageContainer'
+                 }
+                >
+                 <img
+                  src={item.imageUrl}
+                  loading="lazy"
+                 />
+                </Box>
+
+                <div className="itemLabel">
+                 {item.itemName}
+                 <br />
+                 {item.scientificName && (
+                  <strong>
+                   <em>{item.scientificName}</em>
+                  </strong>
+                 )}
+                </div>
+               </Box>
+               <Box
+                className={
+                 index === activeItem
+                  ? 'informationContainer active'
+                  : 'informationContainer'
                 }
                >
-                <img src={item.imageUrl} />
-               </Box>
-
-               <div className="itemLabel">
-                {item.itemName}
                 <br />
-                {item.scientificName && (
-                 <strong>
-                  <em>{item.scientificName}</em>
-                 </strong>
-                )}
-               </div>
-              </Box>
-              <Box
-               className={
-                index === activeItem
-                 ? 'informationContainer active'
-                 : 'informationContainer'
-               }
-              >
-               <br />
-               {index === activeItem ? (
-                <div className="conditional">
-                 <div
-                  ref={childRef}
-                  className="itemInformation"
-                 >
-                  <strong>Item Information: </strong>
-                  {item.itemInformation}
-                 </div>
+                {index === activeItem ? (
+                 <div className="conditional">
+                  <div
+                   ref={childRef}
+                   className="itemInformation"
+                  >
+                   <strong>Item Information: </strong>
+                   {item.itemInformation}
+                  </div>
 
-                 <div className="itemType">
-                  <strong>Item type: </strong>
-                  <span>
-                   {item.type.map((info, index) => (
-                    <span> {(index ? ', ' : '') + info} </span>
-                   ))}
-                  </span>
-                 </div>
+                  <div className="itemType">
+                   <strong>Item type: </strong>
+                   <span>
+                    {item.type.map((info, index) => (
+                     <span> {(index ? ', ' : '') + info} </span>
+                    ))}
+                   </span>
+                  </div>
 
-                 <div className="info-source">
-                  <strong>Information Source: </strong>
-                  <br />
-                  {item.informationSource}
+                  <div className="info-source">
+                   <strong>Information Source: </strong>
+                   <br />
+                   {item.informationSource}
+                  </div>
+                  <div className="image-source">
+                   <strong>Image Source: </strong>
+                   {item.imageSource}
+                  </div>
                  </div>
-                 <div className="image-source">
-                  <strong>Image Source: </strong>
-                  {item.imageSource}
-                 </div>
-                </div>
-               ) : null}
-              </Box>
-             </div>
-            </Grow>
-           ))}
-          </>
-         )}
-        </Box>
+                ) : null}
+               </Box>
+              </div>
+             </Grow>
+            ))}
+           </>
+          )}
+         </Box>
+        )}
        </Box>
       </Container>
      </Box>

@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import GardenCarousel from './Carousel/GardenCarousel';
 import { Container, Box, Grid, Fade } from '@mui/material';
-import UserDesigns from '../Design/UserDesigns/UserDesigns';
+// import UserDesigns from '../Design/UserDesigns/UserDesigns';
+const UserDesigns = React.lazy(() =>
+ import('../Design/UserDesigns/UserDesigns')
+);
+
+// const Admin = React.lazy(() => import('./Admin.js'));
+
 const Home = () => {
  const [openMain, setOpenMain] = useState(false);
 
@@ -47,7 +53,9 @@ const Home = () => {
       item
       xs={4}
      >
-      <UserDesigns renderAtHome />
+      <Suspense fallback={<div>Loading</div>}>
+       <UserDesigns renderAtHome />
+      </Suspense>
      </Grid>
     </Grid>
    </Container>

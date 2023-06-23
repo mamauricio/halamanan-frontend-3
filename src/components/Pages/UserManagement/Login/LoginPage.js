@@ -4,7 +4,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Grow from '@mui/material/Grow';
-import createTheme from '@mui/material/styles/createTheme';
+import Fade from '@mui/material/Fade';
+
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import useTheme from '@mui/material/styles/useTheme';
 import axios from 'axios';
@@ -21,7 +22,8 @@ const LoginPage = ({ handleAuthenticate }) => {
  const [open, setOpen] = useState(false);
  const [error, setError] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
-
+ const [initialize, setInitialize] = useState(false);
+ const [switchForm, setSwitchForm] = useState(true);
  const handleOpen = () => {
   setOpen(true);
  };
@@ -34,6 +36,12 @@ const LoginPage = ({ handleAuthenticate }) => {
    clearTimeout(timer);
   };
  };
+
+ useEffect(() => {
+  const timer = setTimeout(() => {
+   setInitialize(true);
+  }, 250);
+ }, []);
 
  const handleSignUp = async (event) => {
   event.preventDefault();
@@ -117,211 +125,220 @@ const LoginPage = ({ handleAuthenticate }) => {
 
  return (
   <ThemeProvider theme={theme}>
-   <Box
-    className="login-page"
-    sx={{
-     position: 'absolute',
-     display: 'flex',
-     flexDirection: 'column',
-     //  width: 300,
-     //  height: 600,
-     left: '50%',
-     top: '50%',
-     transform: 'translate(-50%, -50%)',
-     color: 'orange',
-     borderRadius: 2,
-     boxShadow: 5,
-     p: 3,
-     alignItems: 'center',
-     justifyContent: 'center',
-     backgroundColor: 'primary.main',
-    }}
-   >
-    {open && (
-     <Grow in={open}>
-      <Alert
-       severity={error ? 'error' : 'success'}
-       onClose={handleClose}
-       sx={{ color: 'primary.main', backgroundColor: error ? 'red' : 'orange' }}
-      >
-       {error ? error : alertMessage}
-      </Alert>
-     </Grow>
-    )}
-    <Box sx={{ color: 'inherit' }}>
-     <h1>Halamanan </h1>
-    </Box>
-    {showLoginForm ? (
-     <>
-      <Box
-       component="form"
-       onSubmit={(event) => handleLogin(event)}
-       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        bgcolor: 'orange',
-        p: 1,
-        color: 'white',
-        borderRadius: 2,
-        // mb: 3,
-       }}
-      >
-       <TextField
-        error={userNameError}
-        helperText={errorMessage}
-        type="email"
-        value={email}
-        label="Email"
-        onChange={(e) => {
-         handleEmail(e.target.value);
-        }}
-        required
-        sx={{ my: 2 }}
-       />
-       <TextField
-        error={passwordError}
-        helperText={errorMessage}
-        type="password"
-        label="Password"
-        value={password}
-        onChange={(e) => {
-         handlePassword(e.target.value);
-        }}
-        required
-       />
-       <Box
+   <Fade in={initialize}>
+    <Box
+     className="login-page"
+     sx={{
+      position: 'absolute',
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+      height: '100%',
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+      color: 'orange',
+      borderRadius: 2,
+      boxShadow: 5,
+      // p: 3,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'primary.main',
+     }}
+    >
+     {open && (
+      <Grow in={open}>
+       <Alert
+        severity={error ? 'error' : 'success'}
+        onClose={handleClose}
         sx={{
-         pt: 1,
-         display: 'flex',
-         flexDirection: 'row',
-         justifyContent: 'space-between',
+         color: 'primary.main',
+         backgroundColor: error ? 'red' : 'orange',
+         boxShadow: 5,
         }}
        >
-        <Button
-         color="primary"
-         type="button"
-         onClick={toggleForm}
+        {error ? error : alertMessage}
+       </Alert>
+      </Grow>
+     )}
+     <Box sx={{ color: 'inherit' }}>
+      <h1>Halamanan </h1>
+     </Box>
+     {showLoginForm ? (
+      <>
+       <Box
+        component="form"
+        onSubmit={(event) => handleLogin(event)}
+        sx={{
+         display: 'flex',
+         flexDirection: 'column',
+         alignItems: 'center',
+         justifyContent: 'center',
+         bgcolor: 'orange',
+         p: 1,
+         color: 'white',
+         borderRadius: 2,
+         boxShadow: 5,
+        }}
+       >
+        <TextField
+         error={userNameError}
+         helperText={errorMessage}
+         type="email"
+         value={email}
+         label="Email"
+         onChange={(e) => {
+          handleEmail(e.target.value);
+         }}
+         required
+         sx={{ my: 2 }}
+        />
+        <TextField
+         error={passwordError}
+         helperText={errorMessage}
+         type="password"
+         label="Password"
+         value={password}
+         onChange={(e) => {
+          handlePassword(e.target.value);
+         }}
+         required
+        />
+        <Box
          sx={{
-          bgcolor: 'primary.main',
-          mr: 1,
-          color: 'white',
-          ':hover': {
-           color: 'primary.main',
-           border: 'solid 1px',
-           borderColor: 'primary.main',
-           color: 'primary.main',
-          },
+          pt: 1,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
          }}
         >
-         Sign Up
-        </Button>
-        <Button
-         type="submit"
-         sx={{
-          backgroundColor: 'primary.main',
-          color: 'white',
-          ml: 2,
-          ':hover': {
-           color: 'primary.main',
-           border: 'solid 1px',
-           borderColor: 'primary.main',
-          },
-         }}
-        >
-         Login
-        </Button>
+         <Button
+          color="primary"
+          type="button"
+          onClick={toggleForm}
+          sx={{
+           bgcolor: 'primary.main',
+           mr: 1,
+           color: 'white',
+           ':hover': {
+            color: 'primary.main',
+            border: 'solid 1px',
+            borderColor: 'primary.main',
+            color: 'primary.main',
+           },
+          }}
+         >
+          Sign Up
+         </Button>
+         <Button
+          type="submit"
+          variant="contained"
+          sx={{
+           backgroundColor: 'primary.main',
+           color: 'white',
+           ml: 2,
+           ':hover': {
+            // color: 'orange',
+            border: 'solid 1px',
+            borderColor: 'primary.main',
+           },
+          }}
+         >
+          Login
+         </Button>
+        </Box>
        </Box>
-      </Box>
-     </>
-    ) : (
-     <>
-      <h3>SignUp</h3>
-      <Box
-       component="form"
-       onSubmit={handleSignUp}
-       sx={{
-        bgcolor: 'orange',
-        p: 2,
-        borderRadius: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyConent: 'center',
-        alignItems: 'center',
-        width: '400px',
-       }}
-      >
-       <TextField
-        type="text"
-        label="First Name"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-        required
-        sx={{
-         py: 2,
-        }}
-       />
-       <TextField
-        type="text"
-        label="Last Name"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-        required
-       />
-       <TextField
-        type="email"
-        label="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        sx={{
-         py: 2,
-        }}
-       />
-       <TextField
-        type="password"
-        label="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-       />
+      </>
+     ) : (
+      <>
+       {' '}
+       <Box sx={{ color: 'orange', mb: 1 }}>Sign Up</Box>
        <Box
+        component="form"
+        onSubmit={handleSignUp}
         sx={{
-         m: 2,
-         width: '50%',
+         bgcolor: 'orange',
+         p: 2,
+         borderRadius: 2,
          display: 'flex',
-         flexDirection: 'row',
-         justifyContent: 'space-between',
+         flexDirection: 'column',
+         justifyConent: 'center',
+         alignItems: 'center',
+         width: '400px',
+         boxShadow: 5,
         }}
        >
-        <Button
-         type="button"
-         onClick={toggleForm}
+        <TextField
+         type="text"
+         label="First Name"
+         value={firstName}
+         onChange={(e) => setFirstName(e.target.value)}
+         required
          sx={{
-          bgcolor: 'primary.main',
-          color: 'white',
+          py: 2,
+         }}
+        />
+        <TextField
+         type="text"
+         label="Last Name"
+         value={lastName}
+         onChange={(e) => setLastName(e.target.value)}
+         required
+        />
+        <TextField
+         type="email"
+         label="Email"
+         value={email}
+         onChange={(e) => setEmail(e.target.value)}
+         required
+         sx={{
+          py: 2,
+         }}
+        />
+        <TextField
+         type="password"
+         label="Password"
+         value={password}
+         onChange={(e) => setPassword(e.target.value)}
+         required
+        />
+        <Box
+         sx={{
+          m: 2,
+          width: '50%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+         }}
+        >
+         <Button
+          type="button"
+          onClick={toggleForm}
+          sx={{
+           bgcolor: 'primary.main',
+           color: 'white',
 
-          ':hover': {
-           border: 'solid 1px',
-           borderColor: 'primary.main',
-           color: 'primary.main',
-          },
-         }}
-        >
-         Back
-        </Button>
-        <Button
-         variant="contained"
-         type="submit"
-        >
-         Submit
-        </Button>
+           ':hover': {
+            border: 'solid 1px',
+            borderColor: 'primary.main',
+            color: 'primary.main',
+           },
+          }}
+         >
+          Back
+         </Button>
+         <Button
+          variant="contained"
+          type="submit"
+         >
+          Submit
+         </Button>
+        </Box>
        </Box>
-      </Box>
-     </>
-    )}
-   </Box>
+      </>
+     )}
+    </Box>
+   </Fade>
   </ThemeProvider>
  );
 };

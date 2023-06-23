@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Box, Modal } from '@mui/material';
+import { Button, Box, Modal, Grow, Fade } from '@mui/material';
 import FindReplaceIcon from '@mui/icons-material/FindReplace';
+import ExistingDesigns from './BlankDesigns';
 
 // import './ReplaceImageButton.css';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
@@ -9,6 +9,25 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
  //  const navigate = useNavigate();
  const { items, dispatch } = useItemsContext();
  const [open, setOpen] = useState(false);
+ const [openSecond, setOpenSecond] = useState(false);
+ const [openTemplate, setOpenTemplate] = useState(false);
+
+ const handleTemplate = (template) => {
+  localStorage.clear();
+  localStorage.setItem('backgroundImage', template);
+  handleReplaceBackground(template);
+  handleCloseSecond();
+  dispatch({
+   type: 'RESET_ITEMS',
+   payload: null,
+  });
+  handleClose();
+ };
+ const handleOpenSecond = () => {
+  setOpenSecond(true);
+  handleClose();
+ };
+ const handleCloseSecond = () => setOpenSecond(false);
  const handleOpen = () => setOpen(true);
  const handleClose = () => setOpen(false);
 
@@ -92,7 +111,7 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
       <br />
       <Box>
        <Button
-        onClick={handleReplaceImageButton}
+        onClick={handleOpenSecond}
         sx={{
          color: 'white',
          backgroundColor: 'red',
@@ -115,6 +134,102 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
       </Box>
      </Box>
     </Box>
+   </Modal>
+   <Modal
+    open={openSecond}
+    onClose={handleCloseSecond}
+   >
+    <Fade in={openSecond}>
+     <Box
+      sx={{
+       backgroundColor: 'orange',
+       position: 'absolute',
+       left: '50%',
+       top: '50%',
+       transform: 'translate(-50%, -50%)',
+       p: 4,
+       borderRadius: 2,
+      }}
+     >
+      <Box
+       sx={{
+        fontSize: '20px',
+        color: 'primary.main',
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+       }}
+      >
+       {' '}
+       Replace Design{' '}
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+       {openTemplate && (
+        <Grow in={openTemplate}>
+         <Box
+          sx={{
+           transition: 'max-width 0.3s, max-height 0.3s',
+           maxWidth: openTemplate ? '1000px' : '600px',
+           maxHeight: openTemplate ? '1000px' : '600px',
+           overflow: 'hidden',
+          }}
+         >
+          <ExistingDesigns handleTemplate={handleTemplate} />
+          <Button
+           onClick={() => setOpenTemplate(false)}
+           sx={{ bgcolor: 'red', color: 'white', mt: 1 }}
+          >
+           Close{' '}
+          </Button>
+         </Box>
+        </Grow>
+       )}
+       {!openTemplate && (
+        <Button
+         onClick={() => setOpenTemplate(true)}
+         sx={{
+          bgcolor: 'primary.main',
+          color: 'orange',
+          mt: 2,
+          ':hover': { backgroundColor: 'white', color: 'primary.main' },
+         }}
+        >
+         Choose from templates
+        </Button>
+       )}
+       <Box
+        sx={{
+         display: 'flex',
+         justifyContent: 'center',
+         alignItems: 'center',
+         m: 2,
+        }}
+       >
+        Or
+       </Box>
+       <Box sx={{ display: 'flex' }}>
+        <Button
+         onClick={handleReplaceImageButton}
+         sx={{
+          backgroundColor: 'primary.main',
+          color: 'orange',
+          ':hover': { backgroundColor: 'white', color: 'primary.main' },
+         }}
+        >
+         Choose Own Image
+        </Button>
+        <Button onClick={handleCloseSecond}>Cancel</Button>
+        <input
+         type="file"
+         id="fileInput"
+         accept=".jpg,.jpeg,.png"
+         onChange={handleReplaceBackground}
+         style={{ display: 'none' }}
+        />
+       </Box>
+      </Box>
+     </Box>
+    </Fade>
    </Modal>
   </>
  );

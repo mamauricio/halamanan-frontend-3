@@ -9,14 +9,21 @@ import Grow from '@mui/material/Grow';
 import CreateNewDesignButton from '../MainDesign/Buttons/CreateNewDesignButton';
 import './UserDesigns.css';
 import { useDesignContext } from '../../../hooks/useDesignContext';
-import html2canvas from 'html2canvas';
+import { FadeLoader } from 'react-spinners';
+import axios from 'axios';
+
 const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
  const navigate = useNavigate();
  const { designs, dispatch } = useDesignContext();
- const [designName, setDesignName] = useState();
  const [error, setError] = useState();
- //  const [open, handleOpen]
+ const [color, setColor] = useState('#ECAB00');
+ const [fetching, setFetching] = useState(true);
  const [aspectRatio, setAspectRatio] = useState();
+ const [openAlert, setOpenAlert] = useState(false);
+ const [alertMessage, setAlertMessage] = useState('');
+ const handleOpenAlert = () => {
+  setOpenAlert(true);
+ };
  const [show, setShow] = useState(false);
  useEffect(() => {
   const fetchDesigns = async () => {
@@ -36,6 +43,7 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
      const designs = text ? JSON.parse(text) : [];
      dispatch({ type: 'GET_DESIGNS', payload: designs });
      setShow(true);
+     setFetching(false);
     }
    } catch (error) {
     console.error('Error fetching designs:', error);
@@ -75,39 +83,38 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
    setAspectRatio(aspectRatio);
   };
 
-  const designThumbnail = backgroundImage;
-
   try {
-   const user_id = sessionStorage.getItem('token');
-   const design = {
-    designThumbnail,
-    user_id,
-    designName: `Design-${designs ? designs.length + 1 : 1}`,
-    items: [],
-    backgroundImage,
-    aspectRatio,
-   };
-   const response = await fetch(
-    `https://halamanan-197e9734b120.herokuapp.com/designs/create`,
-    {
-     method: 'POST',
-     body: JSON.stringify(design),
-     headers: {
-      'Content-type': 'application/json',
-     },
-    }
-   );
-   console.log(response);
-   if (!response.ok) {
-    return;
-   }
+   const user_id = sessionStorage.getItem('token').toString();
 
-   const data = await response.json();
-   navigate(`/designs/${data}`);
+   const design = {
+    designThumbnail: 'we',
+    user_id: user_id,
+    designName: `Design-${user_id + (designs ? designs.length + 1 : 1)}`,
+    items: [],
+    backgroundImage: 'we',
+   };
+
+   const response = await axios
+    .post('https://halamanan-197e9734b120.herokuapp.com/designs/create', {
+     designThumbnail: backgroundImage,
+     user_id: user_id,
+     designName: `Design-${user_id + (designs ? designs.length + 1 : 1)}`,
+     items: [],
+     backgroundImage,
+    })
+    .then(function (response) {
+     setAlertMessage(response.data + 'Redirecting to design area');
+     handleOpenAlert(true);
+     const timer = setTimeout(() => {
+      navigate(`/designs/${response.data}`);
+     }, 200);
+     console.log('Response:', response.data);
+    })
+    .catch(function (error) {
+     console.error('Error:', error);
+    });
   } catch (error) {
-   console.error(error);
-   setError(error);
-   setError(null);
+   setError(error.message);
   }
  };
 
@@ -146,61 +153,100 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
       height: '70%',
      }}
     >
-     {designs && designs.length !== 0 ? (
-      <ImageList
-       cols={1}
-       gap={5}
-       rowHeight={200}
-       sx={{ mt: 2, height: '100%' }}
-      >
-       {designs.map((design, index) => (
-        <Grow
-         in={show}
-         key={index}
-        >
-         <ImageListItem
-          className="image"
-          key={index}
-          onClick={() => handleClick(design)}
-          sx={renderAtHome ? renderAtHomeStyle : imageListItemStyle}
-         >
-          <img
-           src={design.designThumbnail}
-           alt={design.designName}
-           loading="lazy"
-           style={{
-            boxSizing: 'border-box',
-            height: '100%',
-           }}
-          />
-          <ImageListItemBar
-           title={design.designName}
-           position="bottom"
-           sx={{
-            borderBottomRightRadius: 2,
-            borderBottomLeftRadius: 2,
-           }}
-          />
-         </ImageListItem>
-        </Grow>
-       ))}
-      </ImageList>
-     ) : (
+     {fetching === true ? (
       <Box
        sx={{
-        color: 'white',
-        textAlign: 'center',
-        justifyContent: 'center',
-        fontSize: '25px',
-        borderRadius: 1,
-        p: 1,
-        position: 'relative',
-        width: '80%%',
+        display: 'flex',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        flexDirection: 'column',
+        alignItems: 'center',
        }}
       >
-       No designs yet
+       <Box
+        sx={{
+         color: 'primary.main',
+         fontSize: '30px',
+         mb: 2,
+         display: 'flex',
+
+         justifyContent: 'center',
+         alignItems: 'center',
+        }}
+       >
+        Fetching Items
+       </Box>
+       {/* <br /> */}
+       <FadeLoader
+        color={color}
+        loading={fetching}
+        size={200}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+       />
       </Box>
+     ) : (
+      <>
+       {designs && designs.length !== 0 ? (
+        <ImageList
+         cols={1}
+         gap={5}
+         rowHeight={200}
+         sx={{ mt: 2, height: '100%' }}
+        >
+         {designs.map((design, index) => (
+          <Grow
+           in={show}
+           key={index}
+          >
+           <ImageListItem
+            className="image"
+            key={index}
+            onClick={() => handleClick(design)}
+            sx={renderAtHome ? renderAtHomeStyle : imageListItemStyle}
+           >
+            <img
+             src={design.designThumbnail}
+             alt={design.designName}
+             loading="lazy"
+             style={{
+              boxSizing: 'border-box',
+              height: '100%',
+             }}
+            />
+            <ImageListItemBar
+             title={design.designName}
+             position="bottom"
+             sx={{
+              borderBottomRightRadius: 2,
+              borderBottomLeftRadius: 2,
+             }}
+            />
+           </ImageListItem>
+          </Grow>
+         ))}
+        </ImageList>
+       ) : (
+        <Box
+         sx={{
+          color: 'white',
+          textAlign: 'center',
+          justifyContent: 'center',
+          fontSize: '25px',
+          borderRadius: 1,
+          p: 1,
+          position: 'relative',
+          width: '80%%',
+         }}
+        >
+         No designs yet
+        </Box>
+       )}
+      </>
      )}
+
      <Box
       sx={{
        display: 'flex',

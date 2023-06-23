@@ -92,8 +92,10 @@ const ItemTray = ({ handleAddItem }) => {
  });
 
  return (
-  <>
-   <Filters onFilterChange={handleFilterChange} />
+  <Box>
+   <Box sx={{ pt: 1 }}>
+    <Filters onFilterChange={handleFilterChange} />
+   </Box>
    <ImageList
     cols={xs ? 7 : 3}
     rowHeight={250}
@@ -133,6 +135,7 @@ const ItemTray = ({ handleAddItem }) => {
         }}
        >
         <img
+         loading="lazy"
          src={item.imageUrl}
          style={{
           boxSizing: 'border-box',
@@ -175,7 +178,7 @@ const ItemTray = ({ handleAddItem }) => {
      </div>
     ))}
    </ImageList>
-  </>
+  </Box>
  );
 };
 

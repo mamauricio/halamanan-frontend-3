@@ -3,24 +3,18 @@ import { useParams } from 'react-router-dom';
 import { useDesignContext } from '../../../../hooks/useDesignContext';
 import { Button, Alert } from '@mui/material';
 import Zoom from '@mui/material/Zoom';
-import useAutosave from '../../../../hooks/useAutoSave.hook';
+// import useAutosave from '../../../../hooks/useAutoSave.hook';
 
 import SaveIcon from '@mui/icons-material/Save';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 
-const SaveDesignButton = ({
- designName,
- items,
- backgroundImage,
- aspectRatio,
- designDescription,
-}) => {
+const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  const [open, setOpen] = useState(false);
  const { designs, dispatch } = useDesignContext();
  const { id } = useParams();
  const [error, setError] = useState(null);
-
+ const [autosave, setAutosave] = useState(false);
  const handleOpen = () => {
   setOpen(true);
  };
@@ -29,6 +23,12 @@ const SaveDesignButton = ({
   setTimeout(() => {
    setOpen(false);
   }, 3 * 1000);
+ };
+
+ const handleClick = async () => {
+  await handleSave();
+  handleOpen();
+  handleClose();
  };
 
  const handleSave = async () => {
@@ -63,22 +63,34 @@ const SaveDesignButton = ({
      newData,
     },
    });
-
-   if (!response2.ok) {
-    setError(response2.error);
+   const saved = await response2;
+   console.log(saved);
+   if (response2) {
+    setError(null);
    }
-
-   handleOpen();
-   handleClose();
   } catch (error) {
-   setError(error);
-   setError(null);
+   console.log(error);
+   setError(error.message);
   }
  };
 
- useAutosave(() => {
-  handleSave();
- }, 60 * 1000);
+ React.useEffect(() => {
+  const autosave = setInterval(function () {
+   setAutosave(true);
+  }, 60 * 1000); // runs every minute
+  return () => {
+   setAutosave(false); // turn autosave off
+   clearInterval(autosave); // clear autosave on dismount
+  };
+ }, []);
+
+ React.useEffect(() => {
+  if (autosave && items !== saved) {
+   handleSave();
+   setAutosave(false); // toggle autosave off
+  }
+ }, [autosave, items, saved, handleSave]);
+
  //---------------------------------------------------END OF UPDATING EXISTING DESIGN-------------------------------
 
  return (
@@ -94,7 +106,7 @@ const SaveDesignButton = ({
       borderWidth: '1px',
      },
     }}
-    onClick={handleSave}
+    onClick={handleClick}
    >
     <SaveIcon
      fontSize="small"

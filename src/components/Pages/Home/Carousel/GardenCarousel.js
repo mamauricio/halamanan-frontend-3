@@ -93,8 +93,10 @@ const GardenCarousel = () => {
        sx={{ width: '60%', bgcolor: 'yellow', m: 1 }}
       >
        <img
+        alt={landscape.name}
+        loading="lazy"
         src={landscape.imgUrl}
-        alt="Image 1"
+        // alt="Image 1"
         style={{ width: '100%' }}
        />
       </Box>

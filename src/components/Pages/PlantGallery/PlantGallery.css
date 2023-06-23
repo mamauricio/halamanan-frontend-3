@@ -3,7 +3,9 @@
     position:relative;
     height: 100%;
     width: 220px;
-    background-color: #264933;
+    /* background-color: #264933; */
+    background-color: #52734D;
+
     margin: 15px;
     padding: 15px;
     text-align: center;
@@ -12,6 +14,7 @@
     transition: max-height 1s ease-in-out, width 1s ease-in-out, height 1s ease-in-out;
     max-height: 400px;
     overFlow: contain;
+
 }
 
 .itemContainer.active{
@@ -31,7 +34,7 @@
     
 }
 .imageContainerContainer.active {
-    background-color: orange;    
+    background-color: #BFD2BC;    
     border-radius: 10px;
     padding-left: 10px;
     padding-top: 10px;
@@ -42,11 +45,11 @@
     margin-left: 6%;
     border: solid;
     border-width: 1px;
-    border-color: #264933;
+    border-color: #52734D;
     
 }
 .imageContainer{
-    background-color: orange;
+    background-color: #BFD2BC;
     border-radius: 10px;
     height: 250px;
     width: 220px;
@@ -63,7 +66,7 @@
     width: 400px;
     border: solid;
     border-width: 1px;
-    border-color: #264933;
+    border-color: #52734D;
 }
 
 .imageContainer img {
@@ -97,7 +100,7 @@
     width: 350px;
     max-height: 800px;
     opacity: 1;
-    background-color: #264933;
+    background-color: #52734D;
     box-shadow: 0px 1px 15px #162939;
 }
 
@@ -106,7 +109,7 @@
     width: 80%;
     max-width: 300px;
     background-color: rgba(255, 255, 255, 1);
-    color: #264933;
+    color: #52734D;
     text-align: center;
     position: static;
     border-radius: 5px;

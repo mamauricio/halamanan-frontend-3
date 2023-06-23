@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { resolvePath, useLocation, useParams } from 'react-router-dom';
 import { useItemsContext } from '../../../hooks/useItemsContext';
 import { useTheme, ThemeProvider } from '@mui/material/styles';
 import html2canvas from 'html2canvas';
@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
-
+import { FadeLoader } from 'react-spinners';
 import DesignArea from './DesignArea/DesignArea';
 import ReplaceImageButton from './Buttons/ReplaceImageButton';
 import SaveDesignButton from './Buttons/SaveDesignButton';
@@ -30,16 +30,8 @@ const MainDesign = () => {
  const { items, dispatch } = useItemsContext();
  const [designThumbnail, setDesignThumbnail] = useState(null);
  const [selectedItems, setSelectedItems] = useState([]);
- const [saving, setSaving] = useState('');
-
- const [anchorEl, setAnchorEl] = React.useState(null);
- const open = Boolean(anchorEl);
- const handleClick = (event) => {
-  setAnchorEl(event.currentTarget);
- };
- const handleClose = () => {
-  setAnchorEl(null);
- };
+ const [fetching, setFetching] = useState(true);
+ const [color, setColor] = useState('#ECAB00');
 
  const [showDesign, setShowDesign] = useState(false);
  const [aspectRatio, setAspectRatio] = useState('');
@@ -62,6 +54,7 @@ const MainDesign = () => {
      dispatch({ type: 'GET_ITEMS', payload: fetchedItem.items });
      setBackgroundImage(fetchedItem.backgroundImage);
      setShowDesign(true);
+     setFetching(false);
     } catch (error) {}
    };
 
@@ -118,7 +111,7 @@ const MainDesign = () => {
  };
 
  const handleSaveToDevice = async (blob) => {
-  createThumbnail();
+  await createThumbnail();
   const designURL = designThumbnail.toDataURL();
   const a = document.createElement('a');
   a.href = designURL;
@@ -128,11 +121,14 @@ const MainDesign = () => {
  };
 
  const createThumbnail = () => {
-  html2canvas(document.querySelector('#backgroundImageContainer')).then(
-   (canvas) => {
-    setDesignThumbnail(canvas);
-   }
-  );
+  return new Promise((resolve) => {
+   html2canvas(document.querySelector('#backgroundImageContainer')).then(
+    (canvas) => {
+     setDesignThumbnail(canvas);
+     resolve();
+    }
+   );
+  });
  };
 
  return (
@@ -152,46 +148,84 @@ const MainDesign = () => {
         md={12}
         xl={8}
        >
-        <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
-         <TextField
-          required
-          label="Design Name"
-          value={designName}
-          onChange={(e) => {
-           handleDesignName(e.target.value);
+        {fetching === true ? (
+         <Box
+          sx={{
+           display: 'flex',
+           position: 'absolute',
+           top: '50%',
+           left: '50%',
+           transform: 'translate(-50%,-50%)',
+           flexDirection: 'column',
+           alignItems: 'center',
           }}
-         />
-
-         <Box sx={{ display: 'flex' }}>
-          <SaveDesignButton
-           designName={designName}
-           backgroundImage={backgroundImage}
-           items={items}
-           aspectRatio={aspectRatio}
-          />
-          <ReplaceImageButton
-           handleReplaceBackground={handleReplaceBackground}
-          />
-          <ResetButton />
-          <Button
-           onClick={handleSaveToDevice}
+         >
+          <Box
            sx={{
             color: 'primary.main',
+            fontSize: '30px',
+            mb: 2,
             display: 'flex',
+
             justifyContent: 'center',
+            alignItems: 'center',
            }}
           >
-           <SaveAltIcon />
-           Download
-          </Button>
+           Fetching Items
+          </Box>
+          {/* <br /> */}
+          <FadeLoader
+           color={color}
+           loading={fetching}
+           size={200}
+           aria-label="Loading Spinner"
+           data-testid="loader"
+          />
          </Box>
-        </Box>
+        ) : (
+         <>
+          <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
+           <TextField
+            required
+            label="Design Name"
+            value={designName}
+            onChange={(e) => {
+             handleDesignName(e.target.value);
+            }}
+           />
 
-        <DesignArea
-         backgroundImage={backgroundImage}
-         items={items ? items : ''}
-         backgroundAspectRatio={aspectRatio}
-        />
+           <Box sx={{ display: 'flex' }}>
+            <SaveDesignButton
+             designName={designName}
+             backgroundImage={backgroundImage}
+             items={items}
+             aspectRatio={aspectRatio}
+            />
+            <ReplaceImageButton
+             handleReplaceBackground={handleReplaceBackground}
+            />
+            <ResetButton />
+            <Button
+             onClick={handleSaveToDevice}
+             sx={{
+              color: 'primary.main',
+              display: 'flex',
+              justifyContent: 'center',
+             }}
+            >
+             <SaveAltIcon />
+             Download
+            </Button>
+           </Box>
+          </Box>
+
+          <DesignArea
+           backgroundImage={backgroundImage}
+           items={items ? items : ''}
+           backgroundAspectRatio={aspectRatio}
+          />
+         </>
+        )}
        </Grid>
        <Grid
         item

@@ -210,6 +210,7 @@ const AddNewItemButton = () => {
          }}
         >
          <img
+          loading="lazy"
           src={itemData.imageUrl}
           style={{ maxWidth: '100%', maxHeight: '100%' }}
          />

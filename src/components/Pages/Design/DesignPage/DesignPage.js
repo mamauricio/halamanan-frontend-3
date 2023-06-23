@@ -6,12 +6,13 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
 import Modal from '@mui/material/Modal';
+import Alert from '@mui/material/Alert';
+import Grow from '@mui/material/Grow';
 
 import UserDesigns from '../UserDesigns/UserDesigns';
 import axios from 'axios';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteOutline';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-
 import ModeEditRoundedIcon from '@mui/icons-material/ModeEditRounded';
 import { useDesignContext } from '../../../hooks/useDesignContext';
 
@@ -24,7 +25,17 @@ const DesignPage = () => {
  const [openDesign, setOpenDesign] = useState(false);
  const [error, setError] = useState(null);
  const [openMain, setOpenMain] = useState(false);
-
+ const [alertMessage, setAlertMessage] = useState('');
+ const [openAlert, setOpenAlert] = useState(false);
+ const handleOpenAlert = () => {
+  setOpenAlert(true);
+  const timer = setTimeout(() => {
+   setOpenAlert(false);
+  }, 2000);
+ };
+ const handleCloseAlert = () => {
+  setOpenAlert(false);
+ };
  const handleOpen = () => {
   setOpen(true);
  };
@@ -82,7 +93,9 @@ const DesignPage = () => {
      payload: design._id,
     });
     handleClose();
-    window.location.href = window.location.href;
+    setAlertMessage(`Successfully Deleted ${design.designName}`);
+    handleOpenAlert();
+    // window.location.href = window.location.href;
    })
    .catch((error) => {
     setError(error);
@@ -102,6 +115,23 @@ const DesignPage = () => {
     disableGutters={true}
     maxWidth="xl"
    >
+    {openAlert && (
+     <Grow in={openAlert}>
+      <Alert
+       //  severity="success"
+       onClose={handleCloseAlert}
+       sx={{
+        position: 'absolute',
+        color: 'orange',
+        bgcolor: 'background.default',
+        top: '20%',
+        left: '50%',
+       }}
+      >
+       {alertMessage}
+      </Alert>
+     </Grow>
+    )}
     <Grid
      container
      spacing={1}
@@ -155,7 +185,6 @@ const DesignPage = () => {
              display: 'flex',
              flexDirection: 'row',
              height: '40px',
-             //  bgcolor: 'yellow',
              width: '220px',
              mt: 1,
              mr: 1,
