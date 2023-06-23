@@ -43,7 +43,7 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
      const designs = text ? JSON.parse(text) : [];
      dispatch({ type: 'GET_DESIGNS', payload: designs });
      setShow(true);
-     setFetching(false);
+     //  setFetching(false);
     }
    } catch (error) {
     console.error('Error fetching designs:', error);
@@ -157,26 +157,23 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
       <Box
        sx={{
         display: 'flex',
-        position: 'absolute',
+        mt: 10,
         top: '50%',
-        left: '50%',
-        transform: 'translate(-50%,-50%)',
         flexDirection: 'column',
         alignItems: 'center',
        }}
       >
        <Box
         sx={{
-         color: 'primary.main',
+         color: '#ECAB00',
          fontSize: '30px',
          mb: 2,
          display: 'flex',
-
          justifyContent: 'center',
          alignItems: 'center',
         }}
        >
-        Fetching Items
+        Fetching Designs
        </Box>
        {/* <br /> */}
        <FadeLoader
