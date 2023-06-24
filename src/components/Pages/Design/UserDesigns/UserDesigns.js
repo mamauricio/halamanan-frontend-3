@@ -22,12 +22,15 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
  const [show, setShow] = useState(false);
  useEffect(() => {
   const fetchDesigns = async () => {
-   const response = await fetch('http://localhost:3001/designs', {
-    headers: {
-     'Content-Type': 'application/json',
-     token: sessionStorage.getItem('token'),
-    },
-   });
+   const response = await fetch(
+    ' https://halamanan-197e9734b120.herokuapp.com/designs',
+    {
+     headers: {
+      'Content-Type': 'application/json',
+      token: sessionStorage.getItem('token'),
+     },
+    }
+   );
 
    try {
     if (response.ok) {
@@ -79,7 +82,7 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
    const user_id = sessionStorage.getItem('token').toString();
 
    const response = await axios
-    .post('http://localhost:3001/designs/create', {
+    .post(' https://halamanan-197e9734b120.herokuapp.com/designs/create', {
      designThumbnail: backgroundImage,
      user_id: user_id,
      designName: `Design-${user_id + (designs ? designs.length + 1 : 1)}`,

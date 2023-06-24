@@ -45,7 +45,9 @@ const MainDesign = () => {
   if (isValidObjectId(id)) {
    const fetchItem = async () => {
     try {
-     const response = await axios.get(`http://localhost:3001/designs/${id}`);
+     const response = await axios.get(
+      ` https://halamanan-197e9734b120.herokuapp.com/designs/${id}`
+     );
      const fetchedItem = response.data;
 
      setDesignName(fetchedItem.designName);
