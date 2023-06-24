@@ -39,14 +39,11 @@ const ItemTray = ({ handleAddItem }) => {
  const fetchUserFavorites = async () => {
   try {
    const token = sessionStorage.getItem('token');
-   const response = await fetch(
-    'https://halamanan-197e9734b120.herokuapp.com/favorites',
-    {
-     headers: {
-      token: token,
-     },
-    }
-   );
+   const response = await fetch('http://localhost:3001/favorites', {
+    headers: {
+     token: token,
+    },
+   });
 
    const data = await response.json();
    setFavorites(data);
@@ -55,7 +52,7 @@ const ItemTray = ({ handleAddItem }) => {
 
  useEffect(() => {
   axios
-   .get('https://halamanan-197e9734b120.herokuapp.com/gallery')
+   .get('http://localhost:3001/gallery')
    .then((response) => {
     const fetchedItems = response.data;
     setItemTrayItems(fetchedItems);

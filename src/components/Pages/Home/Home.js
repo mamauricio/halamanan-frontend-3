@@ -1,12 +1,9 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import GardenCarousel from './Carousel/GardenCarousel';
 import { Container, Box, Grid, Fade } from '@mui/material';
-// import UserDesigns from '../Design/UserDesigns/UserDesigns';
 const UserDesigns = React.lazy(() =>
  import('../Design/UserDesigns/UserDesigns')
 );
-
-// const Admin = React.lazy(() => import('./Admin.js'));
 
 const Home = () => {
  const [openMain, setOpenMain] = useState(false);

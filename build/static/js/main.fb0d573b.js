@@ -1,4 +1,4 @@
-/*! For license information please see main.71f6ebb9.js.LICENSE.txt */
+/*! For license information please see main.fb0d573b.js.LICENSE.txt */
 !(function () {
  var e = {
    1367: function (e, t, n) {
@@ -278,14 +278,8 @@
        T = (P[0], P[1]),
        R = (0, i.useState)(!1),
        L = (0, o.Z)(R, 2),
-       O = (L[0], L[1]),
-       D = (0, i.useState)(''),
-       M = (0, o.Z)(D, 2),
-       j = (M[0], M[1]),
-       N = (0, i.useState)(!1),
-       K = (0, o.Z)(N, 2),
-       z = K[0],
-       V = K[1];
+       O = L[0],
+       D = L[1];
       (0, i.useEffect)(function () {
        var e = (function () {
         var e = (0, r.Z)(
@@ -298,7 +292,7 @@
               case 0:
                return (
                 (e.next = 2),
-                fetch('https://halamanan-197e9734b120.herokuapp.com/designs', {
+                fetch('http://localhost:3001/designs', {
                  headers: {
                   'Content-Type': 'application/json',
                   token: sessionStorage.getItem('token'),
@@ -315,7 +309,7 @@
                (n = e.sent),
                 (r = n ? JSON.parse(n) : []),
                 m({ type: 'GET_DESIGNS', payload: r }),
-                V(!0),
+                D(!0),
                 Z(!1);
               case 12:
                e.next = 17;
@@ -341,21 +335,21 @@
        })();
        e();
       }, []);
-      var _ = {
+      var M = {
         backgroundColor: 'white',
         borderRadius: 2,
         p: 1,
         mb: 1,
         cursor: 'pointer',
        },
-       W = {
+       j = {
         cursor: 'cursor',
         backgroundColor: 'white',
         borderRadius: 2,
         p: 1,
         mb: 1,
        },
-       G = (function () {
+       N = (function () {
         var e = (0, r.Z)(
          (0, A.Z)().mark(function e() {
           var t, n, r;
@@ -373,48 +367,37 @@
                 }),
                 (e.prev = 4),
                 (r = sessionStorage.getItem('token').toString()),
-                {
-                 designThumbnail: 'we',
+                (e.next = 8),
+                C.Z.post('http://localhost:3001/designs/create', {
+                 designThumbnail: t,
                  user_id: r,
                  designName: 'Design-'.concat(r + (g ? g.length + 1 : 1)),
                  items: [],
-                 backgroundImage: 'we',
-                },
-                (e.next = 9),
-                C.Z.post(
-                 'https://halamanan-197e9734b120.herokuapp.com/designs/create',
-                 {
-                  designThumbnail: t,
-                  user_id: r,
-                  designName: 'Design-'.concat(r + (g ? g.length + 1 : 1)),
-                  items: [],
-                  backgroundImage: t,
-                 }
-                )
+                 backgroundImage: t,
+                })
                  .then(function (e) {
-                  j(e.data + 'Redirecting to design area'), O(!0);
                   setTimeout(function () {
                    p('/designs/'.concat(e.data));
-                  }, 200);
+                  }, 500);
                   console.log('Response:', e.data);
                  })
                  .catch(function (e) {
                   console.error('Error:', e);
                  })
                );
-              case 9:
-               e.sent, (e.next = 15);
+              case 8:
+               e.sent, (e.next = 14);
                break;
-              case 12:
-               (e.prev = 12), (e.t0 = e.catch(4)), Q(e.t0.message);
-              case 15:
+              case 11:
+               (e.prev = 11), (e.t0 = e.catch(4)), Q(e.t0.message);
+              case 14:
               case 'end':
                return e.stop();
              }
            },
            e,
            null,
-           [[4, 12]]
+           [[4, 11]]
           );
          })
         );
@@ -453,24 +436,22 @@
             ? (0, y.jsxs)(s.Z, {
                sx: {
                 display: 'flex',
-                position: 'absolute',
+                mt: 10,
                 top: '50%',
-                left: '50%',
-                transform: 'translate(-50%,-50%)',
                 flexDirection: 'column',
                 alignItems: 'center',
                },
                children: [
                 (0, y.jsx)(s.Z, {
                  sx: {
-                  color: 'primary.main',
+                  color: '#ECAB00',
                   fontSize: '30px',
                   mb: 2,
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
                  },
-                 children: 'Fetching Items',
+                 children: 'Fetching Designs',
                 }),
                 (0, y.jsx)(b.Z, {
                  color: S,
@@ -493,7 +474,7 @@
                      return (0, y.jsx)(
                       f.Z,
                       {
-                       in: z,
+                       in: O,
                        children: (0, y.jsxs)(
                         c.Z,
                         {
@@ -503,7 +484,7 @@
                            t(e);
                           })(e);
                          },
-                         sx: n ? W : _,
+                         sx: n ? j : M,
                          children: [
                           (0, y.jsx)('img', {
                            src: e.designThumbnail,
@@ -537,7 +518,7 @@
                      borderRadius: 1,
                      p: 1,
                      position: 'relative',
-                     width: '80%%',
+                     width: '80%',
                     },
                     children: 'No designs yet',
                    }),
@@ -549,7 +530,7 @@
              justifyContent: 'center',
              alignContent: 'center',
             },
-            children: (0, y.jsx)(B, { handleCreateNewDesign: G }),
+            children: (0, y.jsx)(B, { handleCreateNewDesign: N }),
            }),
           ],
          }),
@@ -44651,12 +44632,9 @@
               return (
                (e.prev = 0),
                (e.next = 3),
-               fetch(
-                'https://halamanan-197e9734b120.herokuapp.com/admin/users',
-                {
-                 headers: { token: 'admin' },
-                }
-               )
+               fetch('http://localhost:3001/admin/users', {
+                headers: { token: 'admin' },
+               })
               );
              case 3:
               return (t = e.sent), (e.next = 6), t.json();
@@ -44718,10 +44696,7 @@
                (e.prev = 1),
                (e.next = 4),
                Br.Z.patch(
-                'https://halamanan-197e9734b120.herokuapp.com/admin/users/'.concat(
-                 c._id,
-                 '/edit'
-                ),
+                'http://localhost:3001/admin/users/'.concat(c._id, '/edit'),
                 { userData: h }
                )
               );
@@ -44768,10 +44743,7 @@
                (e.prev = 0),
                (e.next = 3),
                Br.Z.patch(
-                'https://halamanan-197e9734b120.herokuapp.com/admin/users/'.concat(
-                 t,
-                 '/promote'
-                )
+                'http://localhost:3001/admin/users/'.concat(t, '/promote')
                )
               );
              case 3:
@@ -44816,10 +44788,7 @@
                (e.prev = 0),
                (e.next = 3),
                Br.Z.patch(
-                'https://halamanan-197e9734b120.herokuapp.com/admin/users/'.concat(
-                 t,
-                 '/demote'
-                )
+                'http://localhost:3001/admin/users/'.concat(t, '/demote')
                )
               );
              case 3:
@@ -44864,11 +44833,7 @@
               return (
                (e.prev = 0),
                (e.next = 3),
-               Br.Z.delete(
-                'https://halamanan-197e9734b120.herokuapp.com/admin/users/'.concat(
-                 t
-                )
-               )
+               Br.Z.delete('http://localhost:3001/admin/users/'.concat(t))
               );
              case 3:
               s(function (e) {
@@ -45707,9 +45672,7 @@
              switch ((e.prev = e.next)) {
               case 0:
                return (
-                (e.prev = 0),
-                (e.next = 3),
-                fetch('https://halamanan-197e9734b120.herokuapp.com/admin')
+                (e.prev = 0), (e.next = 3), fetch('http://localhost:3001/admin')
                );
               case 3:
                return (t = e.sent), (e.next = 6), t.json();
@@ -45840,12 +45803,9 @@
               return (
                (e.prev = 0),
                (e.next = 3),
-               Br.Z.delete(
-                'https://halamanan-197e9734b120.herokuapp.com/admin/pending/',
-                {
-                 params: { id: t },
-                }
-               )
+               Br.Z.delete('http://localhost:3001/admin/pending/', {
+                params: { id: t },
+               })
               );
              case 3:
               e.sent,
@@ -45952,25 +45912,19 @@
                imageUrl: n.newItemUrl,
               }),
               (e.next = 4),
-              fetch(
-               'https://halamanan-197e9734b120.herokuapp.com/gallery/add-item',
-               {
-                method: 'POST',
-                body: JSON.stringify(r),
-                headers: { 'Content-type': 'application/json' },
-               }
-              )
+              fetch('http://localhost:3001/gallery/add-item', {
+               method: 'POST',
+               body: JSON.stringify(r),
+               headers: { 'Content-type': 'application/json' },
+              })
              );
             case 4:
              return (
               e.sent,
               (e.next = 7),
-              Br.Z.delete(
-               'https://halamanan-197e9734b120.herokuapp.com/admin/pending/',
-               {
-                params: { id: n._id },
-               }
-              )
+              Br.Z.delete('http://localhost:3001/admin/pending/', {
+               params: { id: n._id },
+              })
              );
             case 7:
              e.sent,
@@ -46123,25 +46077,19 @@
                imageUrl: n.newItemUrl,
               }),
               (e.next = 4),
-              fetch(
-               'https://halamanan-197e9734b120.herokuapp.com/gallery/add-item',
-               {
-                method: 'POST',
-                body: JSON.stringify(A),
-                headers: { 'Content-type': 'application/json' },
-               }
-              )
+              fetch('http://localhost:3001/gallery/add-item', {
+               method: 'POST',
+               body: JSON.stringify(A),
+               headers: { 'Content-type': 'application/json' },
+              })
              );
             case 4:
              return (
               e.sent,
               (e.next = 7),
-              Br.Z.delete(
-               'https://halamanan-197e9734b120.herokuapp.com/admin/pending/',
-               {
-                params: { id: n._id },
-               }
-              )
+              Br.Z.delete('http://localhost:3001/admin/pending/', {
+               params: { id: n._id },
+              })
              );
             case 7:
              e.sent, d(), p({ type: 'REMOVE_NEW_ITEM', payload: n._id });
@@ -46474,14 +46422,11 @@
                imageSource: S.newItemImageSource,
                imageUrl: S.newItemUrl,
               }),
-               fetch(
-                'https://halamanan-197e9734b120.herokuapp.com/gallery/add-item',
-                {
-                 method: 'POST',
-                 body: JSON.stringify(n),
-                 headers: { 'Content-type': 'application/json' },
-                }
-               ) &&
+               fetch('http://localhost:3001/gallery/add-item', {
+                method: 'POST',
+                body: JSON.stringify(n),
+                headers: { 'Content-type': 'application/json' },
+               }) &&
                 (E({
                  newItemName: '',
                  newItemScientificName: '',
@@ -47054,7 +46999,7 @@
               return (
                (e.prev = 0),
                (e.next = 3),
-               fetch('https://halamanan-197e9734b120.herokuapp.com/gallery/', {
+               fetch('http://localhost:3001/designs/', {
                 headers: { token: 'admin' },
                })
               );
@@ -47092,12 +47037,9 @@
               return (
                (e.prev = 0),
                (e.next = 3),
-               fetch(
-                'https://halamanan-197e9734b120.herokuapp.com/admin/users',
-                {
-                 headers: { token: 'admin' },
-                }
-               )
+               fetch('http://localhost:3001/admin/users', {
+                headers: { token: 'admin' },
+               })
               );
              case 3:
               return (t = e.sent), (e.next = 6), t.json();
@@ -47133,7 +47075,7 @@
               return (
                (e.prev = 0),
                (e.next = 3),
-               fetch('https://halamanan-197e9734b120.herokuapp.com/gallery')
+               fetch('http://localhost:3001/gallery')
               );
              case 3:
               return (t = e.sent), (e.next = 6), t.json();
@@ -47167,9 +47109,7 @@
             switch ((e.prev = e.next)) {
              case 0:
               return (
-               (e.prev = 0),
-               (e.next = 3),
-               fetch('https://halamanan-197e9734b120.herokuapp.com/admin/')
+               (e.prev = 0), (e.next = 3), fetch('http://localhost:3001/admin/')
               );
              case 3:
               return (t = e.sent), (e.next = 6), t.json();
@@ -47300,28 +47240,24 @@
       $ = (0, r.Z)(Y, 2),
       ee = $[0],
       te = $[1],
-      ne = (0, e.useState)(!0),
-      Ae = (0, r.Z)(ne, 2),
-      re =
-       (Ae[0],
-       Ae[1],
-       function () {
-        j(!0);
-       }),
-      oe = function () {
+      ne = function () {
+       j(!0);
        var e = setTimeout(function () {
         j(!1);
        }, 4e3);
        return function () {
         clearTimeout(e);
        };
+      },
+      Ae = function () {
+       j(!1);
       };
      (0, e.useEffect)(function () {
       setTimeout(function () {
        te(!0);
       }, 250);
      }, []);
-     var ie = (function () {
+     var re = (function () {
        var e = (0, pe.Z)(
         (0, fe.Z)().mark(function e(t) {
          return (0, fe.Z)().wrap(function (e) {
@@ -47335,16 +47271,16 @@
                method: 'post',
                data: { firstName: C, lastName: U, email: Z, password: R },
                withCredentials: !0,
-               url: 'https://halamanan-197e9734b120.herokuapp.com/signup',
+               url: 'http://localhost:3001/signup',
               })
                .then(function (e) {
                 X('Signed up succesfully. Proceed to login.'),
-                 re(),
+                 ne(),
                  y(!0),
-                 oe();
+                 Ae();
                })
                .catch(function (e) {
-                e.response && (V(e.response.data.error), re(), oe());
+                e.response && (V(e.response.data.error), ne(), Ae());
                })
              );
             case 3:
@@ -47360,7 +47296,7 @@
         return e.apply(this, arguments);
        };
       })(),
-      ae = (function () {
+      oe = (function () {
        var e = (0, pe.Z)(
         (0, fe.Z)().mark(function e(t) {
          return (0, fe.Z)().wrap(function (e) {
@@ -47369,28 +47305,33 @@
             case 0:
              return (
               t.preventDefault(),
-              (e.next = 3),
+              X('Attempting to log in.'),
+              ne(),
+              (e.next = 5),
               (0, Br.Z)({
                method: 'post',
                data: { email: Z, password: R },
                withCredentials: !0,
                credentials: 'include',
-               url: 'https://halamanan-197e9734b120.herokuapp.com/login',
+               url: 'http://localhost:3001/login',
               })
                .then(function (e) {
-                if ('admin' === e.data) n('admin');
+                if ((X('Authenticating'), 'admin' === e.data)) n('admin');
                 else if (e.data) {
                  var t = e.data.userId;
-                 n(t);
+                 X('Authenticating');
+                 setTimeout(function () {
+                  n(t);
+                 }, 1200);
                 }
                })
                .catch(function (e) {
                 h(e.response.data.error);
                })
              );
-            case 3:
+            case 5:
              e.sent;
-            case 4:
+            case 6:
             case 'end':
              return e.stop();
            }
@@ -47401,12 +47342,12 @@
         return e.apply(this, arguments);
        };
       })(),
-      se = function () {
+      ie = function () {
        x(''), E(''), H(''), L(''), y(!v);
       },
-      le = (0, SA.Z)();
+      ae = (0, SA.Z)();
      return (0, b.jsx)(S, {
-      theme: le,
+      theme: ae,
       children: (0, b.jsx)(Od.Z, {
        in: ee,
        children: (0, b.jsxs)(J.Z, {
@@ -47433,7 +47374,7 @@
            in: M,
            children: (0, b.jsx)(Me, {
             severity: z ? 'error' : 'success',
-            onClose: oe,
+            onClose: Ae,
             sx: {
              color: 'primary.main',
              backgroundColor: z ? 'red' : 'orange',
@@ -47451,7 +47392,7 @@
              children: (0, b.jsxs)(J.Z, {
               component: 'form',
               onSubmit: function (e) {
-               return ae(e);
+               return oe(e);
               },
               sx: {
                display: 'flex',
@@ -47501,7 +47442,7 @@
                  (0, b.jsx)(Ct.Z, {
                   color: 'primary',
                   type: 'button',
-                  onClick: se,
+                  onClick: ie,
                   sx: {
                    bgcolor: 'primary.main',
                    mr: 1,
@@ -47546,7 +47487,7 @@
               }),
               (0, b.jsxs)(J.Z, {
                component: 'form',
-               onSubmit: ie,
+               onSubmit: re,
                sx: {
                 bgcolor: 'orange',
                 p: 2,
@@ -47608,7 +47549,7 @@
                  children: [
                   (0, b.jsx)(Ct.Z, {
                    type: 'button',
-                   onClick: se,
+                   onClick: ie,
                    sx: {
                     bgcolor: 'primary.main',
                     color: 'white',
@@ -49805,12 +49746,7 @@
                 designThumbnail: r,
                 items: A,
                }),
-               (a = Br.Z.patch(
-                'https://halamanan-197e9734b120.herokuapp.com/designs/'.concat(
-                 p
-                ),
-                o
-               )),
+               (a = Br.Z.patch('http://localhost:3001/designs/'.concat(p), o)),
                f({
                 type: 'UPDATE_DESIGN',
                 payload: { designId: p, newData: o },
@@ -49844,7 +49780,7 @@
      return (
       e.useEffect(function () {
        var e = setInterval(function () {
-        C(!0);
+        C(!0), console.log(p), console.log('autosaving');
        }, 6e4);
        return function () {
         C(!1), clearInterval(e);
@@ -49852,9 +49788,9 @@
       }, []),
       e.useEffect(
        function () {
-        w && A !== a && (U(), C(!1));
+        w && A !== a && (console.log('stopping autosave'), U(), C(!1));
        },
-       [w, A, a, U]
+       [w, A, p, U]
       ),
       (0, b.jsxs)(b.Fragment, {
        children: [
@@ -50855,12 +50791,9 @@
                 (e.prev = 0),
                 (t = sessionStorage.getItem('token')),
                 (e.next = 4),
-                fetch(
-                 'https://halamanan-197e9734b120.herokuapp.com/favorites',
-                 {
-                  headers: { token: t },
-                 }
-                )
+                fetch('http://localhost:3001/favorites', {
+                 headers: { token: t },
+                })
                );
               case 4:
                return (n = e.sent), (e.next = 7), n.json();
@@ -50885,7 +50818,7 @@
         };
        })());
      (0, e.useEffect)(function () {
-      Br.Z.get('https://halamanan-197e9734b120.herokuapp.com/gallery')
+      Br.Z.get('http://localhost:3001/gallery')
        .then(function (e) {
         var t = e.data;
         s(t);
@@ -51067,11 +51000,7 @@
                 return (
                  (e.prev = 0),
                  (e.next = 3),
-                 Br.Z.get(
-                  'https://halamanan-197e9734b120.herokuapp.com/designs/'.concat(
-                   t
-                  )
-                 )
+                 Br.Z.get('http://localhost:3001/designs/'.concat(t))
                 );
                case 3:
                 (n = e.sent),
@@ -51380,14 +51309,9 @@
            case 0:
             return (
              (e.next = 2),
-             Br.Z.delete(
-              'https://halamanan-197e9734b120.herokuapp.com/designs/'.concat(
-               t._id
-              ),
-              {
-               data: { id: t._id },
-              }
-             )
+             Br.Z.delete('http://localhost:3001/designs/'.concat(t._id), {
+              data: { id: t._id },
+             })
               .then(function (e) {
                f({ type: 'DELETE_DESIGN', payload: t._id }),
                 D(),
@@ -51932,14 +51856,11 @@
                 newItemScientificName: f.newItemScientificName,
                 newItemUrl: f.newItemUrl,
                }),
-               fetch(
-                'https://halamanan-197e9734b120.herokuapp.com/gallery/newItem',
-                {
-                 method: 'POST',
-                 body: JSON.stringify(r),
-                 headers: { 'Content-type': 'application/json' },
-                }
-               ),
+               fetch('http://localhost:3001/gallery/newItem', {
+                method: 'POST',
+                body: JSON.stringify(r),
+                headers: { 'Content-type': 'application/json' },
+               }),
                n(),
                p({
                 newItemName: '',
@@ -52258,7 +52179,7 @@
       }, 100);
      }, []);
      var Y = function () {
-       Br.Z.get('https://halamanan-197e9734b120.herokuapp.com/gallery')
+       Br.Z.get('http://localhost:3001/gallery')
         .then(function (e) {
          var t = e.data;
          B(t), p(!1);
@@ -52280,12 +52201,9 @@
                (e.prev = 0),
                (t = sessionStorage.getItem('token')),
                (e.next = 4),
-               (0, Br.Z)(
-                'https://halamanan-197e9734b120.herokuapp.com/favorites',
-                {
-                 headers: { token: t },
-                }
-               ).then(function (e) {
+               (0, Br.Z)('http://localhost:3001/favorites', {
+                headers: { token: t },
+               }).then(function (e) {
                 E(e.data);
                })
               );
@@ -52339,7 +52257,7 @@
                t.stopPropagation(),
                (e.prev = 1),
                (e.next = 4),
-               fetch('https://halamanan-197e9734b120.herokuapp.com/favorites', {
+               fetch('http://localhost:3001/favorites', {
                 method: 'POST',
                 headers: {
                  'Content-Type': 'application/json',
@@ -52387,7 +52305,7 @@
                t.stopPropagation(),
                (e.prev = 1),
                (e.next = 4),
-               fetch('https://halamanan-197e9734b120.herokuapp.com/favorites', {
+               fetch('http://localhost:3001/favorites', {
                 method: 'DELETE',
                 headers: {
                  'Content-Type': 'application/json',
@@ -52950,7 +52868,7 @@
              case 0:
               return (
                (e.next = 2),
-               fetch('https://halamanan-197e9734b120.herokuapp.com/profile/', {
+               fetch('http://localhost:3001/profile/', {
                 headers: { token: ''.concat(sessionStorage.getItem('token')) },
                })
               );
@@ -52990,14 +52908,11 @@
               case 0:
                return (
                 (e.next = 2),
-                fetch(
-                 'https://halamanan-197e9734b120.herokuapp.com/profile/pending',
-                 {
-                  headers: {
-                   newItemUserId: ''.concat(sessionStorage.getItem('token')),
-                  },
-                 }
-                )
+                fetch('http://localhost:3001/profile/pending', {
+                 headers: {
+                  newItemUserId: ''.concat(sessionStorage.getItem('token')),
+                 },
+                })
                );
               case 2:
                return (t = e.sent), (e.prev = 3), (e.next = 6), t.json();
@@ -53035,12 +52950,9 @@
              return (
               (e.prev = 0),
               (e.next = 3),
-              Br.Z.delete(
-               'https://halamanan-197e9734b120.herokuapp.com/profile/pending',
-               {
-                params: { id: t },
-               }
-              )
+              Br.Z.delete('http://localhost:3001/profile/pending', {
+               params: { id: t },
+              })
              );
             case 3:
              e.sent,
@@ -53493,4 +53405,4 @@
    );
   })();
 })();
-//# sourceMappingURL=main.71f6ebb9.js.map
+//# sourceMappingURL=main.fb0d573b.js.map

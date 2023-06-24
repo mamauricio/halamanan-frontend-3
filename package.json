@@ -1,5 +1,5 @@
 {
-  "proxy": "https://halamanan-197e9734b120.herokuapp.com/",
+  "proxy": "http://localhost:3001",
   "name": "halamanan",
   "version": "0.1.0",
   "private": true,

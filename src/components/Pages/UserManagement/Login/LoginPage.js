@@ -23,11 +23,8 @@ const LoginPage = ({ handleAuthenticate }) => {
  const [error, setError] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
  const [initialize, setInitialize] = useState(false);
- const [switchForm, setSwitchForm] = useState(true);
  const handleOpen = () => {
   setOpen(true);
- };
- const handleClose = () => {
   const timer = setTimeout(() => {
    setOpen(false);
   }, 4 * 1000);
@@ -35,6 +32,9 @@ const LoginPage = ({ handleAuthenticate }) => {
   return () => {
    clearTimeout(timer);
   };
+ };
+ const handleClose = () => {
+  setOpen(false);
  };
 
  useEffect(() => {
@@ -54,7 +54,7 @@ const LoginPage = ({ handleAuthenticate }) => {
     password: password,
    },
    withCredentials: true,
-   url: 'https://halamanan-197e9734b120.herokuapp.com/signup',
+   url: 'http://localhost:3001/signup',
   })
    .then((response) => {
     setAlertMessage('Signed up succesfully. Proceed to login.');
@@ -74,6 +74,8 @@ const LoginPage = ({ handleAuthenticate }) => {
 
  const handleLogin = async (event) => {
   event.preventDefault();
+  setAlertMessage('Attempting to log in.');
+  handleOpen();
 
   const response = await axios({
    method: 'post',
@@ -83,19 +85,24 @@ const LoginPage = ({ handleAuthenticate }) => {
    },
    withCredentials: true,
    credentials: 'include',
-   url: 'https://halamanan-197e9734b120.herokuapp.com/login',
+   url: 'http://localhost:3001/login',
   })
    .then((response) => {
+    setAlertMessage('Authenticating');
     if (response.data === 'admin') {
      handleAuthenticate('admin');
     } else if (response.data) {
      const hashedUserId = response.data.userId;
-     handleAuthenticate(hashedUserId);
+     setAlertMessage('Authenticating');
+     const timer = setTimeout(() => {
+      handleAuthenticate(hashedUserId);
+     }, 1200);
     } else {
     }
    })
    .catch((error) => {
     setErrorMessage(error.response.data.error);
+
     return;
    });
  };

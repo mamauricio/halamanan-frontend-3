@@ -52,7 +52,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
     items,
    };
    const response2 = axios.patch(
-    `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
+    `http://localhost:3001/designs/${id}`,
     newData
    );
 
@@ -77,6 +77,8 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  React.useEffect(() => {
   const autosave = setInterval(function () {
    setAutosave(true);
+   console.log(id);
+   console.log('autosaving');
   }, 60 * 1000); // runs every minute
   return () => {
    setAutosave(false); // turn autosave off
@@ -86,10 +88,11 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
 
  React.useEffect(() => {
   if (autosave && items !== saved) {
+   console.log('stopping autosave');
    handleSave();
    setAutosave(false); // toggle autosave off
   }
- }, [autosave, items, saved, handleSave]);
+ }, [autosave, items, id, handleSave]);
 
  //---------------------------------------------------END OF UPDATING EXISTING DESIGN-------------------------------
 

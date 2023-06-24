@@ -117,14 +117,11 @@ const Users = () => {
 
  const fetchAllUsers = async () => {
   try {
-   const response = await fetch(
-    'https://halamanan-197e9734b120.herokuapp.com/admin/users',
-    {
-     headers: {
-      token: 'admin',
-     },
-    }
-   );
+   const response = await fetch('http://localhost:3001/admin/users', {
+    headers: {
+     token: 'admin',
+    },
+   });
 
    const data = await response.json();
 
@@ -181,7 +178,7 @@ const Users = () => {
   event.preventDefault();
   try {
    await axios.patch(
-    `https://halamanan-197e9734b120.herokuapp.com/admin/users/${selectedUser._id}/edit`,
+    `http://localhost:3001/admin/users/${selectedUser._id}/edit`,
     { userData }
    );
    setUserList((userList) =>
@@ -201,9 +198,7 @@ const Users = () => {
 
  const handlePromote = async (userId) => {
   try {
-   await axios.patch(
-    `https://halamanan-197e9734b120.herokuapp.com/admin/users/${userId}/promote`
-   );
+   await axios.patch(`http://localhost:3001/admin/users/${userId}/promote`);
    setUserList((userList) =>
     userList.map((user) =>
      user._id === userId ? { ...user, role: 'admin' } : user
@@ -221,7 +216,7 @@ const Users = () => {
  const handleDemote = async (userId) => {
   try {
    const response = await axios.patch(
-    `https://halamanan-197e9734b120.herokuapp.com/admin/users/${userId}/demote`
+    `http://localhost:3001/admin/users/${userId}/demote`
    );
    setUserList((userList) =>
     userList.map((user) =>
@@ -239,9 +234,7 @@ const Users = () => {
 
  const handleDelete = async (userId) => {
   try {
-   await axios.delete(
-    `https://halamanan-197e9734b120.herokuapp.com/admin/users/${userId}`
-   );
+   await axios.delete(`http://localhost:3001/admin/users/${userId}`);
    setUserList((userList) => userList.filter((user) => user._id !== userId));
 
    handleClose();

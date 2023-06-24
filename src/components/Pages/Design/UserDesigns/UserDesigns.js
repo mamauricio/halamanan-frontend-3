@@ -19,23 +19,15 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
  const [color, setColor] = useState('#ECAB00');
  const [fetching, setFetching] = useState(true);
  const [aspectRatio, setAspectRatio] = useState();
- const [openAlert, setOpenAlert] = useState(false);
- const [alertMessage, setAlertMessage] = useState('');
- const handleOpenAlert = () => {
-  setOpenAlert(true);
- };
  const [show, setShow] = useState(false);
  useEffect(() => {
   const fetchDesigns = async () => {
-   const response = await fetch(
-    'https://halamanan-197e9734b120.herokuapp.com/designs',
-    {
-     headers: {
-      'Content-Type': 'application/json',
-      token: sessionStorage.getItem('token'),
-     },
-    }
-   );
+   const response = await fetch('http://localhost:3001/designs', {
+    headers: {
+     'Content-Type': 'application/json',
+     token: sessionStorage.getItem('token'),
+    },
+   });
 
    try {
     if (response.ok) {
@@ -43,7 +35,7 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
      const designs = text ? JSON.parse(text) : [];
      dispatch({ type: 'GET_DESIGNS', payload: designs });
      setShow(true);
-     //  setFetching(false);
+     setFetching(false);
     }
    } catch (error) {
     console.error('Error fetching designs:', error);
@@ -86,28 +78,18 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
   try {
    const user_id = sessionStorage.getItem('token').toString();
 
-   const design = {
-    designThumbnail: 'we',
-    user_id: user_id,
-    designName: `Design-${user_id + (designs ? designs.length + 1 : 1)}`,
-    items: [],
-    backgroundImage: 'we',
-   };
-
    const response = await axios
-    .post('https://halamanan-197e9734b120.herokuapp.com/designs/create', {
+    .post('http://localhost:3001/designs/create', {
      designThumbnail: backgroundImage,
      user_id: user_id,
      designName: `Design-${user_id + (designs ? designs.length + 1 : 1)}`,
      items: [],
      backgroundImage,
     })
-    .then(function (response) {
-     setAlertMessage(response.data + 'Redirecting to design area');
-     handleOpenAlert(true);
+    .then((response) => {
      const timer = setTimeout(() => {
       navigate(`/designs/${response.data}`);
-     }, 200);
+     }, 500);
      console.log('Response:', response.data);
     })
     .catch(function (error) {
@@ -235,7 +217,7 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
           borderRadius: 1,
           p: 1,
           position: 'relative',
-          width: '80%%',
+          width: '80%',
          }}
         >
          No designs yet
