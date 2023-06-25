@@ -15,7 +15,7 @@ import AdminNavBar from './Pages/AdminPage/AdminNavBar';
 import AdminRoutes from './Routes/AdminRoutes';
 import GuestRoutes from './Routes/GuestRoutes';
 import UserRoutes from './Routes/UserRoutes';
-import PlantGallery from './Pages/PlantGallery/PlantGallery';
+// import PlantGallery from './Pages/PlantGallery/PlantGallery';
 const App = () => {
  const navigate = useNavigate();
  const [isAuthenticated, setAuthenticated] = useState(
@@ -56,8 +56,8 @@ const App = () => {
   <>
    <TransitionGroup>
     <ThemeProvider theme={theme}>
-     <PlantGallery />
-     {/* {sessionStorage.getItem('adminAuth') ? (
+     {/* <PlantGallery /> */}
+     {sessionStorage.getItem('adminAuth') ? (
       <>
        <AdminNavBar handleLogout={handleLogout} />
        <AdminRoutes />
@@ -73,7 +73,7 @@ const App = () => {
         <GuestRoutes handleAuthenticate={handleAuthenticate} />
        )}
       </>
-     )} */}
+     )}
     </ThemeProvider>
    </TransitionGroup>
   </>
