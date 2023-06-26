@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDesignContext } from '../../../../hooks/useDesignContext';
-import { Button, Alert } from '@mui/material';
-import Zoom from '@mui/material/Zoom';
+import { Button, Alert, Zoom, Grow } from '@mui/material';
 
 import SaveIcon from '@mui/icons-material/Save';
 import html2canvas from 'html2canvas';
