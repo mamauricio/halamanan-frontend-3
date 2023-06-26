@@ -53455,7 +53455,7 @@
                     sessionStorage.setItem('adminAuth', !0),
                     sessionStorage.setItem('authenticated', !0),
                     void (window.location.href =
-                     'http://localhost:3000/admin/dashboard')
+                     'https://halamanan.netlify.app/admin/dashboard')
                    );
                   sessionStorage.getItem('token')
                    ? t('/login')
