@@ -57,7 +57,6 @@ const PlantGallery = () => {
  }, []);
 
  useEffect(() => {
-  // totalPageRef.current = 1;
   const fetchGalleryItems = () => {
    setIsLoading(true);
    console.log(page);
@@ -68,10 +67,7 @@ const PlantGallery = () => {
     )
     .then((response) => {
      const fetchedItems = response.data.items;
-     if (
-      totalPageRef.current !== null &&
-      response.data.page < response.data.totalPages
-     ) {
+     if (response.data.page < response.data.totalPages) {
       setItems((prevItems) => [...prevItems, ...fetchedItems]);
      }
      totalPageRef.current = parseInt(response.data.totalPages);
