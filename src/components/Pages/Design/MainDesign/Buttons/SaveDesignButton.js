@@ -14,6 +14,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  const { id } = useParams();
  const [error, setError] = useState(null);
  const [autosave, setAutosave] = useState(false);
+ const [isSaving, setIsSaving] = useState(false);
  const handleOpen = () => {
   setOpen(true);
   setTimeout(() => {
@@ -28,7 +29,6 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  const handleClick = async () => {
   await handleSave();
   handleOpen();
-  //   handleClose();
  };
 
  const handleSave = async () => {
@@ -44,41 +44,43 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
   );
   const designThumbnail = (await canvas).toDataURL('image/png');
 
-  try {
-   const newData = {
-    designName,
-    backgroundImage,
-    designThumbnail,
-    items,
-   };
-   const response2 = axios.patch(
-    `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
-    newData
-   );
+  if (setIsSaving === false) {
+   try {
+    setIsSaving(true);
+    const newData = {
+     designName,
+     backgroundImage,
+     designThumbnail,
+     items,
+    };
+    const response2 = axios.patch(
+     `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
+     newData
+    );
 
-   dispatch({
-    type: 'UPDATE_DESIGN',
-    payload: {
-     designId: id,
-     newData,
-    },
-   });
-   const saved = await response2;
-   console.log(saved);
-   if (response2) {
-    setError(null);
+    dispatch({
+     type: 'UPDATE_DESIGN',
+     payload: {
+      designId: id,
+      newData,
+     },
+    });
+    const saved = await response2;
+    if (response2) {
+     setIsSaving(false);
+     setError(null);
+    }
+   } catch (error) {
+    setError(error.message);
    }
-  } catch (error) {
-   console.log(error);
-   setError(error.message);
+  } else {
+   setError('Saving already in progress');
   }
  };
 
  React.useEffect(() => {
   const autosave = setInterval(function () {
    setAutosave(true);
-   console.log(id);
-   console.log('autosaving');
   }, 180 * 1000);
   return () => {
    setAutosave(false);
@@ -88,7 +90,6 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
 
  React.useEffect(() => {
   if (autosave && items !== saved) {
-   console.log('stopping autosave');
    handleSave();
    setAutosave(false);
   }
@@ -117,6 +118,28 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
     />
     Save
    </Button>
+   {isSaving && (
+    <Grow in={isSaving}>
+     {' '}
+     <Alert
+      //   onClose={handleClose}
+      variant="outlined"
+      severity="success"
+      sx={{
+       bgcolor: 'primary.main',
+       color: 'white',
+       position: 'absolute',
+       top: '20%',
+       left: '50%',
+       transform: 'translate(-50%, -50%)',
+       zIndex: 2,
+      }}
+     >
+      {' '}
+      Attempting to save design{' '}
+     </Alert>
+    </Grow>
+   )}
    <Zoom
     in={open}
     onClose={handleClose}
