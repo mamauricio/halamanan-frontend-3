@@ -17,18 +17,19 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  const [autosave, setAutosave] = useState(false);
  const handleOpen = () => {
   setOpen(true);
- };
-
- const handleClose = () => {
   setTimeout(() => {
    setOpen(false);
   }, 3 * 1000);
  };
 
+ const handleClose = () => {
+  setOpen(false);
+ };
+
  const handleClick = async () => {
   await handleSave();
   handleOpen();
-  handleClose();
+  //   handleClose();
  };
 
  const handleSave = async () => {

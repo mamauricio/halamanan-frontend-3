@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useRef } from 'react';
+import { React, useState, useEffect, useRef, useCallback } from 'react';
 import {
  Box,
  Container,
@@ -21,6 +21,22 @@ const PlantGallery = () => {
  const [showAlert, setShowAlert] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
  const [fetching, setFetching] = useState(true);
+
+ const [items, setItems] = useState([]);
+ const [page, setPage] = useState(1);
+ const totalPageRef = useRef(null);
+ //  const pageRef = useRef(1);
+ const [isLoading, setIsLoading] = useState(false);
+ const [favorites, setFavorites] = useState([]);
+ const [activeItem, setActiveItem] = useState(null);
+ const [selectedFilters, setSelectedFilters] = useState([]);
+ const [selectedCategory, setSelectedCategory] = useState([]);
+ const [openMain, setOpenMain] = useState(false);
+ const childRef = useRef(null);
+ const [color, setColor] = useState('#ECAB00');
+ const [error, setError] = useState([]);
+ const mainContainerRef = useRef(null);
+
  const openAlert = () => {
   setShowAlert(true);
  };
@@ -34,37 +50,74 @@ const PlantGallery = () => {
   };
  };
 
- const [items, setItems] = useState([]);
- const [error, setError] = useState([]);
- const [favorites, setFavorites] = useState([]);
- const [activeItem, setActiveItem] = useState(null);
- const [selectedFilters, setSelectedFilters] = useState([]);
- const [selectedCategory, setSelectedCategory] = useState([]);
- const [openMain, setOpenMain] = useState(false);
- const childRef = useRef(null);
- const [color, setColor] = useState('#ECAB00');
-
  useEffect(() => {
-  fetchGalleryItems();
-
-  fetchUserFavorites();
+  // totalPageRef.current = 1;
+  // fetchUserFavorites();
   const timer = setTimeout(() => {
    setOpenMain(true);
   }, 100);
  }, []);
 
- const fetchGalleryItems = () => {
-  axios
-   .get(' https://halamanan-197e9734b120.herokuapp.com/gallery')
-   .then((response) => {
-    const fetchedItems = response.data;
-    setItems(fetchedItems);
-    setFetching(false);
-   })
-   .catch((error) => {
-    setError(error.message);
-   });
- };
+ useEffect(() => {
+  // totalPageRef.current = 1;
+  const fetchGalleryItems = () => {
+   setIsLoading(true);
+   console.log(page);
+   //  pageRef.current = 1;
+   //  if (page <= totalPageRef.current) {
+   axios
+    .get(
+     `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10`
+    )
+    .then((response) => {
+     const fetchedItems = response.data.items;
+     if (
+      totalPageRef.current !== null &&
+      response.data.page < response.data.totalPages
+     ) {
+      setItems((prevItems) => [...prevItems, ...fetchedItems]);
+     }
+     totalPageRef.current = parseInt(response.data.totalPages);
+
+     setIsLoading(false);
+     setFetching(false);
+    })
+    .catch((error) => {
+     setError(error.message);
+     setIsLoading(false);
+    });
+  };
+
+  fetchGalleryItems();
+ }, [page]);
+
+ const handleScroll = useCallback(() => {
+  const mainContainer = mainContainerRef.current;
+
+  if (
+   mainContainer.scrollTop + mainContainer.clientHeight >=
+   mainContainer.scrollHeight
+  ) {
+   const totalPages = parseInt(totalPageRef.current);
+   console.log(`current page: ${page}`);
+   console.log(`total pages: ${totalPages}`);
+   if (parseInt(page) < totalPages && isLoading === false) {
+    console.log('adding +1');
+    setPage((page) => page + 1);
+   }
+  }
+ }, [page, isLoading]);
+
+ useEffect(() => {
+  console.log('attaching ');
+  const mainContainer = mainContainerRef.current;
+  if (mainContainer) {
+   mainContainer.addEventListener('scroll', handleScroll);
+   return () => {
+    mainContainer.removeEventListener('scroll', handleScroll);
+   };
+  }
+ }, [fetching, handleScroll]);
 
  const fetchUserFavorites = async () => {
   try {
@@ -87,6 +140,14 @@ const PlantGallery = () => {
  const isItemInFavorites = (itemId) => {
   return favorites.some((favorite) => favorite.itemId === itemId);
  };
+
+ //  const filterItems = async () => {
+ //   try{
+ //     const response = await axios.get('/favorites', {
+
+ //     } )
+ //   }
+ //  }
 
  const filteredItems = items.filter((item) => {
   if (selectedCategory === 'favorites' && isItemInFavorites(item._id)) {
@@ -216,7 +277,7 @@ const PlantGallery = () => {
        hyphens: 'auto',
       }}
      >
-      `
+      {/* {console.log(favorites)} */}
       <Box
        sx={{
         width: 'auto',
@@ -256,7 +317,7 @@ const PlantGallery = () => {
          backgroundColor: 'background.default',
          height: '80vh',
          mt: 1,
-         overflowY: 'auto',
+         //  overflowY: 'auto',
          borderRadius: 2,
          scrollbarColor: 'primary.main',
          boxShadow: 2,
@@ -298,9 +359,11 @@ const PlantGallery = () => {
          </Box>
         ) : (
          <Box
+          ref={mainContainerRef}
           className="object-display"
           display="flex"
           flexWrap="wrap"
+          sx={{ height: 'inherit', overflowY: 'scroll' }}
          >
           {filteredItems.length === 0 ? (
            <Box
@@ -365,8 +428,8 @@ const PlantGallery = () => {
                    sx={{
                     color:
                      activeItem && activeItem.index === item.index
-                      ? 'primary.main'
-                      : 'DDFFBC',
+                      ? 'orange'
+                      : 'orange',
                    }}
                   />
                  </Button>
@@ -387,7 +450,7 @@ const PlantGallery = () => {
                    sx={{
                     color:
                      activeItem && activeItem.index === item.index
-                      ? 'orange'
+                      ? 'primary.main'
                       : 'orange',
                    }}
                   />
@@ -416,6 +479,7 @@ const PlantGallery = () => {
                  )}
                 </div>
                </Box>
+
                <Box
                 className={
                  index === activeItem
@@ -458,6 +522,32 @@ const PlantGallery = () => {
               </div>
              </Grow>
             ))}
+            {isLoading && (
+             <Grow in={isLoading}>
+              <Box
+               sx={{
+                my: 2,
+                ml: 2,
+
+                color: 'red',
+                width: '250px',
+                height: '400px',
+                bgcolor: 'primary.main',
+                justifyContent: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                borderRadius: 2,
+               }}
+              >
+               {' '}
+               <Box sx={{ mb: 2, fontSize: '20px', color: 'orange' }}>
+                Loading
+               </Box>
+               <FadeLoader />
+              </Box>
+             </Grow>
+            )}
            </>
           )}
          </Box>

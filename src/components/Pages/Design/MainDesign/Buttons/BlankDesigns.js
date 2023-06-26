@@ -7,6 +7,14 @@ const blankDesigns = [
   source: 'Provided by client',
  },
  {
+  src: '/Sample_blanks/blank7.JPG',
+  source: 'Provided by client',
+ },
+ {
+  src: '/Sample_blanks/blank8.JPG',
+  source: 'Provided by client',
+ },
+ {
   src: '/Sample_blanks/blank3.jpg',
   source: 'https://www.facebook.com/Casteldinelandscapes/',
  },
@@ -14,29 +22,12 @@ const blankDesigns = [
   src: '/Sample_blanks/blank4.jpg',
   source: 'https://www.facebook.com/Casteldinelandscapes/',
  },
+ {
+  src: '/Sample_blanks/blank2.jpg',
+  source: 'Provided by client',
+ },
 ];
 const ExistingDesigns = ({ handleTemplate }) => {
- useEffect(() => {
-  // const designs =
- }, []);
-
- const convertToDataUrl = (imageUrl) => {
-  const canvas = document.createElement('canvas');
-  const image = new Image();
-
-  image.src = imageUrl;
-
-  image.onload = () => {
-   canvas.width = image.width;
-   canvas.height = image.height;
-
-   const context = canvas.getContext('2d');
-   context.drawImage(image, 0, 0);
-
-   const dataUrl = canvas.toDataURL();
-   handleTemplate(dataUrl);
-  };
- };
  return (
   <Box sx={{ height: '400px', overflowY: 'scroll', width: '500px' }}>
    <ImageList
@@ -53,7 +44,7 @@ const ExistingDesigns = ({ handleTemplate }) => {
       <img
        key={index}
        src={item.src}
-       onClick={() => convertToDataUrl(item.src)}
+       onClick={() => handleTemplate(item.src)}
       />
       <ImageListItemBar
        position="below"

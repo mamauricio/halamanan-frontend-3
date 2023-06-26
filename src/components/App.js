@@ -7,10 +7,7 @@ import theme from './MuiTheme';
 import { TransitionGroup } from 'react-transition-group';
 import NavBar from './Navbar/NavBar';
 
-//------------------------------ADMIN------------------------------//
 import AdminNavBar from './Pages/AdminPage/AdminNavBar';
-
-//-------------------------CONTEXT REDUCERS------------------------//
 
 import AdminRoutes from './Routes/AdminRoutes';
 import GuestRoutes from './Routes/GuestRoutes';
@@ -56,7 +53,6 @@ const App = () => {
   <>
    <TransitionGroup>
     <ThemeProvider theme={theme}>
-     {/* <PlantGallery /> */}
      {sessionStorage.getItem('adminAuth') ? (
       <>
        <AdminNavBar handleLogout={handleLogout} />

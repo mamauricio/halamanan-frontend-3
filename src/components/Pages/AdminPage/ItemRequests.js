@@ -269,7 +269,7 @@ const ItemManagement = () => {
              // bgcolor: 'orange',
              width: 'auto',
              height: 'auto',
-             m: 2,
+             // m: 2,
              p: 2,
              borderRadius: 2,
              border: 'solid 1px orange',
@@ -283,9 +283,9 @@ const ItemManagement = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              bgcolor: 'primary.main',
               borderRadius: 2,
               mb: 1,
+              bgcolor: 'orange',
              }}
             >
              <img
@@ -337,21 +337,23 @@ const ItemManagement = () => {
               {selectedItem.newItemType ? selectedItem.newItemType : 'null'}
              </span>
             </Box>
-           </Box>
-           <Box
-            sx={{
-             width: '100%',
-             justifyContent: 'space-evenly',
-             display: 'flex',
-             alignItems: 'center',
-             bgcolor: 'white',
-             borderRadius: 2,
-             p: 1,
-            }}
-           >
-            <DeleteButton itemData={selectedItem} />
-            <EditButton newItemData={selectedItem} />
-            <ApproveButton itemData={selectedItem} />
+            <Box
+             sx={{
+              width: '100%',
+              justifyContent: 'space-evenly',
+              display: 'flex',
+              alignItems: 'center',
+              bgcolor: 'white',
+              borderRadius: 2,
+              mt: 2,
+              // mt: 1,
+              py: 1,
+             }}
+            >
+             <DeleteButton itemData={selectedItem} />
+             <EditButton newItemData={selectedItem} />
+             <ApproveButton itemData={selectedItem} />
+            </Box>
            </Box>
           </div>
          </Grow>

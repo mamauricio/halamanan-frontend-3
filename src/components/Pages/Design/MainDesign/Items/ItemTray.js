@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useRef, useCallback } from 'react';
 import {
  ImageList,
  ImageListItem,
@@ -22,6 +22,12 @@ const ItemTray = ({ handleAddItem }) => {
  const [selectedCategory, setSelectedCategory] = useState();
  const [favorites, setFavorites] = useState([]);
  const { items, dispatch } = useItemsContext();
+ const mainContainerRef = useRef(null);
+ const [page, setPage] = useState(1);
+ const totalPageRef = useRef(null);
+ const [isLoading, setIsLoading] = useState(false);
+ const [fetching, setFetching] = useState(true);
+ const [error, setError] = useState([]);
 
  const handleFilterChange = (filters, category) => {
   setSelectedCategory(category);
@@ -36,34 +42,84 @@ const ItemTray = ({ handleAddItem }) => {
   }
  };
 
- const fetchUserFavorites = async () => {
-  try {
-   const token = sessionStorage.getItem('token');
-   const response = await fetch(
-    ' https://halamanan-197e9734b120.herokuapp.com/favorites',
-    {
-     headers: {
-      token: token,
-     },
-    }
-   );
+ //  const fetchUserFavorites = async () => {
+ //   try {
+ //    const token = sessionStorage.getItem('token');
+ //    const response = await fetch(' https://halamanan-197e9734b120.herokuapp.com/favorites', {
+ //     headers: {
+ //      token: token,
+ //     },
+ //    });
 
-   const data = await response.json();
-   setFavorites(data);
-  } catch (error) {}
- };
+ //    const data = await response.json();
+ //    setFavorites(data);
+ //   } catch (error) {}
+ //  };
 
  useEffect(() => {
-  axios
-   .get(' https://halamanan-197e9734b120.herokuapp.com/gallery')
-   .then((response) => {
-    const fetchedItems = response.data;
-    setItemTrayItems(fetchedItems);
-   })
-   .catch((error) => {});
+  // totalPageRef.current = 1;
+  const fetchGalleryItems = () => {
+   setIsLoading(true);
+   console.log(page);
+   //  pageRef.current = 1;
+   //  if (page <= totalPageRef.current) {
+   axios
+    .get(
+     `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10`
+    )
+    .then((response) => {
+     const fetchedItems = response.data.items;
+     if (
+      totalPageRef.current !== null &&
+      response.data.page < response.data.totalPages
+     ) {
+      setItemTrayItems((prevItems) => [...prevItems, ...fetchedItems]);
+     }
+     totalPageRef.current = parseInt(response.data.totalPages);
 
-  fetchUserFavorites();
- }, []);
+     setIsLoading(false);
+     setFetching(false);
+    })
+    .catch((error) => {
+     setError(error.message);
+     setIsLoading(false);
+    });
+  };
+  fetchGalleryItems();
+  // }
+ }, [page]);
+ //   fetchUserFavorites();
+ const handleScroll = useCallback(() => {
+  const mainContainer = mainContainerRef.current;
+
+  if (
+   mainContainer.scrollTop + mainContainer.clientHeight >=
+   mainContainer.scrollHeight
+  ) {
+   //  console.log('new item being added');
+   //  console.log('current page: ' + page);
+
+   //  console.log(totalPageRef.current);
+   const totalPages = parseInt(totalPageRef.current);
+   console.log(`current page: ${page}`);
+   console.log(`total pages: ${totalPages}`);
+   if (parseInt(page) < totalPages && isLoading === false) {
+    console.log('adding +1');
+    setPage((page) => page + 1);
+   }
+  }
+ }, [page, isLoading]);
+
+ useEffect(() => {
+  console.log('attaching ');
+  const mainContainer = mainContainerRef.current;
+  if (mainContainer) {
+   mainContainer.addEventListener('scroll', handleScroll);
+   return () => {
+    mainContainer.removeEventListener('scroll', handleScroll);
+   };
+  }
+ }, [fetching, handleScroll]);
 
  const isItemInFavorites = (itemId) => {
   return favorites.some((favorite) => favorite.itemId === itemId);
@@ -97,13 +153,15 @@ const ItemTray = ({ handleAddItem }) => {
     <Filters onFilterChange={handleFilterChange} />
    </Box>
    <ImageList
-    cols={xs ? 7 : 3}
+    ref={mainContainerRef}
+    cols={xs ? 7 : 2}
     rowHeight={250}
     gap={10}
     sx={{
      height: '80vh',
      width: '100%',
      pt: 2,
+     //  overflowX: 'none',
     }}
    >
     {filteredItems.map((item, index) => (
@@ -134,6 +192,7 @@ const ItemTray = ({ handleAddItem }) => {
          justifyContent: 'center',
         }}
        >
+        {console.log(item.imageUrl)}
         <img
          loading="lazy"
          src={item.imageUrl}

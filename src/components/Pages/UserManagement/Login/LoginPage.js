@@ -25,13 +25,6 @@ const LoginPage = ({ handleAuthenticate }) => {
  const [initialize, setInitialize] = useState(false);
  const handleOpen = () => {
   setOpen(true);
-  const timer = setTimeout(() => {
-   setOpen(false);
-  }, 4 * 1000);
-
-  return () => {
-   clearTimeout(timer);
-  };
  };
  const handleClose = () => {
   setOpen(false);

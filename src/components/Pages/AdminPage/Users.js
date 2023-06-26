@@ -20,6 +20,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 const Users = () => {
  const [error, setError] = useState('');
+ const [fetching, setFetching] = useState(false);
  const [userList, setUserList] = useState('');
  const [selectedUser, setSelectedUser] = useState('');
  const [userData, setUserData] = useState({
@@ -54,8 +55,6 @@ const Users = () => {
    [event.target.name]: event.target.value,
   });
  };
-
- //---------------------Edit modal handlers-------------------//
 
  //---------------------------------------------Modal and alert handlers-----------------------------------------//
 
@@ -381,6 +380,7 @@ const Users = () => {
                display: 'flex',
               }}
              >
+              {/* cannot demote admin to user */}
               {user.email !== 'admin@admin.com' && (
                <>
                 <Button

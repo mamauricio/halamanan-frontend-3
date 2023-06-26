@@ -9,6 +9,11 @@ const AdminDashboard = () => {
  const [error, setError] = useState('');
  const [newItems, setNewItems] = useState('');
  const [open, setOpen] = useState();
+ const [fetchingUsers, setFetchingUsers] = useState(true);
+ const [fetchingGallery, setFetchingGallery] = useState(true);
+ const [fetchingDesigns, setFetchingDesigns] = useState(true);
+ const [fetchingItemRequests, setFetchingItemRequests] = useState(true);
+ //  const [fetchingUsers, setFetchingUsers] = useState(false);
 
  const handleOpen = () => {
   setOpen(true);
@@ -37,14 +42,18 @@ const AdminDashboard = () => {
      },
     }
    );
-
-   const data = await response.json();
-   if (data) {
-    setDesigns(data);
-   } else {
-   }
+   console.log(response);
+   // const data = await response.json()
+   // console.log(data);
+   // if (data) {
+   //     setFetchingDesigns(false)
+   //     setDesigns(data);
+   // } else {
+   //     console.log(error)
+   // }
   } catch (error) {
-   setError(error.response.data.error);
+   console.log(error);
+   //    setError(error.response.data.error);
   }
  };
 
@@ -61,6 +70,7 @@ const AdminDashboard = () => {
 
    const data = await response.json();
    if (data) {
+    setFetchingUsers(false);
     setUsers(data);
    } else {
    }
@@ -77,6 +87,7 @@ const AdminDashboard = () => {
 
    const data = await response.json();
    if (data) {
+    setFetchingGallery(false);
     setItems(data);
    } else {
    }
@@ -88,11 +99,12 @@ const AdminDashboard = () => {
  const fetchNewItems = async () => {
   try {
    const response = await fetch(
-    ' https://halamanan-197e9734b120.herokuapp.com/admin/'
+    ' https://halamanan-197e9734b120.herokuapp.com/admin/pending'
    );
 
    const data = await response.json();
    if (data) {
+    setFetchingItemRequests(false);
     setNewItems(data);
    } else {
    }
@@ -137,11 +149,21 @@ const AdminDashboard = () => {
     >
      <Grow in={open}>
       <div>
-       <Box sx={styles}>Number of users: {users.length}</Box>
-       <Box sx={styles}>Number of Gallery Items: {items.length}</Box>
-       <Box sx={styles}>Current amount of Designs: {designs.length}</Box>
+       <Box sx={styles}>
+        Number of users: {fetchingUsers ? 'Loading' : users.length}
+       </Box>
+       <Box sx={styles}>
+        Number of Gallery Items: {fetchingGallery ? 'Loading' : items.length}
+       </Box>
+       <Box sx={styles}>
+        Current amount of Designs:{' '}
+        {fetchingDesigns ? 'Loading' : designs.length}
+       </Box>
 
-       <Box sx={styles}>Number of New Item Requests: {newItems.length}</Box>
+       <Box sx={styles}>
+        Number of New Item Requests:{' '}
+        {fetchingItemRequests ? 'Loading' : newItems.length}
+       </Box>
        <Box sx={styles}>Number of Design Quote Requests: 0</Box>
       </div>
      </Grow>
