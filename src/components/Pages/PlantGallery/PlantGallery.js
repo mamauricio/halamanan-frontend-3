@@ -163,7 +163,7 @@ const PlantGallery = () => {
  };
 
  const isItemInFavorites = (itemId) => {
-  return favoritesId.some((favorite) => favorite === itemId);
+  return favoritesId && favoritesId.some((favorite) => favorite === itemId);
  };
 
  const filteredItems = items.filter((item) => {
