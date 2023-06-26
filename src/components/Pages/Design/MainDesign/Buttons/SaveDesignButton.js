@@ -53,7 +53,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
     items,
    };
    const response2 = axios.patch(
-    ` https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
+    ` http://localhost:3001/designs/${id}`,
     newData
    );
 

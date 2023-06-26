@@ -47,7 +47,7 @@ const LoginPage = ({ handleAuthenticate }) => {
     password: password,
    },
    withCredentials: true,
-   url: ' https://halamanan-197e9734b120.herokuapp.com/signup',
+   url: ' http://localhost:3001/signup',
   })
    .then((response) => {
     setAlertMessage('Signed up succesfully. Proceed to login.');
@@ -78,7 +78,7 @@ const LoginPage = ({ handleAuthenticate }) => {
    },
    withCredentials: true,
    credentials: 'include',
-   url: ' https://halamanan-197e9734b120.herokuapp.com/login',
+   url: ' http://localhost:3001/login',
   })
    .then((response) => {
     setAlertMessage('Authenticating');

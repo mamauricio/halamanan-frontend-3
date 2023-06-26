@@ -12,7 +12,7 @@ const DeleteButton = ({ itemData, handleSuccess }) => {
  const handleDelete = async (itemId) => {
   try {
    const deleteResponse = await axios.delete(
-    ` https://halamanan-197e9734b120.herokuapp.com/admin/pending/`,
+    ` http://localhost:3001/admin/pending/`,
     {
      params: {
       id: itemId,
