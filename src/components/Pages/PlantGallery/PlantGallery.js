@@ -21,16 +21,17 @@ const PlantGallery = () => {
  const [showAlert, setShowAlert] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
  const [fetching, setFetching] = useState(true);
-
+ const [favoritesId, setFavoritesId] = useState();
  const [items, setItems] = useState([]);
  const [page, setPage] = useState(1);
+ const isInitialRender = useRef(true);
+
  const totalPageRef = useRef(null);
- //  const pageRef = useRef(1);
  const [isLoading, setIsLoading] = useState(false);
  const [favorites, setFavorites] = useState([]);
  const [activeItem, setActiveItem] = useState(null);
  const [selectedFilters, setSelectedFilters] = useState([]);
- const [selectedCategory, setSelectedCategory] = useState([]);
+ const [selectedCategory, setSelectedCategory] = useState('all');
  const [openMain, setOpenMain] = useState(false);
  const childRef = useRef(null);
  const [color, setColor] = useState('#ECAB00');
@@ -51,19 +52,41 @@ const PlantGallery = () => {
  };
 
  useEffect(() => {
+  // fetchGalleryItems();
+  fetchUserFavoritesId();
   const timer = setTimeout(() => {
    setOpenMain(true);
   }, 100);
  }, []);
 
- useEffect(() => {
-  const fetchGalleryItems = () => {
-   setIsLoading(true);
-   console.log(page);
+ const fetchGalleryItems = () => {
+  setIsLoading(true);
+  console.log('fetching gallery items');
+  console.log(selectedCategory);
+
+  if (selectedCategory === 'favorites') {
+   const token = sessionStorage.getItem('token');
+
+   console.log(token);
 
    axios
+    .get(`https://halamanan-197e9734b120.herokuapp.com/favorites`, {
+     params: { token },
+    })
+    .then((response) => {
+     console.log(response);
+     setItems(response.data);
+     setIsLoading(false);
+     setFetching(false);
+    })
+    .catch((error) => {
+     setError(error);
+    });
+  } else {
+   console.log('entering 2nd ');
+   axios
     .get(
-     `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10`
+     `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10&category=${selectedCategory}&type=${selectedFilters}`
     )
     .then((response) => {
      const fetchedItems = response.data.items;
@@ -79,8 +102,20 @@ const PlantGallery = () => {
      setError(error.message);
      setIsLoading(false);
     });
-  };
+  }
+ };
 
+ useEffect(() => {
+  setItems([]);
+  setPage(1);
+  fetchGalleryItems();
+ }, [selectedCategory, selectedFilters]);
+
+ useEffect(() => {
+  if (isInitialRender.current) {
+   isInitialRender.current = false;
+   return;
+  }
   fetchGalleryItems();
  }, [page]);
 
@@ -92,17 +127,14 @@ const PlantGallery = () => {
    mainContainer.scrollHeight
   ) {
    const totalPages = parseInt(totalPageRef.current);
-   console.log(`current page: ${page}`);
-   console.log(`total pages: ${totalPages}`);
    if (parseInt(page) < totalPages && isLoading === false) {
-    console.log('adding +1');
     setPage((page) => page + 1);
    }
   }
  }, [page, isLoading]);
 
  useEffect(() => {
-  console.log('attaching ');
+  // console.log('attaching ');
   const mainContainer = mainContainerRef.current;
   if (mainContainer) {
    mainContainer.addEventListener('scroll', handleScroll);
@@ -112,18 +144,18 @@ const PlantGallery = () => {
   }
  }, [fetching, handleScroll]);
 
- const fetchUserFavorites = async () => {
+ const fetchUserFavoritesId = async () => {
   try {
    const token = sessionStorage.getItem('token');
    const response = await axios(
-    'https://halamanan-197e9734b120.herokuapp.com/favorites',
+    'https://halamanan-197e9734b120.herokuapp.com/favorites-id',
     {
      headers: {
       token: token,
      },
     }
    ).then((response) => {
-    setFavorites(response.data);
+    setFavoritesId(response.data);
    });
   } catch (error) {
    setError(error.message);
@@ -131,22 +163,10 @@ const PlantGallery = () => {
  };
 
  const isItemInFavorites = (itemId) => {
-  return favorites.some((favorite) => favorite.itemId === itemId);
+  return favoritesId.some((favorite) => favorite === itemId);
  };
 
  const filteredItems = items.filter((item) => {
-  if (selectedCategory === 'favorites' && isItemInFavorites(item._id)) {
-   return true;
-  }
-
-  if (
-   selectedCategory &&
-   selectedCategory !== 'all' &&
-   selectedCategory !== item.category
-  ) {
-   return false;
-  }
-
   if (
    selectedFilters.length > 0 &&
    item.type.some((type) => !selectedFilters.includes(type))
@@ -173,8 +193,8 @@ const PlantGallery = () => {
    );
 
    if (response.ok) {
-    const updated = [...favorites, { itemId }];
-    setFavorites(updated);
+    const updated = [...favoritesId, itemId];
+    setFavoritesId(updated);
     setAlertMessage('Successfully added item to favorites');
     openAlert();
     closeAlert();
@@ -199,8 +219,8 @@ const PlantGallery = () => {
    );
 
    if (response.ok) {
-    const updated = favorites.filter((favorite) => favorite.itemId !== itemId);
-    setFavorites(updated);
+    const updated = favoritesId.filter((favorite) => favorite !== itemId);
+    setFavoritesId(updated);
     setAlertMessage('Successfully removed item from favorites');
     openAlert();
     closeAlert();
@@ -368,7 +388,7 @@ const PlantGallery = () => {
            </Box>
           ) : (
            <>
-            {filteredItems.map((item, index) => (
+            {items.map((item, index) => (
              <Grow
               in={filteredItems != null}
               key={index}

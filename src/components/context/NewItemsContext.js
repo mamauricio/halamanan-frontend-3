@@ -11,7 +11,7 @@ export const newItemsReducer = (state, action) => {
 
   case 'REMOVE_NEW_ITEM':
    const updatedItems = state.newItems.filter(
-    (item) => item._id !== action.payload.id
+    (item) => item._id !== action.payload
    );
    return { ...state, newItems: updatedItems };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Box, Button, Container, Grow } from '@mui/material';
 import { motion } from 'framer-motion';
-
+import axios from 'axios';
 const AdminDashboard = () => {
  const [designs, setDesigns] = useState('');
  const [items, setItems] = useState('');
@@ -42,18 +42,18 @@ const AdminDashboard = () => {
      },
     }
    );
-   console.log(response);
+   //    console.log(response);
    const data = await response.json();
-   console.log(data);
+   //    console.log(data);
    if (data) {
     setFetchingDesigns(false);
     setDesigns(data);
    } else {
-    console.log(error);
+    // console.log(error);
    }
   } catch (error) {
-   console.log(error);
-   //    setError(error.response.data.error);
+   //    console.log(error);
+   setError(error.response.data.error);
   }
  };
 
@@ -70,8 +70,8 @@ const AdminDashboard = () => {
 
    const data = await response.json();
    if (data) {
-    setFetchingUsers(false);
     setUsers(data);
+    setFetchingUsers(false);
    } else {
    }
   } catch (error) {
@@ -81,19 +81,22 @@ const AdminDashboard = () => {
 
  const fetchAllItems = async () => {
   try {
-   const response = await fetch(
-    'https://halamanan-197e9734b120.herokuapp.com/gallery'
-   );
-
-   const data = await response.json();
-   if (data) {
-    // console.log(data);
-    setFetchingGallery(false);
-    setItems(data.totalCount);
-   } else {
-   }
+   //    const response = await fetch('https://halamanan-197e9734b120.herokuapp.com/gallery');
+   axios
+    .get(`https://halamanan-197e9734b120.herokuapp.com/gallery?category=all`)
+    .then((response) => {
+     const itemCount = response.data.totalCount;
+     setItems(itemCount);
+     //  const data = response.json();
+     //  if (data) {
+     //   // console.log(data);
+     setFetchingGallery(false);
+     //   setItems(data.totalCount);
+     //  } else {
+     //  }
+    });
   } catch (error) {
-   setError(error.response.data.error);
+   setError(error);
   }
  };
 

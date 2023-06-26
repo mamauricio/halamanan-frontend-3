@@ -33,7 +33,7 @@ export const designsReducer = (state, action) => {
 
   case 'DELETE_DESIGN':
    const updatedDesigns = state.designs.filter(
-    (design) => design._id !== action.payload.id
+    (design) => design._id !== action.payload
    );
    return { ...state, designs: updatedDesigns };
 
