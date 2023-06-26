@@ -9,7 +9,9 @@ const RequestedItems = ({ handleSelectedItem }) => {
  useEffect(() => {
   const fetchNewItems = async () => {
    try {
-    const response = await fetch(' http://localhost:3001/admin/pending');
+    const response = await fetch(
+     ' https://halamanan-197e9734b120.herokuapp.com/admin/pending'
+    );
     const data = await response.json();
 
     if (data) {

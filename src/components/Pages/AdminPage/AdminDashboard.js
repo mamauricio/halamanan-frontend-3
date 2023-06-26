@@ -34,11 +34,14 @@ const AdminDashboard = () => {
 
  const fetchDesigns = async () => {
   try {
-   const response = await fetch(' http://localhost:3001/designs/', {
-    headers: {
-     token: 'admin',
-    },
-   });
+   const response = await fetch(
+    ' https://halamanan-197e9734b120.herokuapp.com/designs/',
+    {
+     headers: {
+      token: 'admin',
+     },
+    }
+   );
    console.log(response);
    // const data = await response.json()
    // console.log(data);
@@ -56,11 +59,14 @@ const AdminDashboard = () => {
 
  const fetchAllUsers = async () => {
   try {
-   const response = await fetch(' http://localhost:3001/admin/users', {
-    headers: {
-     token: 'admin',
-    },
-   });
+   const response = await fetch(
+    ' https://halamanan-197e9734b120.herokuapp.com/admin/users',
+    {
+     headers: {
+      token: 'admin',
+     },
+    }
+   );
 
    const data = await response.json();
    if (data) {
@@ -75,7 +81,9 @@ const AdminDashboard = () => {
 
  const fetchAllItems = async () => {
   try {
-   const response = await fetch(' http://localhost:3001/gallery');
+   const response = await fetch(
+    ' https://halamanan-197e9734b120.herokuapp.com/gallery'
+   );
 
    const data = await response.json();
    if (data) {
@@ -90,7 +98,9 @@ const AdminDashboard = () => {
 
  const fetchNewItems = async () => {
   try {
-   const response = await fetch(' http://localhost:3001/admin/pending');
+   const response = await fetch(
+    ' https://halamanan-197e9734b120.herokuapp.com/admin/pending'
+   );
 
    const data = await response.json();
    if (data) {

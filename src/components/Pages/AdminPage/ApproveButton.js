@@ -20,16 +20,19 @@ const ApproveButton = (itemData) => {
    imageSource: 'User',
    imageUrl: itemData.newItemUrl,
   };
-  const response = await fetch(` http://localhost:3001/gallery/add-item`, {
-   method: 'POST',
-   body: JSON.stringify(item),
-   headers: {
-    'Content-type': 'application/json',
-   },
-  });
+  const response = await fetch(
+   ` https://halamanan-197e9734b120.herokuapp.com/gallery/add-item`,
+   {
+    method: 'POST',
+    body: JSON.stringify(item),
+    headers: {
+     'Content-type': 'application/json',
+    },
+   }
+  );
 
   const deleteResponse = await axios.delete(
-   ` http://localhost:3001/admin/pending/`,
+   ` https://halamanan-197e9734b120.herokuapp.com/admin/pending/`,
    {
     params: {
      id: itemData._id,

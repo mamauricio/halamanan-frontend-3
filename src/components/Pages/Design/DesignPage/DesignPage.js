@@ -80,9 +80,12 @@ const DesignPage = () => {
 
  const handleDelete = async (design) => {
   const response = await axios
-   .delete(` http://localhost:3001/designs/${design._id}`, {
-    data: { id: design._id },
-   })
+   .delete(
+    ` https://halamanan-197e9734b120.herokuapp.com/designs/${design._id}`,
+    {
+     data: { id: design._id },
+    }
+   )
 
    .then((response) => {
     dispatch({

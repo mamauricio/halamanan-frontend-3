@@ -112,13 +112,16 @@ const ItemManagement = () => {
     imageSource: itemData.newItemImageSource,
     imageUrl: itemData.newItemUrl,
    };
-   const response = fetch(` http://localhost:3001/gallery/add-item`, {
-    method: 'POST',
-    body: JSON.stringify(newItem),
-    headers: {
-     'Content-type': 'application/json',
-    },
-   });
+   const response = fetch(
+    ` https://halamanan-197e9734b120.herokuapp.com/gallery/add-item`,
+    {
+     method: 'POST',
+     body: JSON.stringify(newItem),
+     headers: {
+      'Content-type': 'application/json',
+     },
+    }
+   );
    if (response) {
     setItemData({
      newItemName: '',
