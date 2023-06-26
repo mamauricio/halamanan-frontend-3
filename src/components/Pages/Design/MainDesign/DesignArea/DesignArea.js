@@ -9,9 +9,9 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio }) => {
  const { items, dispatch } = useItemsContext();
  const [backgroundSize, setBackgroundSize] = useState({ width: 0, height: 0 });
 
- useEffect(() => {
-  dispatch({ type: 'GET_ITEMS', payload: [] });
- }, []);
+ //  useEffect(() => {
+ //   dispatch({ type: 'GET_ITEMS', payload: [] });
+ //  }, []);
 
  const mainContainerStyle = {
   position: 'relative',

@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useDesignContext } from '../../../../hooks/useDesignContext';
 import { Button, Alert } from '@mui/material';
 import Zoom from '@mui/material/Zoom';
-// import useAutosave from '../../../../hooks/useAutoSave.hook';
 
 import SaveIcon from '@mui/icons-material/Save';
 import html2canvas from 'html2canvas';
@@ -53,7 +52,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
     items,
    };
    const response2 = axios.patch(
-    ` https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
+    `http://localhost:3001/designs/${id}`,
     newData
    );
 
@@ -80,7 +79,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
    setAutosave(true);
    console.log(id);
    console.log('autosaving');
-  }, 60 * 1000); // runs every minute
+  }, 180 * 1000); // runs every 3 minutes
   return () => {
    setAutosave(false); // turn autosave off
    clearInterval(autosave); // clear autosave on dismount

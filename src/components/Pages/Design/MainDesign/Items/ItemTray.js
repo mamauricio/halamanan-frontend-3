@@ -45,7 +45,7 @@ const ItemTray = ({ handleAddItem }) => {
  //  const fetchUserFavorites = async () => {
  //   try {
  //    const token = sessionStorage.getItem('token');
- //    const response = await fetch(' https://halamanan-197e9734b120.herokuapp.com/favorites', {
+ //    const response = await fetch('http://localhost:3001/favorites', {
  //     headers: {
  //      token: token,
  //     },
@@ -60,13 +60,11 @@ const ItemTray = ({ handleAddItem }) => {
   // totalPageRef.current = 1;
   const fetchGalleryItems = () => {
    setIsLoading(true);
-   console.log(page);
+   //    console.log(page);
    //  pageRef.current = 1;
    //  if (page <= totalPageRef.current) {
    axios
-    .get(
-     `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10`
-    )
+    .get(`http://localhost:3001/gallery?page=${page}&limit=10`)
     .then((response) => {
      const fetchedItems = response.data.items;
      if (
@@ -97,17 +95,17 @@ const ItemTray = ({ handleAddItem }) => {
    mainContainer.scrollHeight
   ) {
    const totalPages = parseInt(totalPageRef.current);
-   console.log(`current page: ${page}`);
-   console.log(`total pages: ${totalPages}`);
+   //    console.log(`current page: ${page}`)/;
+   //    console.log(`total pages: ${totalPages}`);
    if (parseInt(page) < totalPages && isLoading === false) {
-    console.log('adding +1');
+    // console.log('adding +1');
     setPage((page) => page + 1);
    }
   }
  }, [page, isLoading]);
 
  useEffect(() => {
-  console.log('attaching ');
+  //   console.log('attaching ');
   const mainContainer = mainContainerRef.current;
   if (mainContainer) {
    mainContainer.addEventListener('scroll', handleScroll);
@@ -188,7 +186,7 @@ const ItemTray = ({ handleAddItem }) => {
          justifyContent: 'center',
         }}
        >
-        {console.log(item.imageUrl)}
+        {/* {console.log(item.imageUrl)} */}
         <img
          loading="lazy"
          src={item.imageUrl}

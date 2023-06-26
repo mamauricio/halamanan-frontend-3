@@ -52,14 +52,11 @@ const UserProfile = () => {
 
  useEffect(() => {
   const fetchUser = async () => {
-   const response = await fetch(
-    ` https://halamanan-197e9734b120.herokuapp.com/profile/`,
-    {
-     headers: {
-      token: `${sessionStorage.getItem('token')}`,
-     },
-    }
-   );
+   const response = await fetch(`http://localhost:3001/profile/`, {
+    headers: {
+     token: `${sessionStorage.getItem('token')}`,
+    },
+   });
 
    try {
     const user = await response.json();
@@ -73,14 +70,11 @@ const UserProfile = () => {
 
  useEffect(() => {
   const fetchPendingItems = async () => {
-   const response = await fetch(
-    ` https://halamanan-197e9734b120.herokuapp.com/profile/pending`,
-    {
-     headers: {
-      newItemUserId: `${sessionStorage.getItem('token')}`,
-     },
-    }
-   );
+   const response = await fetch(`http://localhost:3001/profile/pending`, {
+    headers: {
+     newItemUserId: `${sessionStorage.getItem('token')}`,
+    },
+   });
 
    try {
     const pendingItems = await response.json();
@@ -95,7 +89,7 @@ const UserProfile = () => {
  const handleDelete = async (itemId) => {
   try {
    const response = await axios.delete(
-    ` https://halamanan-197e9734b120.herokuapp.com/profile/pending`,
+    `http://localhost:3001/profile/pending`,
     {
      params: {
       id: itemId,

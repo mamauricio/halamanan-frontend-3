@@ -45,13 +45,13 @@ const MainDesign = () => {
   if (isValidObjectId(id)) {
    const fetchItem = async () => {
     try {
-     const response = await axios.get(
-      ` https://halamanan-197e9734b120.herokuapp.com/designs/${id}`
-     );
+     const response = await axios.get(`http://localhost:3001/designs/${id}`);
      const fetchedItem = response.data;
-
+     //  console.log(fetchedItem);
      setDesignName(fetchedItem.designName);
      dispatch({ type: 'GET_ITEMS', payload: fetchedItem.items });
+     //  console.log(fetchedItem.items);
+
      setBackgroundImage(fetchedItem.backgroundImage);
      setShowDesign(true);
      setFetching(false);

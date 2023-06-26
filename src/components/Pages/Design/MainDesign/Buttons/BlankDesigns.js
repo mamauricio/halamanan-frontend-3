@@ -11,7 +11,7 @@ const blankDesigns = [
   source: 'Provided by client',
  },
  {
-  src: '/Sample_blanks/blank8.JPG',
+  src: '/Sample_blanks/blank8.jpg',
   source: 'Provided by client',
  },
  {
