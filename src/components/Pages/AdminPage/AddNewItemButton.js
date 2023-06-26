@@ -71,13 +71,16 @@ const AddNewItemButton = () => {
    imageSource: itemData.imageSource,
    imageUrl: itemData.imageUrl,
   };
-  const response = await fetch(`http://localhost:3001/gallery/add-item`, {
-   method: 'POST',
-   body: JSON.stringify(item),
-   headers: {
-    'Content-type': 'application/json',
-   },
-  });
+  const response = await fetch(
+   `https://halamanan-197e9734b120.herokuapp.com/gallery/add-item`,
+   {
+    method: 'POST',
+    body: JSON.stringify(item),
+    headers: {
+     'Content-type': 'application/json',
+    },
+   }
+  );
 
   setItemData({
    itemName: '',

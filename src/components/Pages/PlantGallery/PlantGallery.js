@@ -62,7 +62,9 @@ const PlantGallery = () => {
    console.log(page);
 
    axios
-    .get(`http://localhost:3001/gallery?page=${page}&limit=10`)
+    .get(
+     `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10`
+    )
     .then((response) => {
      const fetchedItems = response.data.items;
      if (response.data.page < response.data.totalPages) {
@@ -113,11 +115,14 @@ const PlantGallery = () => {
  const fetchUserFavorites = async () => {
   try {
    const token = sessionStorage.getItem('token');
-   const response = await axios('http://localhost:3001/favorites', {
-    headers: {
-     token: token,
-    },
-   }).then((response) => {
+   const response = await axios(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites',
+    {
+     headers: {
+      token: token,
+     },
+    }
+   ).then((response) => {
     setFavorites(response.data);
    });
   } catch (error) {
@@ -155,14 +160,17 @@ const PlantGallery = () => {
   event.stopPropagation();
 
   try {
-   const response = await fetch('http://localhost:3001/favorites', {
-    method: 'POST',
-    headers: {
-     'Content-Type': 'application/json',
-     token: sessionStorage.getItem('token'),
-    },
-    body: JSON.stringify({ itemId }),
-   });
+   const response = await fetch(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites',
+    {
+     method: 'POST',
+     headers: {
+      'Content-Type': 'application/json',
+      token: sessionStorage.getItem('token'),
+     },
+     body: JSON.stringify({ itemId }),
+    }
+   );
 
    if (response.ok) {
     const updated = [...favorites, { itemId }];
@@ -178,14 +186,17 @@ const PlantGallery = () => {
  const removeFromFavorites = async (event, itemId) => {
   event.stopPropagation();
   try {
-   const response = await fetch('http://localhost:3001/favorites', {
-    method: 'DELETE',
-    headers: {
-     'Content-Type': 'application/json',
-     token: sessionStorage.getItem('token'),
-    },
-    body: JSON.stringify({ itemId }),
-   });
+   const response = await fetch(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites',
+    {
+     method: 'DELETE',
+     headers: {
+      'Content-Type': 'application/json',
+      token: sessionStorage.getItem('token'),
+     },
+     body: JSON.stringify({ itemId }),
+    }
+   );
 
    if (response.ok) {
     const updated = favorites.filter((favorite) => favorite.itemId !== itemId);

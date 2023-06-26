@@ -52,7 +52,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
     items,
    };
    const response2 = axios.patch(
-    `http://localhost:3001/designs/${id}`,
+    `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
     newData
    );
 
@@ -79,10 +79,10 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
    setAutosave(true);
    console.log(id);
    console.log('autosaving');
-  }, 180 * 1000); // runs every 3 minutes
+  }, 180 * 1000);
   return () => {
-   setAutosave(false); // turn autosave off
-   clearInterval(autosave); // clear autosave on dismount
+   setAutosave(false);
+   clearInterval(autosave);
   };
  }, []);
 
@@ -90,7 +90,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
   if (autosave && items !== saved) {
    console.log('stopping autosave');
    handleSave();
-   setAutosave(false); // toggle autosave off
+   setAutosave(false);
   }
  }, [autosave, items, id, handleSave]);
 

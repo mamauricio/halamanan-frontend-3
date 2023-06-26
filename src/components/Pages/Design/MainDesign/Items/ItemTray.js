@@ -45,7 +45,7 @@ const ItemTray = ({ handleAddItem }) => {
  //  const fetchUserFavorites = async () => {
  //   try {
  //    const token = sessionStorage.getItem('token');
- //    const response = await fetch('http://localhost:3001/favorites', {
+ //    const response = await fetch('https://halamanan-197e9734b120.herokuapp.com/favorites', {
  //     headers: {
  //      token: token,
  //     },
@@ -64,7 +64,9 @@ const ItemTray = ({ handleAddItem }) => {
    //  pageRef.current = 1;
    //  if (page <= totalPageRef.current) {
    axios
-    .get(`http://localhost:3001/gallery?page=${page}&limit=10`)
+    .get(
+     `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10`
+    )
     .then((response) => {
      const fetchedItems = response.data.items;
      if (
