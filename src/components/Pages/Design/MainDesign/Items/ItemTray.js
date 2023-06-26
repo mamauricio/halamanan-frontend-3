@@ -70,7 +70,7 @@ const ItemTray = ({ handleAddItem }) => {
     .then((response) => {
      const fetchedItems = response.data.items;
      if (
-      totalPageRef.current !== null &&
+      //   totalPageRef.current !== null &&
       response.data.page < response.data.totalPages
      ) {
       setItemTrayItems((prevItems) => [...prevItems, ...fetchedItems]);
@@ -96,10 +96,6 @@ const ItemTray = ({ handleAddItem }) => {
    mainContainer.scrollTop + mainContainer.clientHeight >=
    mainContainer.scrollHeight
   ) {
-   //  console.log('new item being added');
-   //  console.log('current page: ' + page);
-
-   //  console.log(totalPageRef.current);
    const totalPages = parseInt(totalPageRef.current);
    console.log(`current page: ${page}`);
    console.log(`total pages: ${totalPages}`);
