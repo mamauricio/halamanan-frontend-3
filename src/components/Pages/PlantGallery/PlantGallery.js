@@ -61,20 +61,15 @@ const PlantGallery = () => {
 
  const fetchGalleryItems = () => {
   setIsLoading(true);
-  console.log('fetching gallery items');
-  console.log(selectedCategory);
 
   if (selectedCategory === 'favorites') {
    const token = sessionStorage.getItem('token');
-
-   console.log(token);
 
    axios
     .get(`https://halamanan-197e9734b120.herokuapp.com/favorites`, {
      params: { token },
     })
     .then((response) => {
-     console.log(response);
      setItems(response.data);
      setIsLoading(false);
      setFetching(false);
@@ -83,7 +78,6 @@ const PlantGallery = () => {
      setError(error);
     });
   } else {
-   console.log('entering 2nd ');
    axios
     .get(
      `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10&category=${selectedCategory}&type=${selectedFilters}`
@@ -134,7 +128,6 @@ const PlantGallery = () => {
  }, [page, isLoading]);
 
  useEffect(() => {
-  // console.log('attaching ');
   const mainContainer = mainContainerRef.current;
   if (mainContainer) {
    mainContainer.addEventListener('scroll', handleScroll);
@@ -282,7 +275,6 @@ const PlantGallery = () => {
        hyphens: 'auto',
       }}
      >
-      {/* {console.log(favorites)} */}
       <Box
        sx={{
         width: 'auto',

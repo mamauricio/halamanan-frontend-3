@@ -42,17 +42,13 @@ const AdminDashboard = () => {
      },
     }
    );
-   //    console.log(response);
    const data = await response.json();
-   //    console.log(data);
    if (data) {
     setFetchingDesigns(false);
     setDesigns(data);
    } else {
-    // console.log(error);
    }
   } catch (error) {
-   //    console.log(error);
    setError(error.response.data.error);
   }
  };
@@ -81,19 +77,13 @@ const AdminDashboard = () => {
 
  const fetchAllItems = async () => {
   try {
-   //    const response = await fetch('https://halamanan-197e9734b120.herokuapp.com/gallery');
    axios
     .get(`https://halamanan-197e9734b120.herokuapp.com/gallery?category=all`)
     .then((response) => {
      const itemCount = response.data.totalCount;
      setItems(itemCount);
-     //  const data = response.json();
-     //  if (data) {
-     //   // console.log(data);
+
      setFetchingGallery(false);
-     //   setItems(data.totalCount);
-     //  } else {
-     //  }
     });
   } catch (error) {
    setError(error);

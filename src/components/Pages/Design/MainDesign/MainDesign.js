@@ -49,10 +49,8 @@ const MainDesign = () => {
       `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`
      );
      const fetchedItem = response.data;
-     //  console.log(fetchedItem);
      setDesignName(fetchedItem.designName);
      dispatch({ type: 'GET_ITEMS', payload: fetchedItem.items });
-     //  console.log(fetchedItem.items);
 
      setBackgroundImage(fetchedItem.backgroundImage);
      setShowDesign(true);
