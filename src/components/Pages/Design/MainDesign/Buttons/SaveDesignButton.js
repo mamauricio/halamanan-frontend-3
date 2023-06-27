@@ -70,6 +70,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
      setError(null);
     }
    } catch (error) {
+    setIsSaving(false);
     setError(error.message);
    }
   } else {
