@@ -45,20 +45,14 @@ const ItemTray = ({ handleAddItem }) => {
 
  const fetchGalleryItems = () => {
   setIsLoading(true);
-  console.log('fetching gallery items');
-  console.log(selectedCategory);
-
   if (selectedCategory === 'favorites') {
    const token = sessionStorage.getItem('token');
-
-   console.log(token);
 
    axios
     .get(`https://halamanan-197e9734b120.herokuapp.com/favorites`, {
      params: { token },
     })
     .then((response) => {
-     console.log(response);
      setItemTrayItems(response.data);
      setIsLoading(false);
      setFetching(false);
@@ -67,7 +61,6 @@ const ItemTray = ({ handleAddItem }) => {
      setError(error);
     });
   } else {
-   console.log('entering 2nd ');
    axios
     .get(
      `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10&category=${selectedCategory}&type=${selectedFilters}`

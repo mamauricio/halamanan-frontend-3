@@ -93,7 +93,6 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
      const timer = setTimeout(() => {
       navigate(`/designs/${response.data}`);
      }, 500);
-     console.log('Response:', response.data);
     })
     .catch(function (error) {
      console.error('Error:', error);
