@@ -75,6 +75,8 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
    }
   } else {
    setError('Saving already in progress');
+   setIsSaving(false);
+   setError(null);
   }
  };
 
