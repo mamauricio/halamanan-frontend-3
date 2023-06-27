@@ -14,6 +14,9 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  const [error, setError] = useState(null);
  const [autosave, setAutosave] = useState(false);
  const [isSaving, setIsSaving] = useState(false);
+ handleCloseSecond = () => {
+  setIsSaving(false);
+ };
  const handleOpen = () => {
   setOpen(true);
   setTimeout(() => {
@@ -43,40 +46,34 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
   );
   const designThumbnail = (await canvas).toDataURL('image/png');
 
-  if (isSaving === false) {
-   try {
-    setIsSaving(true);
-    const newData = {
-     designName,
-     backgroundImage,
-     designThumbnail,
-     items,
-    };
-    const response2 = axios.patch(
-     `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
-     newData
-    );
+  try {
+   setIsSaving(true);
+   const newData = {
+    designName,
+    backgroundImage,
+    designThumbnail,
+    items,
+   };
+   const response2 = axios.patch(
+    `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
+    newData
+   );
 
-    dispatch({
-     type: 'UPDATE_DESIGN',
-     payload: {
-      designId: id,
-      newData,
-     },
-    });
-    const saved = await response2;
-    if (response2) {
-     setIsSaving(false);
-     setError(null);
-    }
-   } catch (error) {
+   dispatch({
+    type: 'UPDATE_DESIGN',
+    payload: {
+     designId: id,
+     newData,
+    },
+   });
+   const saved = await response2;
+   if (response2) {
     setIsSaving(false);
-    setError(error.message);
+    setError(null);
    }
-  } else {
-   setError('Saving already in progress');
+  } catch (error) {
    setIsSaving(false);
-   setError(null);
+   setError(error.message);
   }
  };
 
@@ -123,7 +120,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
    {isSaving && (
     <Grow in={isSaving}>
      <Alert
-      //   onClose={handleClose}
+      onClose={handleCloseSecond}
       variant="outlined"
       severity="success"
       sx={{
