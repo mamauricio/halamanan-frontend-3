@@ -81,7 +81,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  React.useEffect(() => {
   const autosave = setInterval(function () {
    setAutosave(true);
-  }, 180 * 1000);
+  }, 60 * 1000);
   return () => {
    setAutosave(false);
    clearInterval(autosave);
