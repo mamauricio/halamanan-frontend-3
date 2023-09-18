@@ -56,6 +56,10 @@ const ApproveButton = (itemData) => {
      color: 'rgba(255,255,255,0.8)',
      bgcolor: 'primary.main',
      width: 'auto',
+     transition: 'background-color ease-in-out 0.2s',
+     ':hover': {
+      bgcolor: 'rgba(255,255,255,0.2)',
+     },
     }}
    >
     {/* Approve */}
