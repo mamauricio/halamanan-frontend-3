@@ -135,7 +135,6 @@ const ItemManagement = () => {
     handleOpenAlert();
    }
   } catch (error) {
-   console.log(error);
    setError(true);
    setAlertMessage(
     'Error adding item. Make Sure all the fields are correct and item is unique'
@@ -352,6 +351,7 @@ const ItemManagement = () => {
                borderRadius: 1,
                bgcolor: 'rgba(255,255,255,0.8)',
                p: 2,
+               ml: 1,
               }}
              >
               {selectedItem.newItemUrl === '' ? (

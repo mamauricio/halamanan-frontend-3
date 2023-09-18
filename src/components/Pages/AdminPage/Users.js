@@ -277,12 +277,8 @@ const Users = () => {
     disableGutters={true}
     sx={{
      alignItems: 'center',
-     //  mt: 2,
-     //  bgcolor: 'primary.main',
      p: 2,
      borderRadius: 1,
-     //  height: '70vh',
-     //  overflowY: 'scroll',
     }}
    >
     <Typography
@@ -316,14 +312,10 @@ const Users = () => {
         bgcolor: 'rgba(255,255,255,0.2)',
         height: '85vh',
         overflowY: 'scroll',
+        borderRadius: 1,
        }}
       >
-       <TableContainer
-        component={Paper}
-        sx={{
-         bgcolor: 'rgba(255,255,255,0.2)',
-        }}
-       >
+       <TableContainer component={Paper}>
         <Table
          sx={{ minWidth: 650 }}
          size="large"
