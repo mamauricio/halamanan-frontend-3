@@ -307,7 +307,7 @@ const DashBoard = ({ setValue }) => {
                >
                 <img
                  src={items.newItemUrl}
-                 style={{ height: '100%', objectFit: 'contain' }}
+                 style={{ height: '100%', width: '100%', objectFit: 'contain' }}
                 />
                </Box>
               )}
