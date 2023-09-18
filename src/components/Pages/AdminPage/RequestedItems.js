@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grow } from '@mui/material';
+import { Box, Grow, Typography } from '@mui/material';
 import { useNewItemsContext } from '../../hooks/uewNewItemsContext';
 import { FadeLoader } from 'react-spinners';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 const RequestedItems = ({ handleSelectedItem }) => {
  const { newItems, dispatch } = useNewItemsContext();
  const [fetchingItems, setFetchingItems] = useState(true);
  const [showItems, setShowItems] = useState(false);
+ const [color, setColor] = useState('#ECAB00');
+
  useEffect(() => {
   const fetchNewItems = async () => {
    try {
@@ -34,9 +37,32 @@ const RequestedItems = ({ handleSelectedItem }) => {
  return (
   <Box>
    {fetchingItems ? (
-    <Box>
+    <Box
+     sx={{
+      height: '500px',
+      width: '300px',
+     }}
+    >
      {' '}
-     <Box> Fetching Items </Box>{' '}
+     <Box
+      sx={{
+       height: 'inherit',
+       width: 'inherit',
+       display: 'flex',
+       flexDirection: 'column',
+       justifyContent: 'space-evenly',
+       alignItems: 'center',
+      }}
+     >
+      <Typography variant="h4">Fetching Items</Typography>
+      <FadeLoader
+       color={color}
+       loading={fetchingItems}
+       size={200}
+       aria-label="Loading Spinner"
+       data-testid="loader"
+      />
+     </Box>{' '}
     </Box>
    ) : newItems && newItems.length !== 0 ? (
     newItems.map((item, index) => (
@@ -48,13 +74,16 @@ const RequestedItems = ({ handleSelectedItem }) => {
        onClick={() => handleSelectedItem(item)}
        key={index}
        sx={{
-        bgcolor: 'primary.main',
-        width: '250px',
-        height: 'auto',
+        backgroundColor: 'rgba(255,255,255,0.2)',
+        width: '300px',
         p: 2,
-        borderRadius: 2,
-        border: 'solid 1px orange',
+        borderRadius: 1,
         cursor: 'pointer',
+        mb: 1,
+        transition: 'background-color ease-in-out 0.2s',
+        ':hover': {
+         backgroundColor: 'rgba(255,255,255,0.1)',
+        },
        }}
       >
        <Box
@@ -63,19 +92,35 @@ const RequestedItems = ({ handleSelectedItem }) => {
          display: 'flex',
          alignItems: 'center',
          justifyContent: 'center',
-         bgcolor: 'orange',
-         borderRadius: 2,
+         bgcolor: 'rgba(255,255,255,0.8)',
+         borderRadius: 1,
          mb: 1,
+         py: 1,
         }}
        >
-        <img
-         src={item.newItemUrl}
-         style={{
-          maxHeight: '100%',
-          maxWidth: '100%',
-          objectFit: 'contain',
-         }}
-        />
+        {item.newItemUrl === '' ? (
+         <>
+          <Box
+           sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: 'rgba(0,0,0,0.4)',
+           }}
+          >
+           <QuestionMarkIcon fontSize="large" />
+          </Box>
+         </>
+        ) : (
+         <img
+          src={item.newItemUrl}
+          style={{
+           maxHeight: '100%',
+           maxWidth: '100%',
+           objectFit: 'contain',
+          }}
+         />
+        )}
        </Box>
        <Box sx={{ color: 'orange', fontSize: '18px' }}>
         {' '}

@@ -11,6 +11,8 @@ import {
  InputLabel,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+// import EditIcon from '@mui/icons-material/Edit';
+import Edit from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { useNewItemsContext } from '../../hooks/uewNewItemsContext';
 
@@ -53,9 +55,11 @@ const EditButton = ({ newItemData }) => {
    itemInformation: itemData.newItemDescription,
    category: itemData.newItemCategory,
    type: itemData.newItemType,
-   informationSource: 'User',
-   imageSource: 'User',
-   imageUrl: itemData.newItemUrl,
+   informationSource: itemData.informationSource
+    ? itemData.informationSource
+    : 'User',
+   imageSource: itemData.imageSource ? itemData.imageSource : 'User',
+   imageUrl: itemData.newItemUrl || itemData.imageUrl,
   };
   const response = await fetch(
    `https://halamanan-197e9734b120.herokuapp.com/gallery/add-item`,
@@ -85,10 +89,20 @@ const EditButton = ({ newItemData }) => {
  return (
   <Box sx={{ mx: 2 }}>
    <Button
+    title="Edit Item"
     onClick={handleOpen}
-    sx={{ bgcolor: 'primary.main', color: 'orange' }}
+    sx={{
+     bgcolor: 'primary.main',
+     color: 'rgba(255,255,255,0.8)',
+     transition: 'background-color ease-in 0.15s, color ease-in 0.15s ',
+     ':hover': {
+      bgcolor: 'orange',
+      color: 'primary.main',
+     },
+    }}
    >
-    Edit
+    {/* Edit */}
+    <Edit />
    </Button>
    <Modal
     open={open}
@@ -201,13 +215,20 @@ const EditButton = ({ newItemData }) => {
              objectFit: 'contain',
              overFlow: 'hidden',
              border: 'solid 1px',
-             borderColor: 'primary.main',
-             p: 1,
+             p: 2,
+             display: 'flex',
+             justifyContent: 'center',
+             alignItems: 'center',
+             borderRadius: 1,
+             bgcolor: 'rgba(255,255,255,0.7)',
             }}
            >
             <img
              src={itemData.newItemUrl}
-             style={{ maxWidth: '100%', maxHeight: '100%' }}
+             style={{
+              maxWidth: '100%',
+              maxHeight: '100%',
+             }}
             />
            </Box>
 

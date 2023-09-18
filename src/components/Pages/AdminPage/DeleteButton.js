@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Box } from '@mui/material';
 import axios from 'axios';
 import { useNewItemsContext } from '../../hooks/uewNewItemsContext';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const DeleteButton = ({ itemData, handleSuccess }) => {
  const [open, setOpen] = useState(false);
@@ -31,10 +32,21 @@ const DeleteButton = ({ itemData, handleSuccess }) => {
  return (
   <>
    <Button
+    title="Delete Request"
     onClick={handleOpen}
-    sx={{ color: 'white', bgcolor: 'red' }}
+    sx={{
+     color: 'white',
+     bgcolor: 'primary.main',
+     color: 'rgba(255,255,255,0.8)',
+     transition: 'background-color ease-in 0.15s',
+     ':hover': {
+      bgcolor: 'red',
+      color: 'rgba(255,255,255,0.2',
+     },
+    }}
    >
-    Delete
+    {/* Delete */}
+    <DeleteOutlineIcon />
    </Button>
 
    <Modal

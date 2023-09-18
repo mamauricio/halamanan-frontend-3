@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -8,13 +8,15 @@ import Fade from '@mui/material/Fade';
 import Modal from '@mui/material/Modal';
 import Alert from '@mui/material/Alert';
 import Grow from '@mui/material/Grow';
-
+import Typography from '@mui/material/Typography';
 import UserDesigns from '../UserDesigns/UserDesigns';
 import axios from 'axios';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteOutline';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ModeEditRoundedIcon from '@mui/icons-material/ModeEditRounded';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useDesignContext } from '../../../hooks/useDesignContext';
+import { motion } from 'framer-motion';
 
 const DesignPage = () => {
  const navigate = useNavigate();
@@ -27,12 +29,14 @@ const DesignPage = () => {
  const [openMain, setOpenMain] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
  const [openAlert, setOpenAlert] = useState(false);
+ const itemListRef = useRef(null);
  const handleOpenAlert = () => {
   setOpenAlert(true);
   const timer = setTimeout(() => {
    setOpenAlert(false);
   }, 2000);
  };
+
  const handleCloseAlert = () => {
   setOpenAlert(false);
  };
@@ -46,7 +50,7 @@ const DesignPage = () => {
  useEffect(() => {
   const timer = setTimeout(() => {
    setOpenMain(true);
-  }, 100);
+  }, 70);
  }, []);
 
  useEffect(() => {
@@ -64,17 +68,23 @@ const DesignPage = () => {
  }, [selectedDesign]);
 
  const handleEditDesign = (design) => {
+  // console.log(design._id);
   navigate(`/designs/${design._id}`, { state: { design } });
  };
 
  const handleSelectedDesign = (design) => {
   if (selectedDesign === design) {
    setOpenDesign(false);
-   setSelectedDesign(null);
+   const timer = setTimeout(() => {
+    setSelectedDesign('');
+   }, 100);
   } else {
    setOpenDesign(false);
-   setSelectedDesign(design);
-   setOpenDesign(true);
+
+   const timer = setTimeout(() => {
+    setSelectedDesign(design);
+    setOpenDesign(true);
+   }, 100);
   }
  };
 
@@ -95,7 +105,7 @@ const DesignPage = () => {
     handleClose();
     setAlertMessage(`Successfully Deleted ${design.designName}`);
     handleOpenAlert();
-    // window.location.href = window.location.href;
+    setSelectedDesign('');
    })
    .catch((error) => {
     setError(error);
@@ -105,25 +115,44 @@ const DesignPage = () => {
  const handleSaveToDevice = (selectedDesign) => {
   const link = document.createElement('a');
   link.href = selectedDesign.designThumbnail;
-  link.download = `${selectedDesign.designName}.png`; // Specify the desired filename here
+  link.download = `${selectedDesign.designName}.png`;
   link.click();
  };
 
+ const copyToClipboard = (e) => {
+  var copyText = document.querySelector('#itemList');
+  console.log(copyText);
+
+  console.log(copyText.innerText);
+  navigator.clipboard.writeText(copyText.innerText);
+  setAlertMessage('Copied to Clipboard');
+  handleOpenAlert();
+ };
+
  return (
-  <Fade in={openMain}>
+  <motion.div
+   initial={{ opacity: 0, transition: { duration: 0.3 } }}
+   animate={{ opacity: 1, transition: { duration: 0.3 } }}
+   exit={{ opacity: 0, transition: { duration: 0.3 } }}
+  >
    <Container
     disableGutters={true}
     maxWidth="xl"
    >
+    <Typography
+     variant="h5"
+     sx={{ pt: 2 }}
+    >
+     Designs
+    </Typography>
     {openAlert && (
      <Grow in={openAlert}>
       <Alert
-       //  severity="success"
        onClose={handleCloseAlert}
        sx={{
         position: 'absolute',
         color: 'orange',
-        bgcolor: 'background.default',
+        bgcolor: 'primary.main',
         top: '20%',
         left: '50%',
        }}
@@ -136,17 +165,26 @@ const DesignPage = () => {
      container
      spacing={1}
      sx={{
-      backgroundColor: 'background.default',
+      background: 'rgba(255,255,255,0.1)',
+      m: 1,
       mt: 2,
+      p: 1,
       borderRadius: 2,
-      height: '88vh',
+      height: '84vh',
      }}
     >
      <Grid
       item
       xs={3}
      >
-      <Box>
+      <Box
+       sx={{
+        pr: 1,
+        border: 'solid',
+        borderColor: 'primary.main',
+        borderWidth: '0 1px 0 0 ',
+       }}
+      >
        <UserDesigns handleSelectedDesign={handleSelectedDesign} />
       </Box>
      </Grid>
@@ -157,13 +195,9 @@ const DesignPage = () => {
      >
       <Box
        sx={{
-        backgroundColor: 'primary.main',
         height: '93%',
         maxHeight: '89vh',
         borderRadius: 2,
-        boxShadow: 5,
-        mt: 2,
-        mr: 2,
         overflowY: 'auto',
        }}
       >
@@ -192,6 +226,7 @@ const DesignPage = () => {
             }}
            >
             <Button
+             title="Save to Device"
              onClick={() => handleSaveToDevice(selectedDesign)}
              sx={{
               color: 'primary.main',
@@ -202,6 +237,7 @@ const DesignPage = () => {
              <SaveAltIcon />
             </Button>
             <Button
+             title="Edit Design"
              sx={{
               backgroundColor: 'white',
 
@@ -215,6 +251,7 @@ const DesignPage = () => {
              <ModeEditRoundedIcon label="Edit Design" />
             </Button>
             <Button
+             title="Delete design"
              sx={{
               backgroundColor: 'white',
 
@@ -255,18 +292,28 @@ const DesignPage = () => {
                }}
               >
                <Box sx={{ fontSize: '20px', color: 'primary.main' }}>
-                Are you sure you want to delete Design{' '}
-                {selectedDesign.designName} ?
+                Are you sure you want to delete {selectedDesign.designName} ?
                </Box>
                <Box
                 sx={{
                  mt: 2,
                  display: 'flex',
-                 justifyContent: 'space-evenly',
+                 //  bgcolor: 'white',
+                 width: '50%',
+                 flexDirection: 'row',
+                 justifyContent: 'space-between',
                 }}
                >
                 <Button
-                 sx={{ ':hover': { backgroundColor: 'red' } }}
+                 sx={{
+                  bgcolor: 'red',
+                  transition: 'opacity ease-in-out 0.2s',
+                  ':hover': {
+                   backgroundColor: 'red',
+                   color: 'white',
+                   opacity: 0.8,
+                  },
+                 }}
                  onClick={() => handleDelete(selectedDesign)}
                 >
                  Yes
@@ -275,6 +322,8 @@ const DesignPage = () => {
                  sx={{
                   color: 'white',
                   backgroundColor: 'primary.main',
+                  transition: 'opacity ease-in-out 0.2s ',
+                  ':hover': { bgcolor: 'primary.main', opacity: 0.8 },
                  }}
                  onClick={handleClose}
                 >
@@ -290,7 +339,6 @@ const DesignPage = () => {
           <Box
            className="thumbnail-container"
            sx={{
-            maxWidth: '100%',
             backgroundColor: 'white',
             py: 1,
             alignContent: 'center',
@@ -298,7 +346,7 @@ const DesignPage = () => {
             justifyContent: 'center',
             borderRadius: 2,
             mx: 2,
-            maxHeight: '800px',
+            maxHeight: '600px',
            }}
           >
            <Box
@@ -310,7 +358,8 @@ const DesignPage = () => {
            >
             <img
              src={selectedDesign.designThumbnail}
-             width="70%"
+             width="inherit"
+             height="inherit"
             />
            </Box>
           </Box>
@@ -328,22 +377,49 @@ const DesignPage = () => {
            <Box
             className="item-list"
             sx={{
-             display: 'flex',
-             flexDirection: 'row',
-             height: '200px',
+             height: 'auto',
              overflow: 'auto',
-             width: 'auto',
+             maxWidth: 'auto',
+             minWidth: '500px',
+             mt: 1,
             }}
            >
+            <Box
+             sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+             }}
+            >
+             <Typography>Items: </Typography>
+             <Button
+              title="Copy to Clipboard"
+              onClick={copyToClipboard}
+              sx={{ mr: 4 }}
+             >
+              <ContentCopyIcon sx={{ color: 'white' }} />
+             </Button>
+            </Box>
             <ul style={{ columnCount: 2, columnGap: '30px' }}>
-             <strong>Items: </strong>
-             {Object.entries(itemList).map(([itemName, count]) => (
-              <div key={itemName}>
-               <li>
-                {itemName}: {count}
-               </li>
-              </div>
-             ))}
+             {Object.entries(itemList).length > 0 ? (
+              <>
+               <Box id="itemList">
+                {Object.entries(itemList).map(([itemName, count]) => (
+                 <div
+                  key={itemName}
+                  ref={itemListRef}
+                 >
+                  <li>
+                   {itemName}: {count}
+                  </li>
+                 </div>
+                ))}
+               </Box>
+              </>
+             ) : (
+              <Typography>No items yet</Typography>
+             )}
             </ul>
            </Box>
           </Box>
@@ -365,7 +441,7 @@ const DesignPage = () => {
      </Grid>
     </Grid>
    </Container>
-  </Fade>
+  </motion.div>
  );
 };
 

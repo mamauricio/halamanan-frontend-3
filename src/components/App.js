@@ -4,15 +4,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './MuiTheme';
-import { TransitionGroup } from 'react-transition-group';
+import TransitionGroup from 'react-transition-group/TransitionGroup';
 import NavBar from './Navbar/NavBar';
-
 import AdminNavBar from './Pages/AdminPage/AdminNavBar';
-
 import AdminRoutes from './Routes/AdminRoutes';
 import GuestRoutes from './Routes/GuestRoutes';
 import UserRoutes from './Routes/UserRoutes';
-// import PlantGallery from './Pages/PlantGallery/PlantGallery';
+import Box from '@mui/material/Box';
+
 const App = () => {
  const navigate = useNavigate();
  const [isAuthenticated, setAuthenticated] = useState(
@@ -39,7 +38,7 @@ const App = () => {
    navigate('/login');
   }
 
-  navigate('/home');
+  navigate('/designs');
  };
 
  const handleLogout = () => {
@@ -54,19 +53,58 @@ const App = () => {
    <TransitionGroup>
     <ThemeProvider theme={theme}>
      {sessionStorage.getItem('adminAuth') ? (
-      <>
+      <Box
+       sx={{
+        bgcolor: 'primary.main',
+        height: '100%',
+        width: '100%',
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        overflowY: 'hidden',
+       }}
+      >
        <AdminNavBar handleLogout={handleLogout} />
        <AdminRoutes />
-      </>
+      </Box>
      ) : (
       <>
        {isAuthenticated && !sessionStorage.getItem('adminAuth') ? (
-        <>
+        <Box
+         sx={{
+          bgcolor: 'primary.main',
+          height: '100%',
+          width: '100%',
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          overflowY: 'scroll',
+         }}
+        >
          <NavBar handleLogout={handleLogout} />
          <UserRoutes />
-        </>
+        </Box>
        ) : (
-        <GuestRoutes handleAuthenticate={handleAuthenticate} />
+        <Box
+         sx={{
+          bgcolor: 'primary.main',
+          height: '100%',
+          width: '100%',
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          overflowY: 'scroll',
+         }}
+        >
+         <NavBar isGuest />
+         <GuestRoutes
+          handleAuthenticate={handleAuthenticate}
+          isGuest
+         />
+        </Box>
        )}
       </>
      )}

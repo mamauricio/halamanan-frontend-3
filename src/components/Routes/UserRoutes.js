@@ -7,7 +7,7 @@ import {
 import React from 'react';
 import HomePage from '../Pages/Home/Home';
 import GalleryPage from '../Pages/PlantGallery/PlantGallery';
-import AboutPage from '../Pages/About/AboutPage';
+import HowTo from '../Pages/About/HowTo';
 import MainDesignPage from '../Pages/Design/MainDesign/MainDesign';
 import DesignPage from '../Pages/Design//DesignPage/DesignPage';
 import InvalidURL from '../Pages/InvalidURL';
@@ -21,16 +21,16 @@ const UserRoutes = () => {
    <Route
     exact
     path="/"
-    element={<Navigate to="/home" />}
+    element={<Navigate to="/designs" />}
    ></Route>
-   <Route
+   {/* <Route
     path={`/home`}
     element={
      <DesignsContextProvider>
       <HomePage />
      </DesignsContextProvider>
     }
-   />
+   /> */}
    {/* Item Gallery */}
    <Route
     path="/gallery"
@@ -67,7 +67,7 @@ const UserRoutes = () => {
 
    <Route
     path="/about"
-    element={<AboutPage />}
+    element={<HowTo />}
    />
    <Route
     path="/invalid"

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { resolvePath, useLocation, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { useItemsContext } from '../../../hooks/useItemsContext';
 import { useTheme, ThemeProvider } from '@mui/material/styles';
 import html2canvas from 'html2canvas';
@@ -27,6 +27,7 @@ const MainDesign = () => {
  const [backgroundImage, setBackgroundImage] = useState(
   localStorage.backgroundImage
  );
+
  const { items, dispatch } = useItemsContext();
  const [designThumbnail, setDesignThumbnail] = useState(null);
  const [selectedItems, setSelectedItems] = useState([]);
@@ -35,6 +36,8 @@ const MainDesign = () => {
 
  const [showDesign, setShowDesign] = useState(false);
  const [aspectRatio, setAspectRatio] = useState('');
+
+ const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
 
  const isValidObjectId = (objectId) => {
   const objectIdPattern = /^[0-9a-fA-F]{24}$/;
@@ -92,21 +95,51 @@ const MainDesign = () => {
  const handleDesignName = (event) => {
   setDesignName(event);
  };
- const handleAddItem = ({ designAreaItem, itemKey }) => {
-  if (designAreaItem) {
-   const newItem = {
-    itemKey: itemKey,
-    itemName: designAreaItem.itemName,
-    width: '200px',
-    height: '200px',
-    x: 200,
-    y: 200,
-    imageUrl: designAreaItem.imageUrl,
-   };
-   dispatch({
-    type: 'ADD_NEW_ITEM',
-    payload: newItem,
-   });
+
+ const handleDrop = (event) => {
+  event.preventDefault();
+  const droppableArea = document.getElementById('backgroundImageContainer');
+
+  const offsetX = event.clientX - droppableArea.getBoundingClientRect().left;
+  const offsetY = event.clientY - droppableArea.getBoundingClientRect().top;
+
+  setCoordinates({ x: offsetX, y: offsetY });
+ };
+
+ const handleAddItem = ({
+  designAreaItem,
+  itemKey,
+  height,
+  mouseOffsetX,
+  mouseOffsetY,
+ }) => {
+  const droppableArea = document.getElementById('backgroundImageContainer');
+  const droppableAreaRect = droppableArea.getBoundingClientRect();
+  if (
+   coordinates.x - mouseOffsetX > 0 &&
+   coordinates.x - mouseOffsetX <
+    droppableAreaRect.right - droppableAreaRect.left &&
+   coordinates.y - mouseOffsetY > 0 &&
+   coordinates.y - mouseOffsetY <
+    droppableAreaRect.bottom - droppableAreaRect.top
+  ) {
+   if (designAreaItem) {
+    const newItem = {
+     itemKey: itemKey,
+     itemName: designAreaItem.itemName,
+     width: 200,
+     height: height,
+     x: coordinates.x - mouseOffsetX,
+     y: coordinates.y - mouseOffsetY,
+     imageUrl: designAreaItem.imageUrl,
+    };
+    dispatch({
+     type: 'ADD_NEW_ITEM',
+     payload: newItem,
+    });
+    setCoordinates({ x: 0, y: 0 });
+   }
+  } else {
   }
  };
 
@@ -131,6 +164,10 @@ const MainDesign = () => {
   });
  };
 
+ const selectAll = (event) => {
+  event.target.select();
+ };
+
  return (
   <ThemeProvider theme={theme}>
    <Fade in={showDesign}>
@@ -138,7 +175,17 @@ const MainDesign = () => {
      maxWidth="xl"
      disableGutters={true}
     >
-     <Box sx={{ mt: 2 }}>
+     <Box
+      sx={{
+       mt: 2,
+       bgcolor: 'rgba(255,255,255,0.1)',
+       borderRadius: 2,
+       p: 2,
+       pb: 0,
+
+       height: 'auto',
+      }}
+     >
       <Grid
        container
        spacing={0}
@@ -173,7 +220,6 @@ const MainDesign = () => {
           >
            Fetching Items
           </Box>
-          {/* <br /> */}
           <FadeLoader
            color={color}
            loading={fetching}
@@ -184,7 +230,14 @@ const MainDesign = () => {
          </Box>
         ) : (
          <>
-          <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
+          <Box
+           sx={{
+            m: 1,
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '72vw',
+           }}
+          >
            <TextField
             required
             label="Design Name"
@@ -192,9 +245,22 @@ const MainDesign = () => {
             onChange={(e) => {
              handleDesignName(e.target.value);
             }}
+            onFocus={selectAll}
+            InputProps={{
+             style: {
+              color: 'white',
+             },
+            }}
            />
 
-           <Box sx={{ display: 'flex' }}>
+           <Box
+            sx={{
+             display: 'flex',
+             mt: 1,
+             width: '550px',
+             justifyContent: 'space-around',
+            }}
+           >
             <SaveDesignButton
              designName={designName}
              backgroundImage={backgroundImage}
@@ -207,23 +273,32 @@ const MainDesign = () => {
             <ResetButton />
             <Button
              onClick={handleSaveToDevice}
+             title="Download to device"
              sx={{
-              color: 'primary.main',
+              fontSize: 18,
+              height: '50px',
+              color: 'rgba(255,255,255,0.8)',
               display: 'flex',
               justifyContent: 'center',
+              ':hover': {
+               bgcolor: 'rgba(255,255,255,0.8)',
+               color: 'primary.main',
+              },
              }}
             >
-             <SaveAltIcon />
+             <SaveAltIcon sx={{ mr: '2px' }} />
              Download
             </Button>
            </Box>
           </Box>
-
-          <DesignArea
-           backgroundImage={backgroundImage}
-           items={items ? items : ''}
-           backgroundAspectRatio={aspectRatio}
-          />
+          <Box sx={{ mt: 2 }}>
+           <DesignArea
+            backgroundImage={backgroundImage}
+            items={items ? items : ''}
+            backgroundAspectRatio={aspectRatio}
+            handleDrop={handleDrop}
+           />
+          </Box>
          </>
         )}
        </Grid>
@@ -234,17 +309,13 @@ const MainDesign = () => {
        >
         <Box
          sx={{
-          border: '0.5px solid',
           ml: 2,
           pt: 1,
          }}
         >
          <Box
           sx={{
-           bgcolor: 'background.default',
-           width: '420px',
            pl: 1,
-           borderRadius: 2,
           }}
          >
           <ItemTray handleAddItem={handleAddItem} />

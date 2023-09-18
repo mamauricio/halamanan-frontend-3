@@ -16,7 +16,7 @@ div {
 
 /* width */
 ::-webkit-scrollbar {
-    width: 7px;
+    width: 10px;
 }
 
 /* Track */
@@ -36,7 +36,7 @@ div {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
-    border-radius: 0px 10px 10px 0px;
+    border-radius: 10px 10px 10px 10px;
 }
 
 div{

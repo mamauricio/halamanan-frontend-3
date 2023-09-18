@@ -50,18 +50,11 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
 
  const imageListItemStyle = {
   backgroundColor: 'white',
-  borderRadius: 2,
+  borderRadius: 1,
   p: 1,
   mb: 1,
   cursor: 'pointer',
- };
-
- const renderAtHomeStyle = {
-  cursor: 'cursor',
-  backgroundColor: 'white',
-  borderRadius: 2,
-  p: 1,
-  mb: 1,
+  boxShadow: 3,
  };
 
  const handleClick = (design) => {
@@ -109,32 +102,17 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
   >
    <Box
     sx={{
-     backgroundColor: 'primary.main',
      height: '84vh',
      borderRadius: 2,
-     m: 2,
-     boxShadow: 10,
      maxWidth: '40vw',
     }}
    >
     <Box
-     sx={{
-      fontSize: 30,
-      textAlign: 'center',
-      pt: 2,
-      height: '5%',
-      color: 'orange',
-     }}
-    >
-     Designs
-    </Box>
-
-    <Box
      className="designsContainer"
      sx={{
-      m: 1,
+      pt: 1,
       pb: 2,
-      height: '70%',
+      height: '80%',
      }}
     >
      {fetching === true ? (
@@ -159,7 +137,6 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
        >
         Fetching Designs
        </Box>
-       {/* <br /> */}
        <FadeLoader
         color={color}
         loading={fetching}
@@ -173,9 +150,9 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
        {designs && designs.length !== 0 ? (
         <ImageList
          cols={1}
-         gap={5}
+         gap={15}
          rowHeight={200}
-         sx={{ mt: 2, height: '100%' }}
+         sx={{ mt: 2, height: '100%', pr: 2 }}
         >
          {designs.map((design, index) => (
           <Grow
@@ -186,7 +163,7 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
             className="image"
             key={index}
             onClick={() => handleClick(design)}
-            sx={renderAtHome ? renderAtHomeStyle : imageListItemStyle}
+            sx={imageListItemStyle}
            >
             <img
              src={design.designThumbnail}

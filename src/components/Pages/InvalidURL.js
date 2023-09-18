@@ -22,7 +22,7 @@ const InvalidURL = () => {
    sx={{
     display: 'flex',
     position: 'absolute',
-    color: 'primary.main',
+    color: 'white',
     position: 'absolute',
     left: '50%',
     top: '50%',
@@ -30,7 +30,7 @@ const InvalidURL = () => {
    }}
   >
    <Fade in={open}>
-    <Box sx={{ color: 'primary.main', fontSize: '30px' }}>
+    <Box sx={{ color: 'white', fontSize: '30px' }}>
      Forbidden, but feel free to explore.
     </Box>
    </Fade>

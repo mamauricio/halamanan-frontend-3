@@ -13,7 +13,8 @@ import {
  Modal,
  Grow,
  Alert,
- FormControl,
+ //  FormControl,
+ Typography,
  TextField,
 } from '@mui/material';
 import axios from 'axios';
@@ -37,7 +38,7 @@ const Users = () => {
   fetchAllUsers();
   const timer = setTimeout(() => {
    setOpenMain(true);
-  }, 200);
+  }, 100);
  }, []);
 
  useEffect(() => {
@@ -74,17 +75,24 @@ const Users = () => {
  };
  const handleOpenAlert = () => {
   setOpenAlert(true);
-  const timer = setTimeout(() => {
-   setOpenAlert(false);
-  }, 4 * 1000);
-
-  return () => {
-   clearTimeout(timer);
-  };
  };
  const handleCloseAlert = () => {
   setOpenAlert(false);
  };
+
+ useEffect(() => {
+  let timer;
+
+  if (openAlert) {
+   timer = setTimeout(() => {
+    setOpenAlert(false);
+   }, 5000); // 5 seconds
+  }
+
+  return () => {
+   clearTimeout(timer);
+  };
+ }, [openAlert]);
  const handleOpen = (message, user) => {
   if (message === 'delete') {
    setDeleteUser(true);
@@ -170,6 +178,11 @@ const Users = () => {
 
  const textFieldStyle = {
   mt: 1,
+ };
+
+ const tableTextStyle = {
+  color: 'primary.main',
+  fontSize: '20px',
  };
 
  //---------------------------END OF COMPONENT STYLING-----------------------------  //
@@ -260,9 +273,22 @@ const Users = () => {
    exit={{ opacity: 0, transition: { duration: 0.3 } }}
   >
    <Container
-    maxWidth="lg"
-    sx={{ alignItems: 'center', mt: 2 }}
+    maxWidth="xl"
+    disableGutters={true}
+    sx={{
+     alignItems: 'center',
+     //  mt: 2,
+     //  bgcolor: 'primary.main',
+     p: 2,
+     borderRadius: 1,
+    }}
    >
+    <Typography
+     variant="h5"
+     sx={{ mb: 2 }}
+    >
+     Users
+    </Typography>
     <Grow in={openMain}>
      <div>
       {openAlert && (
@@ -283,24 +309,43 @@ const Users = () => {
         </Alert>
        </Grow>
       )}
-      <TableContainer component={Paper}>
+      <TableContainer
+       component={Paper}
+       sx={{ bgcolor: 'rgba(255,255,255,0.2)' }}
+      >
        <Table
         sx={{ minWidth: 650 }}
-        size="small"
+        size="large"
         aria-label="a dense table"
        >
         <TableHead>
          <TableRow>
-          <TableCell>User Email</TableCell>
-          <TableCell align="right">First Name</TableCell>
-          <TableCell align="right">Last Name</TableCell>
-          <TableCell align="right">Role</TableCell>
+          <TableCell sx={{ color: 'orange' }}>User Email</TableCell>
+          <TableCell
+           align="right"
+           sx={{ color: 'orange' }}
+          >
+           First Name
+          </TableCell>
+          <TableCell
+           align="right"
+           sx={{ color: 'orange' }}
+          >
+           Last Name
+          </TableCell>
+          <TableCell
+           align="right"
+           sx={{ color: 'orange' }}
+          >
+           Role
+          </TableCell>
 
           <TableCell
            sx={{
             justifyContent: 'center',
             display: 'flex',
             alignItems: 'center',
+            color: 'orange',
            }}
           >
            Actions
@@ -361,17 +406,48 @@ const Users = () => {
 
             <TableRow
              key={user.email}
-             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+             sx={{
+              '&:last-child td, &:last-child th': { border: 0 },
+              // color: 'white',
+             }}
             >
              <TableCell
               component="th"
               scope="row"
+              sx={{
+               ...tableTextStyle,
+               color: user.role === 'admin' ? 'white' : 'primary.main',
+              }}
              >
               {user.email}
              </TableCell>
-             <TableCell align="right">{user.firstName}</TableCell>
-             <TableCell align="right">{user.lastName}</TableCell>
-             <TableCell align="right">{user.role}</TableCell>
+             <TableCell
+              align="right"
+              sx={{
+               ...tableTextStyle,
+               color: user.role === 'admin' ? 'white' : 'primary.main',
+              }}
+             >
+              {user.firstName}
+             </TableCell>
+             <TableCell
+              align="right"
+              sx={{
+               ...tableTextStyle,
+               color: user.role === 'admin' ? 'white' : 'primary.main',
+              }}
+             >
+              {user.lastName}
+             </TableCell>
+             <TableCell
+              align="right"
+              sx={{
+               ...tableTextStyle,
+               color: user.role === 'admin' ? 'white' : 'primary.main',
+              }}
+             >
+              {user.role}
+             </TableCell>
              <TableCell
               align="right"
               sx={{
@@ -381,15 +457,52 @@ const Users = () => {
               }}
              >
               {/* cannot demote admin to user */}
+              {user.email === 'admin@admin.com' && (
+               <Box sx={{ m: 2, fontSize: '20px' }}></Box>
+              )}
               {user.email !== 'admin@admin.com' && (
-               <>
+               <Box
+                sx={{
+                 //  bgcolor: 'white',
+                 width: '80%',
+                 display: 'flex',
+                 justifyContent: 'space-evenly',
+                }}
+               >
+                {user.role !== 'admin' ? (
+                 <Button
+                  title="Promote user to admin role"
+                  onClick={() => handleOpen('promote', user)}
+                  sx={{
+                   bgcolor: 'rgba(255,255,255,0.2)',
+                   color: 'primary.main',
+                   width: '200px',
+                  }}
+                 >
+                  Promote to Admin
+                 </Button>
+                ) : (
+                 <Button
+                  title="Remove user's admin role"
+                  onClick={() => handleOpen('demote', user)}
+                  sx={{
+                   bgcolor: 'rgba(255,255,255,0.4)',
+                   color: 'white',
+                   width: '200px',
+                  }}
+                 >
+                  {' '}
+                  Remove as Admin
+                 </Button>
+                )}
+
                 <Button
-                 onClick={() => handleOpen('delete', user)}
-                 sx={{ bgcolor: 'red', color: 'white' }}
+                 title="Edit User Information"
+                 onClick={() => handleOpenEdit(user)}
+                 sx={{ bgcolor: 'rgba(255,255,255,0.2)' }}
                 >
-                 Delete
+                 Edit
                 </Button>
-                <Button onClick={() => handleOpenEdit(user)}>Edit</Button>
                 {selectedUser._id === user._id && (
                  <Modal
                   open={openEdit}
@@ -446,23 +559,22 @@ const Users = () => {
                   </Box>
                  </Modal>
                 )}
-                {user.role !== 'admin' ? (
-                 <Button
-                  onClick={() => handleOpen('promote', user)}
-                  sx={{ bgcolor: 'green', color: 'white' }}
-                 >
-                  Promote to Admin
-                 </Button>
-                ) : (
-                 <Button
-                  onClick={() => handleOpen('demote', user)}
-                  sx={{ bgcolor: 'orange', color: 'white' }}
-                 >
-                  {' '}
-                  Remove as Admin
-                 </Button>
-                )}
-               </>
+                <Button
+                 title="Delete User"
+                 onClick={() => handleOpen('delete', user)}
+                 sx={{
+                  bgcolor: 'red',
+                  color: 'white',
+                  // opacity: '0.4',
+                  ':hover': {
+                   opacity: 1,
+                   bgcolor: 'red',
+                  },
+                 }}
+                >
+                 Delete
+                </Button>
+               </Box>
               )}
              </TableCell>
             </TableRow>

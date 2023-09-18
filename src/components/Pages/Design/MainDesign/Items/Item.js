@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './Item.css';
 import { Rnd } from 'react-rnd';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 import RemoveIcon from '@mui/icons-material/Remove';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -62,11 +64,9 @@ const Item = (props) => {
   <>
    <Rnd
     className="item"
-    size={{ width, height }}
+    size={{ height: height, width: width }}
     position={{ x, y }}
     enableResizing={{ bottomRight: true, topRight: true, bottomLeft: true }}
-    minWidth={100}
-    minHeight={100}
     disableDragging={false}
     lockAspectRatio={true}
     onDrag={changePosition}
@@ -75,64 +75,79 @@ const Item = (props) => {
     onMouseEnter={() => setIsHovered(true)}
     onMouseLeave={() => setIsHovered(false)}
    >
-    {isHovered && (
-     <>
-      <Button
-       onClick={() => removeItem(props.itemKey)}
-       sx={{ position: 'absolute', bgcolor: 'orange', zIndex: 2 }}
-      >
-       <RemoveIcon />
-      </Button>
-
-      <KeyboardArrowRightIcon
-       fontSize="large"
-       sx={{
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        color: 'primary.main',
-        zIndex: 0,
-        transform: 'rotate(45deg)',
-       }}
-      />
-      <KeyboardArrowRightIcon
-       fontSize="large"
-       sx={{
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        color: 'primary.main',
-        zIndex: 0,
-        transform: 'rotate(-45deg)',
-       }}
-      />
-      <KeyboardArrowRightIcon
-       fontSize="large"
-       sx={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        color: 'primary.main',
-        zIndex: 0,
-        transform: 'rotate(135deg)',
-       }}
-      />
-     </>
-    )}
-
-    <img
-     className="image"
-     key={props.itemKey}
-     label={props.itemName}
-     src={props.imageUrl}
-     width={width}
-     height={height}
-     onClick={() => handleClick(props.itemKey)}
-     style={{
-      zIndex: selectedItem === props.itemKey ? 1 : 0,
-      objectFit: 'contain',
+    <Box
+     sx={{
+      height: height,
+      width: width,
+      display: 'flex',
      }}
-    />
+    >
+     {isHovered && (
+      <>
+       <Button
+        onClick={() => removeItem(props.itemKey)}
+        sx={{
+         left: 2,
+         top: 2,
+         width: '20px',
+         position: 'absolute',
+         bgcolor: 'rgba(255,255,255,0.7)',
+         zIndex: 2,
+         ':hover': { bgcolor: 'orange' },
+        }}
+       >
+        <RemoveIcon fontSize="small" />
+       </Button>
+
+       <KeyboardArrowRightIcon
+        fontSize="large"
+        sx={{
+         position: 'absolute',
+         right: 0,
+         bottom: 0,
+         color: 'primary.main',
+         zIndex: 0,
+         transform: 'rotate(45deg)',
+        }}
+       />
+       <KeyboardArrowRightIcon
+        fontSize="large"
+        sx={{
+         position: 'absolute',
+         top: 0,
+         right: 0,
+         color: 'primary.main',
+         zIndex: 0,
+         transform: 'rotate(-45deg)',
+        }}
+       />
+       <KeyboardArrowRightIcon
+        fontSize="large"
+        sx={{
+         position: 'absolute',
+         bottom: 0,
+         left: 0,
+         color: 'primary.main',
+         zIndex: 0,
+         transform: 'rotate(135deg)',
+        }}
+       />
+      </>
+     )}
+
+     <img
+      className="image"
+      key={props.itemKey}
+      label={props.itemName}
+      src={props.imageUrl}
+      height={height}
+      onClick={() => handleClick(props.itemKey)}
+      style={{
+       zIndex: selectedItem === props.itemKey ? 1 : 0,
+       objectFit: 'contain',
+      }}
+     />
+    </Box>
    </Rnd>
   </>
  );

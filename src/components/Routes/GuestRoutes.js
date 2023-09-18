@@ -2,9 +2,11 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../Pages/UserManagement/Login/LoginPage';
 import HomePage from '../Pages/Home/Home';
-import { DesignsContextProvider } from '../context/DesignContext';
+import PlantGallery from '../Pages/PlantGallery/PlantGallery';
+import HowTo from '../Pages/About/HowTo';
+import InvalidURL from '../Pages/InvalidURL';
 
-const GuestRoutes = ({ handleAuthenticate }) => {
+const GuestRoutes = ({ handleAuthenticate, isGuest }) => {
  return (
   <div>
    <Routes>
@@ -22,13 +24,20 @@ const GuestRoutes = ({ handleAuthenticate }) => {
       />
      }
     />
+
     <Route
-     path="/home"
-     element={
-      <DesignsContextProvider>
-       <HomePage />
-      </DesignsContextProvider>
-     }
+     path="/gallery"
+     element={<PlantGallery isGuest />}
+    />
+
+    <Route
+     path="/about"
+     element={<HowTo />}
+    />
+
+    <Route
+     path="/invalid"
+     element={<InvalidURL />}
     />
    </Routes>
   </div>

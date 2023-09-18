@@ -5,8 +5,6 @@
     
 }
 
-
-
 .item:hover  {
     position: absolute;
     border: 2px;
@@ -18,6 +16,7 @@
    
     display: block;
     background-color: rgba(255, 170, 0, 0.254) ;
+    transition: background-color ease-in-out 0.2s;
     object-fit: contain;
 }
 

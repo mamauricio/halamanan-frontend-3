@@ -96,26 +96,20 @@ const AddNewItemButton = ({ handleSuccess }) => {
  };
 
  return (
-  <Box sx={{}}>
+  <>
    <Button
     onClick={handleOpen}
-    sx={{ fontSize: '18px', position: 'relative' }}
+    sx={{
+     fontSize: '18px',
+     position: 'relative',
+     bgcolor: 'orange',
+     mt: 1,
+     mr: 1,
+     ':hover': { bgcolor: 'white' },
+    }}
    >
-    <Box
-     sx={{
-      display: 'flex',
-      flexDirection: 'row',
-      backgroundColor: 'orange',
-      p: 1,
-      color: 'primary.main',
-      borderRadius: 1,
-
-      ':hover': { opacity: 0.9 },
-     }}
-    >
-     <AddPhoto fontSize="medium" />
-     Request New Item
-    </Box>
+    <AddPhoto fontSize="medium" />
+    Request New item
    </Button>
    <Modal
     open={open}
@@ -131,14 +125,15 @@ const AddNewItemButton = ({ handleSuccess }) => {
       boxShadow: 24,
       p: 4,
       width: 600,
-      maxWidth: '95%',
-      borderRadius: 2,
+      maxWidth: '100%',
+      borderRadius: 1,
      }}
     >
      <Typography
       variant="h5"
       component="h2"
       gutterBottom
+      sx={{ color: 'primary.main' }}
      >
       Add Item
      </Typography>
@@ -211,7 +206,6 @@ const AddNewItemButton = ({ handleSuccess }) => {
           value={itemData.newItemType}
           onChange={handleFormChange}
           fullWidth
-          // required
           sx={{ my: 1 }}
          />
         </Grid>
@@ -260,24 +254,29 @@ const AddNewItemButton = ({ handleSuccess }) => {
           </Box>
          ) : (
           <>
-           <Button onClick={handleButtonClick}>
-            <Box
-             sx={{
-              color: 'orange',
-              fontSize: '50px',
-              backgroundColor: 'primary.main',
-              p: 3,
-              m: 2,
-              borderRadius: 2,
-              boxShadow: 10,
-              ':hover': { opacity: 0.9, marginBottom: 1 },
-             }}
-            >
-             <AddIcon fontSize="large" />
+           <Box
+            onClick={handleButtonClick}
+            sx={{
+             height: '70%',
+             color: 'orange',
+             fontSize: '50px',
+             backgroundColor: 'primary.main',
+             p: 3,
+             m: 2,
+             borderRadius: 2,
+             boxShadow: 10,
+             display: 'flex',
+             flexDirection: 'column',
+             justifyContent: 'space-evenly',
+             cursor: 'pointer',
+             transition: 'background-color ease-in-out 0.18s',
+             ':hover': { backgroundColor: 'rgba(12,35,13,0.8)' },
+            }}
+           >
+            <AddIcon sx={{ fontSize: '60px' }} />
 
-             <Box sx={{ color: 'inherit' }}>Add Image</Box>
-            </Box>
-           </Button>
+            <Box sx={{ color: 'inherit' }}>Add Image</Box>
+           </Box>
            <input
             type="file"
             id="fileInput"
@@ -290,18 +289,39 @@ const AddNewItemButton = ({ handleSuccess }) => {
         </Grid>
        </Grid>
 
-       <Button
-        type="submit"
-        variant="contained"
-        sx={{ mt: 2 }}
+       <Box
+        sx={{
+         mt: 2,
+         display: 'flex',
+         justifyContent: 'space-evenly',
+         width: '50%',
+        }}
        >
-        Submit
-       </Button>
+        <Button
+         onClick={handleClose}
+         sx={{ ':hover': { bgcolor: 'rgba(0,0,0,0.1)' } }}
+        >
+         Cancel
+        </Button>
+        <Button
+         type="submit"
+         sx={{
+          bgcolor: 'primary.main',
+          color: 'orange',
+          px: 2,
+          mr: 1,
+          transition: 'opacity ease-in-out 0.2s',
+          ':hover': { opacity: '0.8', bgcolor: 'primary.main' },
+         }}
+        >
+         Submit
+        </Button>
+       </Box>
       </form>
      </FormControl>
     </Box>
    </Modal>
-  </Box>
+  </>
  );
 };
 

@@ -1,11 +1,11 @@
 .itemContainer{
     cursor: pointer;
     position:relative;
-    height: 100%;
+    height: 300;
     width: 220px;
     /* background-color: #264933; */
     background-color: #52734D;
-    
+    justify-content: center;
     margin: 15px;
     padding: 15px;
     text-align: center;
@@ -18,7 +18,9 @@
 }
 
 .itemContainer.active{
-    z-index: 1;
+    padding-right: 20px;
+    z-index: 2;
+    height: auto;
     max-height: 1000px;
     text-align: left;
 }
@@ -46,6 +48,7 @@
     border: solid;
     border-width: 1px;
     border-color: #52734D;
+    color: #0c230d;
     
 }
 .imageContainer{
@@ -82,14 +85,17 @@
     transition: max-height 1s ease-in, width 1s ease-in-out, height 1s ease-in-out, position 1s ease-in-out, opacity 2s ease;
     opacity: 0;
     border-radius: 10px;
-    color: white;   
+    /* color:'white'; */
+    color: #0c230d;   
     width: 200px;
     margin-right: 5px;
     max-height: 200px;
+    /* z-index: 1; */
 }
 
 .informationContainer.active {
     position: absolute;
+    /* float:'right'; */
     right: 0;
     top: 0;
     margin-right: 10px;
@@ -98,26 +104,42 @@
     padding-left: 5px;
     text-align:left;
     width: 350px;
-    max-height: 800px;
+    max-height: 1000px;
     opacity: 1;
-    background-color: #52734D;
-    box-shadow: 0px 1px 15px #162939;
+    color: #0c230d;   
+    /* background-color: #52734D; */
+    background-color: #BFD2BC;
+    z-index: 10;
+
+    /* box-shadow: 0px 1px 15px #162939; */
+}
+
+.conditional *{
+    color: #0c230d;   
+    text-align: left;
 }
 
 .itemLabel {
-    margin-top: 3px;
+    /* margin-top: 3px; */
     width: 80%;
     max-width: 300px;
-    background-color: rgba(255, 255, 255, 1);
-    color: #52734D;
+    /* background-color: rgba(255, 255, 255, 1); */
+    color: white;
+    color:'white';
+    /* color: #52734D; */
     text-align: center;
     position: static;
     border-radius: 5px;
     font-size: 18px;
-    margin-left: 10%;
+    /* padding: 5px; */
+    /* margin-left: 10%; */
 }
 
 .informationContainer.active div{
     margin-top: 10px;
     padding-bottom: 5px;
+}
+
+.plantImage{
+    -webkit-user-drag: none;
 }

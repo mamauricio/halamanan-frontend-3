@@ -9,10 +9,13 @@ import {
  Alert,
  Zoom,
  Grow,
- Fade,
+ //  Fade,
+ TextField,
 } from '@mui/material/';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+
 const UserProfile = () => {
  const [value, setValue] = useState(0);
  const [showProfile, setShowProfile] = useState(false);
@@ -22,7 +25,22 @@ const UserProfile = () => {
  const [openAlert, setOpenAlert] = useState(false);
  const [pendingItems, setPendingItems] = useState([]);
  const [user, setUser] = useState('');
+ const [selectedItem, setSelectedItem] = useState('');
  const [openMain, setOpenMain] = useState(false);
+ const [editing, setEditing] = useState(false);
+ const [userData, setUserData] = useState({
+  firstName: '',
+  lastName: '',
+  email: '',
+ });
+
+ const handleFormChange = (event) => {
+  setError('');
+  setUserData({
+   ...userData,
+   [event.target.name]: event.target.value,
+  });
+ };
 
  useEffect(() => {
   const timer = setTimeout(() => {
@@ -39,7 +57,8 @@ const UserProfile = () => {
  const handleCloseAlert = () => {
   setOpenAlert(false);
  };
- const handleOpen = () => {
+ const handleOpen = (item) => {
+  setSelectedItem(item);
   setOpen(true);
  };
  const handleClose = () => {
@@ -64,6 +83,11 @@ const UserProfile = () => {
    try {
     const user = await response.json();
     setUser(user);
+    setUserData({
+     firstName: user.firstName,
+     lastName: user.lastName,
+     email: user.email,
+    });
    } catch (error) {}
   };
 
@@ -116,23 +140,78 @@ const UserProfile = () => {
   }
  };
 
+ const boxStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  width: '100%',
+  p: 1,
+  color: 'orange',
+ };
+
+ const textStyle = {
+  color: 'rgba(255,255,255,0.8)',
+  width: '100px',
+  justifyContent: 'right',
+  display: 'flex',
+  mr: 1,
+ };
+
+ const handleSave = async () => {
+  const token = sessionStorage.getItem('token');
+
+  try {
+   const response = await axios.patch(
+    `https://halamanan-197e9734b120.herokuapp.com/profile/${token}`,
+    userData
+   );
+   if (response) {
+    const user = response.data;
+    console.log(user);
+    // console.log(response.data);
+    setUser(user);
+    setEditing(false);
+   }
+  } catch (response) {
+   console.log(response.response.data.error);
+   //    console.log(error);
+   setError(response.response.data.error);
+  }
+ };
+
+ const handleCancel = () => {
+  setUserData({
+   firstName: user.firstName,
+   lastName: user.lastName,
+   email: user.email,
+  });
+  setEditing(false);
+ };
+
  return (
-  <Fade in={openMain}>
+  //   <Fade in={openMain}>
+  <motion.div
+   initial={{ opacity: 0, transition: { duration: 0.3 } }}
+   animate={{ opacity: 1, transition: { duration: 0.3 } }}
+   exit={{ opacity: 0, transition: { duration: 0.3 } }}
+  >
    <Container
     maxWidth="xl"
     disableGutters={true}
     sx={{ bgcolor: 'primary.main', height: '85vh', mt: 2, borderRadius: 2 }}
    >
-    <Box sx={{ color: 'orange', pt: 2 }}>
-     <h2>Profile</h2>
-    </Box>
+    <Typography variant="h5">Profile</Typography>
     <Container
-     maxWidth="lg"
+     maxWidth="xl"
      disableGutters={true}
      sx={{
       height: '65vh',
-      bgcolor: 'orange',
+      //   bgcolor: 'orange',
+      bgcolor: 'rgba(255,255,255,0.1)',
       borderRadius: 2,
+      m: 1,
+      mt: 2,
+      p: 1,
      }}
     >
      <Grid
@@ -163,7 +242,7 @@ const UserProfile = () => {
           mr: 2,
           borderRadius: 2,
           cursor: 'pointer',
-          color: value === 0 ? 'orange' : 'primary.main',
+          color: value === 0 ? 'orange' : 'rgba(255,255,255,0.7)',
           borderBottom: '2px',
           borderColor: 'divider',
           bgcolor: value === 0 ? 'primary.main' : 'transparent',
@@ -179,9 +258,9 @@ const UserProfile = () => {
           mr: 2,
           borderRadius: 2,
 
-          color: value === 1 ? 'orange' : 'primary.main',
-          cursor: 'pointer',
+          color: value === 1 ? 'orange' : 'rgba(255,255,255,0.7)',
           bgcolor: value === 1 ? 'primary.main' : 'transparent',
+          cursor: 'pointer',
          }}
         >
          <Typography>Requested Items</Typography>
@@ -196,35 +275,140 @@ const UserProfile = () => {
         {value === 0 && (
          <Box
           sx={{
-           color: 'primary.main',
-           mt: '20%',
-           display: 'flex',
-           top: '30%',
+           //    bgcolor: 'white',
            justifyContent: 'center',
            alignItems: 'center',
-           height: '100%',
+           display: 'flex',
+           flexDirection: 'column',
           }}
          >
+          <Typography
+           variant="h6"
+           sx={{ my: 3, color: 'rgba(255,255,255,0.8)' }}
+          >
+           Account Information
+          </Typography>
           <Grow in={showProfile}>
-           <Box
-            sx={{
-             bgcolor: 'primary.main',
-             width: '300px',
-             height: '150px',
-             position: 'absolute',
-             display: 'flex',
-             flexDirection: 'column',
-             justifyContent: 'center',
-             alignItems: 'center',
-             borderRadius: 2,
-             boxShadow: 5,
-            }}
-           >
-            <Box sx={{ color: 'orange' }}>First Name: {user.firstName}</Box>
-            <Box sx={{ color: 'orange', py: 2 }}>
-             Last Name: {user.lastName}
+           <Box sx={{}}>
+            <Box sx={boxStyle}>
+             <Typography sx={textStyle}>First Name:</Typography>
+             {editing && (
+              <TextField
+               name="firstName"
+               value={userData.firstName}
+               onChange={handleFormChange}
+               inputProps={{
+                style: {
+                 color: 'white',
+                },
+               }}
+               sx={{ width: '300px' }}
+              />
+             )}
+             {/* {console.log(user)} */}
+             {!editing && (
+              <Typography sx={{ ml: 1 }}>{user.firstName}</Typography>
+             )}
             </Box>
-            <Box sx={{ color: 'orange' }}>Email: {user.email}</Box>
+            <Box sx={boxStyle}>
+             <Typography sx={textStyle}>Last Name:</Typography>
+             {editing && (
+              <TextField
+               name="lastName"
+               value={userData.lastName}
+               onChange={handleFormChange}
+               inputProps={{
+                style: {
+                 color: 'white',
+                },
+               }}
+               sx={{ width: '300px' }}
+              />
+             )}
+             {!editing && (
+              <Typography sx={{ ml: 1 }}>{user.lastName}</Typography>
+             )}
+            </Box>
+            <Box sx={boxStyle}>
+             <Typography sx={textStyle}>Email:</Typography>
+             {editing && (
+              <TextField
+               name="email"
+               required
+               email
+               error={error}
+               helperText={error}
+               value={userData.email}
+               onChange={handleFormChange}
+               inputProps={{
+                style: {
+                 color: 'white',
+                },
+               }}
+               sx={{ width: '300px' }}
+              />
+             )}
+             {!editing && <Typography sx={{ ml: 1 }}>{user.email}</Typography>}
+            </Box>
+            <Box
+             sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mt: 2,
+             }}
+            >
+             {!editing && (
+              <Button
+               onClick={() => {
+                setEditing(true);
+               }}
+               sx={{
+                bgcolor: 'orange',
+                ':hover': { color: 'white', bgcolor: 'rgba(255,255,255,0.3)' },
+               }}
+              >
+               {' '}
+               Edit Information
+              </Button>
+             )}
+             {editing && (
+              <Box
+               sx={{
+                width: '80%',
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                // bgcolor: 'orange',
+               }}
+              >
+               <Button
+                onClick={() => handleCancel()}
+                sx={{
+                 width: '100px',
+                 bgcolor: 'rgba(255,255,255,0.2)',
+                 color: 'rgba(255,255,255,0.5)',
+                 transition:
+                  'background-color ease-in-out 0.2s, color ease-in-out 0.2s',
+                 ':hover': { bgcolor: 'red', color: 'white' },
+                }}
+               >
+                cancel
+               </Button>
+               <Button
+                onClick={() => handleSave()}
+                sx={{
+                 width: '100px',
+                 bgcolor: 'orange',
+                 ':hover': { bgcolor: 'orange', color: 'white' },
+                }}
+               >
+                save
+               </Button>
+              </Box>
+             )}
+            </Box>
+            {/* </Box> */}
            </Box>
           </Grow>
          </Box>
@@ -232,24 +416,111 @@ const UserProfile = () => {
         {value === 1 && (
          <Box
           sx={{
-           color: 'primary.main',
            p: 3,
            overflowY: 'auto',
            height: '500px',
           }}
          >
-          <Typography>Pending Items</Typography>
+          <Typography
+           variant="h6"
+           sx={{ color: 'orange' }}
+          >
+           Pending Items
+          </Typography>
           <Box
            sx={{
             display: 'flex',
-            //    bgcolor: 'yellow',
             flexDirection: 'row',
             height: '10vh',
-            //    overFlowY: 'hidden',
             flexWrap: 'wrap',
            }}
           >
-           {' '}
+           <Modal
+            open={open}
+            onClose={handleClose}
+           >
+            <Box
+             sx={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              display: 'flex',
+              flexDirection: 'column',
+              bgcolor: 'orange',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 2,
+              borderRadius: 2,
+              boxShadow: 10,
+             }}
+            >
+             <Box
+              sx={{
+               color: 'primary.main',
+               fontSize: '20px',
+              }}
+             >
+              Are you sure you want to delete request for{' '}
+              {selectedItem.newItemName}?
+             </Box>
+             <Box
+              sx={{
+               display: 'flex',
+               justifyContent: 'space-evenly',
+               width: '60%',
+               mt: 2,
+              }}
+             >
+              <Button
+               onClick={() => handleDelete(selectedItem._id)}
+               sx={{
+                bgcolor: 'primary.main',
+                color: 'orange',
+                ':hover': {
+                 color: 'white',
+                 bgcolor: 'red',
+                },
+               }}
+              >
+               Yes
+              </Button>
+              <Button
+               onClick={handleClose}
+               sx={{
+                bgcolor: 'primary.main',
+                color: 'orange',
+                ':hover': {
+                 color: 'orange',
+                 bgcolor: 'primary.main',
+                 opacity: 0.9,
+                },
+               }}
+              >
+               No
+              </Button>
+             </Box>
+            </Box>
+           </Modal>
+           <Zoom
+            in={openAlert}
+            onClose={handleCloseAlert}
+           >
+            <Alert
+             onClose={handleCloseAlert}
+             severity={!error ? 'success' : 'error'}
+             sx={{
+              backgroundColor: !error ? 'primary.main' : 'red',
+              position: 'absolute',
+              zIndex: 1,
+              height: '40px',
+              left: '35%',
+              top: '9%',
+             }}
+            >
+             {!error ? 'Deleted Successfully' : error}
+            </Alert>
+           </Zoom>
            {pendingItems.map((item, index) => (
             <Grow
              in={showItems}
@@ -270,106 +541,20 @@ const UserProfile = () => {
              >
               <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                <Button
-                onClick={handleOpen}
+                title="Delete Request"
+                onClick={() => handleOpen(item)}
                 sx={{
                  color: 'primary.main',
                  bgcolor: 'orange',
                  mb: 1,
                  ':hover': {
                   backgroundColor: 'red',
-                  opacity: 0.9,
-                  color: 'orange',
+                  color: 'primary.main',
                  },
                 }}
                >
                 <DeleteOutlineIcon />
                </Button>
-               <Modal
-                open={open}
-                onClose={handleClose}
-               >
-                <Box
-                 sx={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  bgcolor: 'orange',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 2,
-                  borderRadius: 2,
-                  boxShadow: 10,
-                 }}
-                >
-                 <Box
-                  sx={{
-                   color: 'primary.main',
-                   fontSize: '20px',
-                  }}
-                 >
-                  Are you sure you want to delete request for {item.newItemName}
-                  ?
-                 </Box>
-                 <Box
-                  sx={{
-                   display: 'flex',
-                   justifyContent: 'space-evenly',
-                   width: '60%',
-                   mt: 2,
-                  }}
-                 >
-                  <Button
-                   onClick={() => handleDelete(item._id)}
-                   sx={{
-                    bgcolor: 'primary.main',
-                    color: 'orange',
-                    ':hover': {
-                     color: 'white',
-                     bgcolor: 'red',
-                    },
-                   }}
-                  >
-                   Yes
-                  </Button>
-                  <Button
-                   onClick={handleClose}
-                   sx={{
-                    bgcolor: 'primary.main',
-                    color: 'orange',
-                    ':hover': {
-                     color: 'orange',
-                     bgcolor: 'primary.main',
-                     opacity: 0.9,
-                    },
-                   }}
-                  >
-                   No
-                  </Button>
-                 </Box>
-                </Box>
-               </Modal>
-               <Zoom
-                in={openAlert}
-                onClose={handleCloseAlert}
-               >
-                <Alert
-                 onClose={handleCloseAlert}
-                 severity={!error ? 'success' : 'error'}
-                 sx={{
-                  backgroundColor: !error ? 'primary.main' : 'red',
-                  position: 'absolute',
-                  zIndex: 1,
-                  height: '40px',
-                  left: '35%',
-                  top: '9%',
-                 }}
-                >
-                 {!error ? 'Deleted Successfully' : error}
-                </Alert>
-               </Zoom>
               </Box>
               <Box>
                {item.newItemUrl && (
@@ -379,9 +564,10 @@ const UserProfile = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  bgcolor: 'orange',
+                  bgcolor: 'rgba(255,255,255,0.8)',
                   borderRadius: 2,
                   mb: 1,
+                  p: 2,
                  }}
                 >
                  <img
@@ -424,7 +610,8 @@ const UserProfile = () => {
      </Grid>
     </Container>
    </Container>
-  </Fade>
+  </motion.div>
+  //</Fade>
  );
 };
 

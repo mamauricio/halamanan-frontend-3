@@ -5,8 +5,17 @@ import {
  Button,
  ImageListItemBar,
  IconButton,
+ Fade,
+ Modal,
+ Box,
+ Grow,
+ Alert,
 } from '@mui/material';
-import Box from '@mui/material/Box';
+import CloseIcon from '@mui/icons-material/Close';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
+
+// import Box from '@mui/material/';
 import InfoIcon from '@mui/icons-material/Info';
 import Filters from '../../../PlantGallery/Filters';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
@@ -14,13 +23,16 @@ import { useMediaQuery } from '@mui/material';
 import axios from 'axios';
 
 const ItemTray = ({ handleAddItem }) => {
- const xs = useMediaQuery((theme) => theme.breakpoints.down('xs'));
+ const xl = useMediaQuery((theme) => theme.breakpoints.down('xl'));
+
+ const [mouseOffsetX, setMouseOffsetX] = useState(0);
+ const [mouseOffsetY, setMouseOffsetY] = useState(0);
 
  const [itemTrayItems, setItemTrayItems] = useState([]);
  const [selectedItem, setSelectedItem] = useState('');
  const [selectedFilters, setSelectedFilters] = useState([]);
  const [selectedCategory, setSelectedCategory] = useState();
- const [favorites, setFavorites] = useState([]);
+ const [favoritesId, setFavoritesId] = useState([]);
  const { items, dispatch } = useItemsContext();
  const mainContainerRef = useRef(null);
  const isInitialRender = useRef(true);
@@ -29,6 +41,26 @@ const ItemTray = ({ handleAddItem }) => {
  const [isLoading, setIsLoading] = useState(false);
  const [fetching, setFetching] = useState(true);
  const [error, setError] = useState([]);
+ const [showAlert, setShowAlert] = useState(false);
+ const [alertMessage, setAlertMessage] = useState('');
+
+ const [imageDimensions, setImageDimensions] = useState({
+  width: null,
+  height: null,
+ });
+
+ const openAlert = () => {
+  setShowAlert(true);
+  const timer = setTimeout(() => {
+   setShowAlert(false);
+  }, 5 * 1000);
+  return () => {
+   clearTimeout(timer);
+  };
+ };
+ const closeAlert = () => {
+  setShowAlert(false);
+ };
 
  const handleFilterChange = (filters, category) => {
   setSelectedCategory(category);
@@ -43,11 +75,14 @@ const ItemTray = ({ handleAddItem }) => {
   }
  };
 
+ const handleClose = () => {
+  setSelectedItem('');
+ };
+
  const fetchGalleryItems = () => {
   setIsLoading(true);
   if (selectedCategory === 'favorites') {
    const token = sessionStorage.getItem('token');
-
    axios
     .get(`https://halamanan-197e9734b120.herokuapp.com/favorites`, {
      params: { token },
@@ -67,6 +102,7 @@ const ItemTray = ({ handleAddItem }) => {
     )
     .then((response) => {
      const fetchedItems = response.data.items;
+     //  console.log(fetchedItems);
      if (response.data.page < response.data.totalPages) {
       setItemTrayItems((prevItems) => [...prevItems, ...fetchedItems]);
      }
@@ -81,6 +117,10 @@ const ItemTray = ({ handleAddItem }) => {
     });
   }
  };
+
+ useEffect(() => {
+  fetchUserFavoritesId();
+ }, []);
 
  useEffect(() => {
   setItemTrayItems([]);
@@ -119,23 +159,29 @@ const ItemTray = ({ handleAddItem }) => {
   }
  }, [fetching, handleScroll]);
 
+ const fetchUserFavoritesId = async () => {
+  try {
+   const token = sessionStorage.getItem('token');
+   const response = await axios(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites-id',
+    {
+     headers: {
+      token: token,
+     },
+    }
+   ).then((response) => {
+    setFavoritesId(response.data);
+   });
+  } catch (error) {
+   setError(error.message);
+  }
+ };
+
  const isItemInFavorites = (itemId) => {
-  return favorites.some((favorite) => favorite.itemId === itemId);
+  return favoritesId && favoritesId.some((favorite) => favorite === itemId);
  };
 
  const filteredItems = itemTrayItems.filter((item) => {
-  if (selectedCategory === 'favorites' && isItemInFavorites(item._id)) {
-   return true;
-  }
-
-  if (
-   selectedCategory &&
-   selectedCategory !== 'all' &&
-   selectedCategory !== item.category
-  ) {
-   return false;
-  }
-
   if (
    selectedFilters.length > 0 &&
    item.type.some((type) => !selectedFilters.includes(type))
@@ -145,6 +191,100 @@ const ItemTray = ({ handleAddItem }) => {
   return true;
  });
 
+ const addToFavorites = async (event, itemId) => {
+  event.stopPropagation();
+
+  try {
+   const response = await fetch(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites',
+    {
+     method: 'POST',
+     headers: {
+      'Content-Type': 'application/json',
+      token: sessionStorage.getItem('token'),
+     },
+     body: JSON.stringify({ itemId }),
+    }
+   );
+
+   if (response.ok) {
+    const updated = [...favoritesId, itemId];
+    setFavoritesId(updated);
+    setAlertMessage('Successfully added item to favorites');
+    openAlert();
+    closeAlert();
+   } else {
+   }
+  } catch (error) {}
+ };
+
+ const removeFromFavorites = async (event, itemId) => {
+  event.stopPropagation();
+  try {
+   const response = await fetch(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites',
+    {
+     method: 'DELETE',
+     headers: {
+      'Content-Type': 'application/json',
+      token: sessionStorage.getItem('token'),
+     },
+     body: JSON.stringify({ itemId }),
+    }
+   );
+
+   if (response.ok) {
+    const updated = favoritesId.filter((favorite) => favorite !== itemId);
+    setFavoritesId(updated);
+    setAlertMessage('Successfully removed item from favorites');
+    openAlert();
+    closeAlert();
+   }
+  } catch {}
+ };
+
+ const addItem = (event, item, index) => {
+  const img = new Image();
+  img.src = event.target.src;
+  const aspectRatio = img.width / img.height;
+  const newHeight = 200 / aspectRatio;
+
+  handleAddItem({
+   designAreaItem: item,
+   itemKey: item._id + items.length + index,
+   height: newHeight,
+   mouseOffsetX: mouseOffsetX,
+   mouseOffsetY: mouseOffsetY,
+  });
+ };
+
+ const getMousePosition = (event) => {
+  var rect = event.target.getBoundingClientRect();
+  const offsetX = event.clientX - rect.left;
+  const offsetY = event.clientY - rect.top;
+
+  setMouseOffsetY(offsetY);
+  setMouseOffsetX(offsetX);
+ };
+
+ const CustomAlert = ({ showAlert, closeAlert }) => {
+  return (
+   <Grow in={showAlert}>
+    <Alert
+     variant="success"
+     onClose={closeAlert}
+     sx={{
+      color: 'primary.main',
+      backgroundColor: 'DDFFBC',
+      zIndex: 999999999,
+     }}
+    >
+     {alertMessage}
+    </Alert>
+   </Grow>
+  );
+ };
+
  return (
   <Box>
    <Box sx={{ pt: 1 }}>
@@ -152,87 +292,197 @@ const ItemTray = ({ handleAddItem }) => {
    </Box>
    <ImageList
     ref={mainContainerRef}
-    cols={xs ? 7 : 2}
-    rowHeight={250}
-    gap={10}
+    cols={xl ? 6 : 2}
+    rowHeight={260}
+    gap={11}
     sx={{
+     width: xl ? '90vw' : null,
      height: '80vh',
-     width: '100%',
-     pt: 2,
-     //  overflowX: 'none',
+     pr: 2,
     }}
    >
-    {filteredItems.map((item, index) => (
-     <div key={item._id + items.length + index}>
-      <ImageListItem
-       key={item._id + items.length + index}
-       cols={2}
-       onClick={() =>
-        handleAddItem({
-         designAreaItem: item,
-         itemKey: item._id + items.length + index,
-        })
-       }
-       sx={{
-        cursor: 'pointer',
-        ':hover': { opacity: '0.8' },
-        bgcolor: 'orange',
-        height: '200px',
-        width: '200px',
-        borderRadius: 2,
-       }}
-      >
-       <Box
-        sx={{
-         height: '200px',
-         display: 'flex',
-         alignItems: 'center',
-         justifyContent: 'center',
-        }}
-       >
-        <img
-         loading="lazy"
-         src={item.imageUrl}
-         style={{
-          boxSizing: 'border-box',
-          height: '100%',
-          maxWidth: '100%',
-          objectFit: 'cover',
-         }}
-        />
-       </Box>
-       <ImageListItemBar
-        sx={{
-         backgroundColor: 'primary.main',
-         pl: 2,
-         borderBottomLeftRadius: 10,
-         borderBottomRightRadius: 10,
-        }}
-        title={item.itemName}
-        position="below"
-        actionIcon={
-         <IconButton
-          onClick={(event) => showItemDetails(event, item)}
-          sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-          aria-label={`info about ${item.title}`}
-         >
-          <InfoIcon />
-         </IconButton>
-        }
-       />
-      </ImageListItem>
-      {selectedItem && selectedItem._id === item._id && (
+    {filteredItems === 0 ? (
+     <Box sx={{ translate: 'transform(-50%, -50%)' }}> No Items Found </Box>
+    ) : (
+     filteredItems.map((item, index) => (
+      <div key={item._id + items.length + index}>
        <ImageListItem
-        key={`${item._id}-details`}
-        rows={2}
-        col={2}
-        sx={{ height: '500px', bgcolor: 'orange' }}
+        id=""
+        key={item._id + items.length + index}
+        cols={2}
+        sx={{
+         cursor: 'grab',
+         bgcolor: 'white',
+         width: '220px',
+         borderRadius: 2,
+         transition: 'background-color ease-in-out 0.2s',
+         ':hover': { bgcolor: 'rgba(255,255,255,0.7)' },
+        }}
        >
-        <Box sx={{ color: 'primary.main', p: 2 }}>{item.itemInformation}</Box>
+        <Box
+         className="draggableItem"
+         onDragStart={(event) => getMousePosition(event)}
+         onDragEnd={(event) => addItem(event, item, index)}
+         sx={{
+          height: '191px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          objectFit: 'contain',
+          p: 1,
+         }}
+        >
+         <img
+          loading="lazy"
+          src={item.imageUrl}
+          style={{
+           maxHeight: '100%',
+           maxWidth: '100%',
+           objectFit: 'contain',
+          }}
+         />
+        </Box>
+        <ImageListItemBar
+         sx={{
+          position: 'absolute',
+          bottom: 0,
+          backgroundColor: 'primary.main',
+          pl: 2,
+          my: 1,
+         }}
+         title={item.itemName}
+         position="below"
+         actionIcon={
+          <IconButton
+           title="Information"
+           onClick={(event) => showItemDetails(event, item)}
+           sx={{
+            transition: 'color ease-in-out 0.2s',
+            color: 'rgba(255, 255, 255, 0.54)',
+            ':hover': { color: 'orange' },
+           }}
+           aria-label={`info about ${item.title}`}
+          >
+           <InfoIcon />
+          </IconButton>
+         }
+        />
        </ImageListItem>
-      )}
-     </div>
-    ))}
+       <Modal
+        open={selectedItem._id === item._id}
+        onClose={handleClose}
+       >
+        <Box
+         sx={{
+          position: 'absolute',
+          transform: 'translate(-50%, -50%)',
+          width: '800px',
+          top: '50%',
+          left: '50%',
+          bgcolor: 'rgba(12, 35, 13, 0.6)',
+
+          borderRadius: 1,
+         }}
+        >
+         {showAlert && (
+          <CustomAlert
+           showAlert={showAlert}
+           closeAlert={closeAlert}
+          />
+         )}
+         <Box
+          sx={{
+           bgcolor: 'rgba(255,255,255,0.2)',
+           p: 2,
+           borderRadius: 1,
+          }}
+         >
+          <Box
+           sx={{
+            bgcolor: 'rgba(255,255,255,0.9)',
+            justifyContent: 'space-between',
+            display: 'flex',
+            p: 2,
+            borderRadius: 1,
+           }}
+          >
+           <Button
+            title={
+             isItemInFavorites(item._id)
+              ? 'Remove from Favorites'
+              : 'Add to Favorites ko.'
+            }
+            onClick={
+             isItemInFavorites(item._id)
+              ? (event) => {
+                 removeFromFavorites(event, item._id);
+                }
+              : (event) => {
+                 addToFavorites(event, item._id);
+                }
+            }
+            sx={{
+             height: '50px',
+             width: '50px',
+             ':hover': { bgcolor: 'rgba(0,0,0,0.1)' },
+            }}
+           >
+            {isItemInFavorites(item._id) ? <StarIcon /> : <StarBorderIcon />}
+           </Button>
+
+           <img src={item.imageUrl} />
+           <Button
+            sx={{
+             height: '50px',
+             width: '50px',
+             ':hover': { bgcolor: 'rgba(0,0,0,0.1)' },
+            }}
+           >
+            <CloseIcon
+             title="Close"
+             onClick={handleClose}
+            />
+           </Button>
+          </Box>
+          <Box
+           className="itemInformation"
+           sx={{ py: 1 }}
+          >
+           <span style={{ color: 'orange' }}>
+            <strong>Item Description: </strong>
+           </span>
+           {item.itemInformation}
+          </Box>
+          <Box>
+           <span style={{ color: 'orange' }}>
+            <strong>Hardiness Zone: </strong>
+           </span>{' '}
+           Lorem Ipsum
+          </Box>
+          <Box sx={{ py: 1 }}>
+           <span style={{ color: 'orange' }}>
+            <strong>Height: </strong>
+           </span>{' '}
+           Lorem Ipsum
+          </Box>
+          <Box>
+           <span style={{ color: 'orange' }}>
+            <strong>Watering: </strong>
+           </span>{' '}
+           Lorem Ipsum
+          </Box>
+          <Box sx={{ pt: 1 }}>
+           <span style={{ color: 'orange' }}>
+            <strong>Lighting: </strong>
+           </span>{' '}
+           Lorem Ipsum
+          </Box>
+         </Box>
+        </Box>
+       </Modal>
+      </div>
+     ))
+    )}
    </ImageList>
   </Box>
  );

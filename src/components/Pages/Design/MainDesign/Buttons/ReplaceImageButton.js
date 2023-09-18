@@ -60,8 +60,11 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
  return (
   <>
    <Button
+    title="Replace background image"
     sx={{
-     color: 'primary.main',
+     fontSize: 18,
+     height: '50px',
+     color: 'rgba(255,255,255,0.8)',
      ':hover': { backgroundColor: 'orange', color: 'primary.main' },
     }}
     onClick={handleOpen}
@@ -114,9 +117,13 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
         onClick={handleOpenSecond}
         sx={{
          color: 'white',
-         backgroundColor: 'red',
+         bgcolor: 'red',
          m: 2,
-         ':hover': { opacity: '0.4', backgroundColor: 'red' },
+         transition: 'background-color ease-in-out 0.2s',
+         ':hover': {
+          bgcolor: 'rgba(0,0,0,0.6)',
+          //   backgroundColor: 'rgba(255,255,255,0.7)',
+         },
         }}
        >
         Yes
@@ -126,7 +133,12 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
         sx={{
          backgroundColor: 'white',
          m: 2,
-         ':hover': { opacity: '0.7', backgroundColor: 'white' },
+         transition: 'background-color ease-in-out 0.2s',
+
+         ':hover': {
+          backgroundColor: 'rgba(255,255,255,0.7)',
+          color: 'primary.main',
+         },
         }}
        >
         No

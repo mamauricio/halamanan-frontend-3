@@ -14,7 +14,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  const [error, setError] = useState(null);
  const [autosave, setAutosave] = useState(false);
  const [isSaving, setIsSaving] = useState(false);
- handleCloseSecond = () => {
+ const handleCloseSecond = () => {
   setIsSaving(false);
  };
  const handleOpen = () => {
@@ -98,15 +98,17 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
 
  return (
   <>
-   {/* {useAutoSave()}; */}
    <Button
+    title="Save Design"
     sx={{
+     fontSize: 18,
+     height: 50,
+     color: 'rgba(255,255,255,0.8)',
      ':hover': {
-      backgroundColor: 'white',
-      border: 'solid',
+      //   bgcolor: 'rgba(255,255,255,0.6)',
+      bgcolor: 'rgba(255,255,255,0.2)',
+
       color: 'primary.main',
-      borderColor: 'primary.main',
-      borderWidth: '1px',
      },
     }}
     onClick={handleClick}

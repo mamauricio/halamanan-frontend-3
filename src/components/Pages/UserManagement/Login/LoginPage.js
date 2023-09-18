@@ -5,30 +5,36 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Grow from '@mui/material/Grow';
 import Fade from '@mui/material/Fade';
+import Container from '@mui/material/Container';
+
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import { motion } from 'framer-motion';
 
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import useTheme from '@mui/material/styles/useTheme';
 import axios from 'axios';
+import ForgotPassword from './ForgotPassword';
 
 const LoginPage = ({ handleAuthenticate }) => {
  const [userNameError, setuserNameError] = useState(false);
  const [passwordError, setPasswordError] = useState(false);
  const [errorMessage, setErrorMessage] = useState(null);
- const [showLoginForm, setShowLoginForm] = useState(true);
+ const [showLoginForm, setShowLoginForm] = useState(false);
  const [firstName, setFirstName] = useState('');
  const [lastName, setLastName] = useState('');
  const [email, setEmail] = useState('');
  const [password, setPassword] = useState('');
+ const [confirmPassword, setConfirmPassword] = useState('');
  const [open, setOpen] = useState(false);
  const [error, setError] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
  const [initialize, setInitialize] = useState(false);
- const handleOpen = () => {
-  setOpen(true);
- };
- const handleClose = () => {
-  setOpen(false);
- };
+ const [isVisible, setIsVisible] = useState(false);
+ const [showForgotPasswordForm, setShowForgotPasswordForm] = useState(false);
 
  useEffect(() => {
   const timer = setTimeout(() => {
@@ -36,8 +42,54 @@ const LoginPage = ({ handleAuthenticate }) => {
   }, 250);
  }, []);
 
+ const handleOpen = () => {
+  setOpen(true);
+  const timer = setTimeout(() => {
+   setAlertMessage('');
+   setOpen(false);
+  }, 3000);
+ };
+ const handleClose = () => {
+  setAlertMessage('');
+  setOpen(false);
+ };
+
+ const handleShowPassword = () => {
+  setIsVisible(!isVisible);
+ };
+
+ const validatePassword = () => {
+  const passwordRegex = /^(?=.*[0-9\W]).{8,}$/;
+
+  if (!passwordRegex.test(password)) {
+   setPasswordError(
+    'Password should be at least 8 characters long with at least 1 special character'
+   );
+   return false;
+  }
+
+  return true;
+ };
+
+ const checkIfSame = () => {
+  if (password !== confirmPassword) {
+   setPasswordError('Passwords do not match');
+   return false;
+  }
+  return true;
+ };
+
  const handleSignUp = async (event) => {
   event.preventDefault();
+
+  if (validatePassword() != true) {
+   console.log('password format not correct');
+   return false;
+  }
+  if (checkIfSame() != true) {
+   console.log('password not same');
+   return false;
+  }
   const response = await axios({
    method: 'post',
    data: {
@@ -50,16 +102,21 @@ const LoginPage = ({ handleAuthenticate }) => {
    url: 'https://halamanan-197e9734b120.herokuapp.com/signup',
   })
    .then((response) => {
-    setAlertMessage('Signed up succesfully. Proceed to login.');
+    setAlertMessage('Signed up succesfully. Loggin in.');
     handleOpen();
+    handleLogin(event);
     setShowLoginForm(true);
-    handleClose();
+    setError('');
    })
    .catch((error) => {
     if (error.response) {
      setError(error.response.data.error);
+     if (error.response.status === 409) {
+      setuserNameError('A user with this email already exists.');
+      setErrorMessage('A user with this email already exists.');
+     }
      handleOpen();
-     handleClose();
+     console.log('error');
     } else {
     }
    });
@@ -100,6 +157,16 @@ const LoginPage = ({ handleAuthenticate }) => {
    });
  };
 
+ const handleForgotPassword = () => {
+  setShowForgotPasswordForm(true);
+  setShowLoginForm(false);
+ };
+
+ const handleBack = () => {
+  setShowForgotPasswordForm(false);
+  setShowLoginForm(true);
+ };
+
  const handleEmail = (event) => {
   setuserNameError(false);
   setErrorMessage('');
@@ -112,233 +179,516 @@ const LoginPage = ({ handleAuthenticate }) => {
   setErrorMessage('');
   setPassword(event);
  };
+ const handleConfirmPassword = (event) => {
+  setPasswordError(false);
+  setErrorMessage('');
+  setConfirmPassword(event);
+ };
 
  const toggleForm = () => {
   setFirstName('');
   setLastName('');
   setEmail('');
   setPassword('');
+  setConfirmPassword('');
+  setuserNameError('');
+
   setShowLoginForm(!showLoginForm);
  };
 
  const theme = useTheme();
 
+ const buttonStyle = {
+  bgcolor: 'primary.main',
+  color: 'rgba(255,255,255,0.9)',
+  px: 2,
+  mb: 1,
+  width: '100px',
+  // fontSize: 20,
+  ':hover': {
+   color: 'primary.main',
+   //  opacity: 0.9,
+   backgroundColor: 'rgba(0,0,0,0.18)',
+   //  bgcolor: 'rgba(255,255,255,0.18)',
+  },
+ };
+
  return (
   <ThemeProvider theme={theme}>
-   <Fade in={initialize}>
+   {/* <Fade
+    in={initialize}
+    //  sx={{ bgcolor: 'primary.main', height: '100vh' }}
+   > */}
+   <motion.div
+    initial={{ opacity: 0, transition: { duration: 0.3 } }}
+    animate={{ opacity: 1, transition: { duration: 0.3 } }}
+    exit={{ opacity: 0, transition: { duration: 0.3 } }}
+   >
     <Box
      className="login-page"
      sx={{
       position: 'absolute',
-      display: 'flex',
-      flexDirection: 'column',
       width: '100%',
       height: '100%',
       left: '50%',
       top: '50%',
       transform: 'translate(-50%, -50%)',
-      color: 'orange',
-      borderRadius: 2,
-      boxShadow: 5,
-      // p: 3,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'primary.main',
+      zIndex: -1,
      }}
     >
-     {open && (
-      <Grow in={open}>
-       <Alert
-        severity={error ? 'error' : 'success'}
-        onClose={handleClose}
-        sx={{
-         color: 'primary.main',
-         backgroundColor: error ? 'red' : 'orange',
-         boxShadow: 5,
-        }}
+     <Container
+      maxWidth="xl"
+      disableGutters
+      sx={{ width: '100%', height: '100%' }}
+     >
+      <Grid
+       container
+       sx={{
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+       }}
+      >
+       <Grid
+        item
+        xs={8}
        >
-        {error ? error : alertMessage}
-       </Alert>
-      </Grow>
-     )}
-     <Box sx={{ color: 'inherit' }}>
-      <h1>Halamanan </h1>
-     </Box>
-     {showLoginForm ? (
-      <>
-       <Box
-        component="form"
-        onSubmit={(event) => handleLogin(event)}
-        sx={{
-         display: 'flex',
-         flexDirection: 'column',
-         alignItems: 'center',
-         justifyContent: 'center',
-         bgcolor: 'orange',
-         p: 1,
-         color: 'white',
-         borderRadius: 2,
-         boxShadow: 5,
-        }}
-       >
-        <TextField
-         error={userNameError}
-         helperText={errorMessage}
-         type="email"
-         value={email}
-         label="Email"
-         onChange={(e) => {
-          handleEmail(e.target.value);
-         }}
-         required
-         sx={{ my: 2 }}
-        />
-        <TextField
-         error={passwordError}
-         helperText={errorMessage}
-         type="password"
-         label="Password"
-         value={password}
-         onChange={(e) => {
-          handlePassword(e.target.value);
-         }}
-         required
-        />
-        <Box
-         sx={{
-          pt: 1,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-         }}
-        >
-         <Button
-          color="primary"
-          type="button"
-          onClick={toggleForm}
-          sx={{
-           bgcolor: 'primary.main',
-           mr: 1,
-           color: 'white',
-           ':hover': {
-            color: 'primary.main',
-            border: 'solid 1px',
-            borderColor: 'primary.main',
-            color: 'primary.main',
-           },
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+         <img
+          src="/images/TreeBranchesWhite.png"
+          style={{
+           height: '220px',
           }}
-         >
-          Sign Up
-         </Button>
-         <Button
-          type="submit"
-          variant="contained"
-          sx={{
-           backgroundColor: 'primary.main',
-           color: 'white',
-           ml: 2,
-           ':hover': {
-            // color: 'orange',
-            border: 'solid 1px',
-            borderColor: 'primary.main',
-           },
-          }}
-         >
-          Login
-         </Button>
+         />
+         <Box sx={{ ml: 4 }}>
+          <Typography
+           variant="h1"
+           sx={{
+            fontFamily: 'Sans Serif',
+            letterSpacing: '12px',
+            alignItems: 'center',
+           }}
+          >
+           Halamanan
+          </Typography>
+          <Typography sx={{ width: '80%', fontSize: '20px', color: 'orange' }}>
+           Helping homeowners create and visualize their landscaping project
+           using our 2D landscape editor and expandable gallery of items.
+          </Typography>
+         </Box>
         </Box>
-       </Box>
-      </>
-     ) : (
-      <>
-       {' '}
-       <Box sx={{ color: 'orange', mb: 1 }}>Sign Up</Box>
-       <Box
-        component="form"
-        onSubmit={handleSignUp}
-        sx={{
-         bgcolor: 'orange',
-         p: 2,
-         borderRadius: 2,
-         display: 'flex',
-         flexDirection: 'column',
-         justifyConent: 'center',
-         alignItems: 'center',
-         width: '400px',
-         boxShadow: 5,
-        }}
+       </Grid>
+       <Grid
+        item
+        xs={4}
        >
-        <TextField
-         type="text"
-         label="First Name"
-         value={firstName}
-         onChange={(e) => setFirstName(e.target.value)}
-         required
-         sx={{
-          py: 2,
-         }}
-        />
-        <TextField
-         type="text"
-         label="Last Name"
-         value={lastName}
-         onChange={(e) => setLastName(e.target.value)}
-         required
-        />
-        <TextField
-         type="email"
-         label="Email"
-         value={email}
-         onChange={(e) => setEmail(e.target.value)}
-         required
-         sx={{
-          py: 2,
-         }}
-        />
-        <TextField
-         type="password"
-         label="Password"
-         value={password}
-         onChange={(e) => setPassword(e.target.value)}
-         required
-        />
-        <Box
-         sx={{
-          m: 2,
-          width: '50%',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-         }}
-        >
-         <Button
-          type="button"
-          onClick={toggleForm}
-          sx={{
-           bgcolor: 'primary.main',
-           color: 'white',
+        {open && (
+         <Grow in={open}>
+          <Alert
+           severity={error ? 'error' : 'success'}
+           onClose={handleClose}
+           sx={{
+            color: 'primary.main',
+            backgroundColor: error ? 'red' : 'orange',
+            boxShadow: 5,
+            mb: 2,
+           }}
+          >
+           {error ? error : alertMessage}
+          </Alert>
+         </Grow>
+        )}
 
-           ':hover': {
-            border: 'solid 1px',
-            borderColor: 'primary.main',
-            color: 'primary.main',
-           },
-          }}
-         >
-          Back
-         </Button>
-         <Button
-          variant="contained"
-          type="submit"
-         >
-          Submit
-         </Button>
-        </Box>
-       </Box>
-      </>
-     )}
+        {showLoginForm && (
+         <Fade in={showLoginForm}>
+          <Box
+           component="form"
+           onSubmit={(event) => handleLogin(event)}
+           sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'left',
+            justifyContent: 'center',
+            bgcolor: 'orange',
+            py: 2,
+            color: 'white',
+            borderRadius: 2,
+            boxShadow: 5,
+            position: 'relative',
+           }}
+          >
+           <Box
+            sx={{
+             width: '100%',
+             display: 'flex',
+             justifyContent: 'center',
+             alignItems: 'center',
+            }}
+           >
+            <Typography
+             variant="h6"
+             sx={{
+              color: 'primary.main',
+              mb: 2,
+             }}
+            >
+             Login
+            </Typography>
+           </Box>
+           <Box
+            sx={{
+             //  bgcolor: 'white',
+             width: '100%',
+             display: 'flex',
+             flexDirection: 'column',
+             justifyContent: 'center',
+             alignItems: 'center',
+            }}
+           >
+            <TextField
+             error={userNameError}
+             helperText={errorMessage}
+             type="email"
+             value={email}
+             label="Email"
+             onChange={(e) => {
+              handleEmail(e.target.value);
+             }}
+             required
+             sx={{ my: 2, width: '80%' }}
+            />
+            <TextField
+             error={passwordError}
+             helperText={errorMessage}
+             type={!isVisible ? 'password' : 'text'}
+             label="Password"
+             value={password}
+             onChange={(e) => {
+              handlePassword(e.target.value);
+             }}
+             required
+             sx={{ width: '80%' }}
+             InputProps={{
+              endAdornment: (
+               <IconButton onClick={handleShowPassword}>
+                {!isVisible ? (
+                 <Visibility sx={{ color: 'primary.main' }} />
+                ) : (
+                 <VisibilityOff sx={{ color: 'primary.main' }} />
+                )}
+               </IconButton>
+              ),
+             }}
+            />
+           </Box>
+           {/* <Box
+            sx={{
+             width: '100%',
+             display: 'flex',
+             justifyContent: 'center',
+             //  bgcolor: 'pink',
+            }}
+           >
+            <Button sx={{ my: 2.2, bgcolor: 'white', width: '50%' }}>
+            <Typography
+             onClick={handleForgotPassword}
+             variant="body2"
+             sx={{
+              fontSize: '15px',
+              cursor: 'pointer',
+              bgcolor: 'transparent',
+              color: 'primary.main',
+              p: 1,
+              my: 2.2,
+              borderRadius: 1,
+              transition: 'background-color ease-in-out 0.2s',
+              ':hover': {
+               color: 'primary.main',
+               bgcolor: 'rgba(255,255,255,0.18)',
+              },
+             }}
+            >
+             Forgot your password?{' '}
+            </Typography>
+            </Button>
+           </Box> */}
+           <Box
+            sx={{
+             //  bgcolor: 'white',
+             //  width: '50%',
+             justifyContent: 'center',
+             //  pt: 1,
+             display: 'flex',
+             mt: 3,
+             //  flexDirection: 'row',
+             //  justifyContent: 'space-evenly',
+            }}
+           >
+            <Box
+             sx={{
+              width: '45%',
+              // bgcolor: 'white',
+              display: 'flex',
+              justifyContent: 'space-between',
+              // bgcolor: 'white',
+             }}
+            >
+             <Button
+              title="Create an account"
+              color="primary"
+              type="button"
+              onClick={toggleForm}
+              // sx={{
+              //  bgcolor: 'primary.main',
+              //  mr: 1,
+              //  py: 1,
+              //  px: 2,
+              //  width: '100px',
+              //  color: 'white',
+              //  ':hover': {
+              //   color: 'primary.main',
+              //   opacity: 0.8,
+              //  },
+              // }}
+              sx={buttonStyle}
+             >
+              Register
+             </Button>
+
+             <Button
+              type="submit"
+              // sx={{
+              //  backgroundColor: 'primary.main',
+              //  color: 'white',
+              //  ml: 2,
+              //  py: 1,
+              //  width: '100px',
+              //  ':hover': {
+              //   color: 'primary.main',
+              //   opacity: 0.8,
+              //  },
+              // }}
+              sx={buttonStyle}
+             >
+              Login
+             </Button>
+            </Box>
+           </Box>
+          </Box>
+         </Fade>
+        )}
+
+        {!showLoginForm && !showForgotPasswordForm && (
+         <Fade in={!showLoginForm}>
+          <Box
+           component="form"
+           onSubmit={handleSignUp}
+           sx={{
+            // bgcolor: 'rgba(255,255,255,0.18)',
+            bgcolor: 'orange',
+
+            p: 2,
+            borderRadius: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyConent: 'center',
+            alignItems: 'left',
+            boxShadow: 5,
+           }}
+          >
+           <Box
+            sx={{
+             display: 'flex',
+             justifyContent: 'center',
+             width: '100%',
+             pt: 1,
+            }}
+           >
+            <Typography
+             variant="h6"
+             sx={{
+              mb: 1,
+              // color: 'orange',
+              color: 'primary.main',
+             }}
+            >
+             Join Now
+            </Typography>
+           </Box>
+           <Box sx={{ display: 'flex', justifyContent: 'space-evenly', mb: 2 }}>
+            <TextField
+             type="text"
+             label="First Name"
+             value={firstName}
+             onChange={(e) => setFirstName(e.target.value)}
+             required
+             sx={{ mr: 1 }}
+            />
+            <TextField
+             type="text"
+             label="Last Name"
+             value={lastName}
+             onChange={(e) => setLastName(e.target.value)}
+             required
+             //  sx={{
+             //   my: 2,
+             //  }}
+            />
+           </Box>
+           <TextField
+            error={userNameError ? true : false}
+            type="email"
+            label="Email"
+            helperText={userNameError}
+            value={email}
+            onChange={(e) => handleEmail(e.target.value)}
+            required
+           />
+           <TextField
+            error={passwordError ? true : false}
+            type={!isVisible ? 'password' : 'text'}
+            label="Password"
+            helperText={passwordError}
+            value={password}
+            onChange={(e) => handlePassword(e.target.value)}
+            required
+            sx={{ my: 2 }}
+            InputProps={{
+             endAdornment: (
+              <IconButton onClick={handleShowPassword}>
+               {!isVisible ? (
+                <Visibility sx={{ color: 'primary.main' }} />
+               ) : (
+                <VisibilityOff sx={{ color: 'primary.main' }} />
+               )}
+              </IconButton>
+             ),
+            }}
+           />
+
+           <TextField
+            error={passwordError ? true : false}
+            type={!isVisible ? 'password' : 'text'}
+            label="Confirm Password"
+            helperText={passwordError}
+            value={confirmPassword}
+            onChange={(e) => handleConfirmPassword(e.target.value)}
+            required
+            InputProps={{
+             endAdornment: (
+              <IconButton onClick={handleShowPassword}>
+               {!isVisible ? (
+                <Visibility sx={{ color: 'primary.main' }} />
+               ) : (
+                <VisibilityOff sx={{ color: 'primary.main' }} />
+               )}
+              </IconButton>
+             ),
+            }}
+           />
+           <Box
+            sx={{
+             display: 'flex',
+             flexDirection: 'column',
+             justifyContent: 'center',
+             alignItems: 'center',
+            }}
+           >
+            <Typography
+             onClick={toggleForm}
+             sx={{
+              color: 'primary.main',
+              my: 2,
+              p: 1,
+              bgcolor: 'transparent',
+              borderRadius: 1,
+              transition:
+               'background-color ease-in-out 0.2s, color ease-in-out 0.2s',
+              color: 'rgba(0,0,0,0.6)',
+              ':hover': {
+               bgcolor: 'rgba(0,0,0,0.2)',
+               color: 'primary.main',
+               color: 'white',
+              },
+             }}
+            >
+             Already have an account? Click here to login
+            </Typography>
+            {/* <Box
+             sx={{
+              // mt: 3,
+              // mb: 1,
+              // bgcolor: 'white',
+              width: '50%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              // bgcolor: 'white',
+             }}
+            > */}
+            {/* <Button
+              type="button"
+              onClick={toggleForm}
+              //  sx={{
+              //   backgroundColor: 'primary.main',
+              //   color: 'white',
+              //   opacity: 1,
+              //   //  transition: 'opacity 0.3s, backgroundColor 2s, color 0.3s',
+              //   ':hover': {
+              //    color: 'primary.main',
+              //    //  opacity: 0.9,
+              //    // backgroundColor: 'white',
+              //   },
+              //  }}
+              sx={buttonStyle}
+             >
+              Login
+             </Button> */}
+            <Button
+             title="Create an account"
+             // variant="contained"
+             type="submit"
+             //  sx={{
+             //   bgcolor: 'primary.main',
+             //   color: 'rgba(255,255,255,0.9)',
+             //   px: 2,
+             //   mb: 1,
+             //   ':hover': {
+             //    color: 'primary.main',
+             //    //  opacity: 0.9,
+             //    backgroundColor: 'rgba(0,0,0,0.18)',
+             //    //  bgcolor: 'rgba(255,255,255,0.18)',
+             //   },
+             //  }}
+             sx={buttonStyle}
+            >
+             <Typography
+              variant="body"
+              // sx={{ fontSize: '20px' }}
+             >
+              Register
+             </Typography>
+            </Button>
+           </Box>
+          </Box>
+          {/* </Box> */}
+         </Fade>
+        )}
+
+        {showForgotPasswordForm && (
+         <Fade in={showForgotPasswordForm}>
+          <Box>
+           <ForgotPassword handleBack={handleBack} />
+          </Box>
+         </Fade>
+        )}
+       </Grid>
+      </Grid>
+     </Container>
     </Box>
-   </Fade>
+   </motion.div>
+   {/* </Fade> */}
   </ThemeProvider>
  );
 };

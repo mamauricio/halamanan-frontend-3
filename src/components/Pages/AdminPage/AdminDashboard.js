@@ -1,117 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, Button, Container, Grow } from '@mui/material';
+import { Grid, Box, Button, Typography } from '@mui/material';
+import Users from './Users';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import PlantGallery from '../PlantGallery/PlantGallery';
+import ItemRequests from './ItemRequests';
+import DesignQuotes from './DesignQuotes';
+import DashBoard from './DashBoard';
+import AdminGallery from './AdminGallery';
 const AdminDashboard = () => {
- const [designs, setDesigns] = useState('');
- const [items, setItems] = useState('');
- const [users, setUsers] = useState('');
- const [error, setError] = useState('');
- const [newItems, setNewItems] = useState('');
- const [open, setOpen] = useState();
- const [fetchingUsers, setFetchingUsers] = useState(true);
- const [fetchingGallery, setFetchingGallery] = useState(true);
- const [fetchingDesigns, setFetchingDesigns] = useState(true);
- const [fetchingItemRequests, setFetchingItemRequests] = useState(true);
- //  const [fetchingUsers, setFetchingUsers] = useState(false);
-
- const handleOpen = () => {
-  setOpen(true);
- };
- const handleClose = () => {
-  setOpen(false);
- };
-
- useEffect(() => {
-  fetchDesigns();
-  fetchAllUsers();
-  fetchAllItems();
-  fetchNewItems();
-  const timer = setTimeout(() => {
-   handleOpen();
-  }, 500);
- }, []);
-
- const fetchDesigns = async () => {
-  try {
-   const response = await fetch(
-    'https://halamanan-197e9734b120.herokuapp.com/designs/',
-    {
-     headers: {
-      token: 'admin',
-     },
-    }
-   );
-   const data = await response.json();
-   if (data) {
-    setFetchingDesigns(false);
-    setDesigns(data);
-   } else {
-   }
-  } catch (error) {
-   setError(error.response.data.error);
-  }
- };
-
- const fetchAllUsers = async () => {
-  try {
-   const response = await fetch(
-    'https://halamanan-197e9734b120.herokuapp.com/admin/users',
-    {
-     headers: {
-      token: 'admin',
-     },
-    }
-   );
-
-   const data = await response.json();
-   if (data) {
-    setUsers(data);
-    setFetchingUsers(false);
-   } else {
-   }
-  } catch (error) {
-   setError(error.response.data.error);
-  }
- };
-
- const fetchAllItems = async () => {
-  try {
-   axios
-    .get(`https://halamanan-197e9734b120.herokuapp.com/gallery?category=all`)
-    .then((response) => {
-     const itemCount = response.data.totalCount;
-     setItems(itemCount);
-
-     setFetchingGallery(false);
-    });
-  } catch (error) {
-   setError(error);
-  }
- };
-
- const fetchNewItems = async () => {
-  try {
-   const response = await fetch(
-    'https://halamanan-197e9734b120.herokuapp.com/admin/pending'
-   );
-
-   const data = await response.json();
-   if (data) {
-    setFetchingItemRequests(false);
-    setNewItems(data);
-   } else {
-   }
-  } catch (error) {
-   setError(error.response.data.error);
-  }
- };
-
- const styles = {
-  color: 'orange',
-  my: '3px',
-  fontSize: '20px',
- };
+ const [value, setValue] = useState(0);
 
  return (
   <motion.div
@@ -120,49 +17,127 @@ const AdminDashboard = () => {
    animate={{ opacity: 1, transition: { duration: 0.3 } }}
    exit={{ opacity: 0, transition: { duration: 0.3 } }}
   >
-   <Container
-    maxWidth="xl"
-    sx={{
-     color: 'primary.main',
-     height: '80vh',
-     bgcolor: 'primary.main',
-     borderRadius: 2,
-     mt: 2,
-     position: 'relative',
-    }}
-   >
-    <Box
-     sx={{
-      position: 'absolute',
-      display: 'flex',
-      top: '30%',
-      left: '50%',
-      transform: 'translate(-40%, -60%)',
-      flexDirection: 'column',
-     }}
-    >
-     <Grow in={open}>
-      <div>
-       <Box sx={styles}>
-        Number of users: {fetchingUsers ? 'Loading' : users.length}
-       </Box>
-       <Box sx={styles}>
-        Number of Gallery Items: {fetchingGallery ? 'Loading' : items}
-       </Box>
-       <Box sx={styles}>
-        Current amount of Designs:{' '}
-        {fetchingDesigns ? 'Loading' : designs.length}
-       </Box>
+   <Box sx={{ bgcolor: 'primary.main', height: '' }}>
+    <Grid container>
+     <Grid
+      item
+      xs={2}
+     >
+      <Box
+       sx={{
+        bgcolor: 'rgba(255,255,255,0.1)',
+        display: 'flex',
+        flexDirection: 'column',
+        left: 0,
+        justifyContent: 'left ',
+        color: 'orange',
+        height: '93.5vh',
+        p: 2,
+       }}
+      >
+       <Typography
+        variant="h5"
+        sx={{
+         display: 'flex',
+         justifyContent: 'center',
+         alignItems: 'center',
+         mb: 1,
+        }}
+       >
+        Admin
+       </Typography>
+       <Button
+        onClick={() => setValue(0)}
+        sx={{
+         my: 1,
+         color: value === 0 ? 'orange' : 'rgba(255,255,255,0.6)',
+         bgcolor: value === 0 ? 'rgba(0,0,0,0.3)' : 'transparent',
+         ':hover': {
+          bgcolor: value === 0 ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.2)',
+          color: 'orange',
+         },
+        }}
+       >
+        <Typography>Dashboard</Typography>
+       </Button>
+       <Button
+        onClick={() => setValue(1)}
+        sx={{
+         color: value === 1 ? 'orange' : 'rgba(255,255,255,0.6)',
+         bgcolor: value === 1 ? 'rgba(0,0,0,0.3)' : 'transparent',
+         mb: 1,
+         ':hover': {
+          bgcolor: value === 1 ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.2)',
 
-       <Box sx={styles}>
-        Number of New Item Requests:{' '}
-        {fetchingItemRequests ? 'Loading' : newItems.length}
-       </Box>
-       <Box sx={styles}>Number of Design Quote Requests: 0</Box>
-      </div>
-     </Grow>
-    </Box>
-   </Container>
+          color: 'orange',
+         },
+        }}
+       >
+        <Typography>Users</Typography>
+       </Button>
+       <Button
+        onClick={() => setValue(2)}
+        sx={{
+         color: value === 2 ? 'orange' : 'rgba(255,255,255,0.6)',
+         bgcolor: value === 2 ? 'rgba(0,0,0,0.3)' : 'transparent',
+         mb: 1,
+         ':hover': {
+          bgcolor: value === 2 ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.2)',
+
+          color: 'orange',
+         },
+        }}
+       >
+        <Typography>Gallery Items</Typography>
+       </Button>
+       <Button
+        onClick={() => setValue(3)}
+        sx={{
+         color: value === 3 ? 'orange' : 'rgba(255,255,255,0.6)',
+         bgcolor: value === 3 ? 'rgba(0,0,0,0.3)' : 'transparent',
+         mb: 1,
+         ':hover': {
+          bgcolor: value === 3 ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.2)',
+
+          color: 'orange',
+         },
+        }}
+       >
+        <Typography>Item Requests</Typography>
+       </Button>
+
+       <Button
+        // href="/admin/users"
+        onClick={() => setValue(4)}
+        sx={{
+         color: value === 4 ? 'orange' : 'rgba(255,255,255,0.6)',
+         bgcolor: value === 4 ? 'rgba(0,0,0,0.3)' : 'transparent',
+         mb: 1,
+         ':hover': {
+          bgcolor: value === 4 ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.2)',
+
+          color: 'orange',
+         },
+        }}
+       >
+        <Typography>Design Quotes</Typography>
+       </Button>
+      </Box>
+     </Grid>
+     <Grid
+      item
+      xs={10}
+      sx={{ bgcolor: 'rgba(255,255,255,0.2)' }}
+     >
+      {value === 0 && <DashBoard setValue={setValue} />}
+
+      {value === 1 && <Users />}
+      {value === 2 && <AdminGallery />}
+      {value === 3 && <ItemRequests />}
+      {value === 4 && <DesignQuotes />}
+     </Grid>
+    </Grid>
+   </Box>
   </motion.div>
  );
 };

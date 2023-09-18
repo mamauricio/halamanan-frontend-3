@@ -8,7 +8,10 @@ import {
  Button,
  Box,
  Menu,
+ Typography,
 } from '@mui/material';
+
+import TuneIcon from '@mui/icons-material/Tune';
 
 const categories = {
  softscape: [
@@ -31,10 +34,10 @@ const categories = {
 const allSubcategories = Object.values(categories).flat();
 categories.all = allSubcategories;
 
-const Filters = ({ onFilterChange }) => {
+const Filters = ({ onFilterChange, isGuest }) => {
  const [anchorEl, setAnchorEl] = React.useState(null);
  const open = Boolean(anchorEl);
-
+ const isAuthenticated = sessionStorage.getItem('authenticated');
  const [showFilter, setShowFilters] = useState(false);
  const [selectedFilters, setSelectedFilters] = useState([]);
  const [selectedCategory, setSelectedCategory] = useState('all');
@@ -84,24 +87,26 @@ const Filters = ({ onFilterChange }) => {
  return (
   <Box
    className="categories-filters"
-   sx={{ display: 'flex', flexWrap: 'true' }}
+   sx={{ alignItems: 'right', height: '50px' }}
   >
    <Button
     onClick={handleShowFilters}
+    title="Filters"
     aria-controls={open ? 'basic-menu' : undefined}
     aria-haspopup="true"
     aria-expanded={open ? 'true' : undefined}
     sx={{
      backgroundColor: 'white',
+     mt: 1,
+     float: 'right',
      ':hover': {
-      border: 'solid',
-      borderWidth: 1,
       color: 'white',
       borderColor: 'white',
      },
     }}
    >
-    Filters
+    {/* Filters */}
+    <TuneIcon sx={{ height: 30 }} />
    </Button>
    <Menu
     id="basic-menu"
@@ -112,9 +117,10 @@ const Filters = ({ onFilterChange }) => {
      'aria-labelledby': 'basic-button',
     }}
    >
+    {/* {console.log(isAuthenticated)} */}
     <MenuItem>
-     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      <FormControl sx={{ width: '300px' }}>
+     <Box sx={{ display: 'flex', flexDirection: 'column', width: '450px' }}>
+      <FormControl sx={{ width: '100%' }}>
        <InputLabel id="categorys"> Category </InputLabel>
        <Select
         labelId="category-label"
@@ -142,51 +148,92 @@ const Filters = ({ onFilterChange }) => {
         >
          Hardscape
         </MenuItem>
-        <MenuItem
-         key="favorites"
-         value="favorites"
-        >
-         Favorites
-        </MenuItem>
+        {isAuthenticated && (
+         <MenuItem
+          key="favorites"
+          value="favorites"
+         >
+          Favorites
+         </MenuItem>
+        )}
        </Select>
       </FormControl>
      </Box>
     </MenuItem>
     <Box>
-     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+     <Box
+      sx={{
+       display: 'flex',
+       flexDirection: 'column',
+       maxWidth: '480px',
+       //  bgcolor: 'orange',
+       //  color: 'pink',
+      }}
+     >
       {selectedCategory !== 'all' ? (
-       <>
-        {selectedFilters.map((filter, index) => (
-         <Chip
-          key={index}
-          label={filter}
-          onDelete={() => handleChipDelete(filter)}
-          color="primary"
-          variant="outlined"
+       <Box sx={{ maxWidth: ' inherit' }}>
+        {/* {console.log(selectedFilters)} */}
+        {selectedFilters.length >= 1 && (
+         <Box
           sx={{
-           backgroundColor: 'white',
-           width: 'fullWidth',
+           mb: 2,
+           mt: 1,
+           display: 'flex',
+           flexDirection: 'column',
           }}
-         />
-        ))}
-
-        {subCategories?.map((filter, index) => (
-         <Chip
-          key={index}
-          label={filter}
-          value={filter}
-          onClick={() => {
-           handleFilterChange(filter);
-          }}
-          variant="outlined"
-          sx={{
-           width: '100%',
-           backgroundColor: 'white',
-           py: 0.5,
-          }}
-         />
-        ))}
-       </>
+         >
+          <Typography
+           variant="h7"
+           sx={{ ml: 1, color: 'primary.main' }}
+          >
+           Selected Filters:{' '}
+          </Typography>
+          <Box>
+           {selectedFilters.map((filter, index) => (
+            <Chip
+             key={index}
+             label={filter}
+             onDelete={() => handleChipDelete(filter)}
+             color="primary"
+             variant="filed"
+             sx={{
+              // backgroundColor: 'white',
+              // width: 'fullWidth',
+              // width: '100%',
+              m: 1,
+              width: '30%',
+              //  marginLeft: 'auto',
+             }}
+            />
+           ))}
+          </Box>
+         </Box>
+        )}
+        <Box
+         sx={{
+          justifyContent: 'space-between',
+         }}
+        >
+         {subCategories?.map((filter, index) => (
+          <Chip
+           key={index}
+           label={filter}
+           value={filter}
+           onClick={() => {
+            handleFilterChange(filter);
+           }}
+           variant="outlined"
+           sx={{
+            // display: 'flex',
+            width: '30%',
+            m: 1,
+            backgroundColor: 'white',
+            py: 0.5,
+           }}
+          />
+         ))}
+        </Box>
+       </Box>
       ) : null}
      </Box>
     </Box>

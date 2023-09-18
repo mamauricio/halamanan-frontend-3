@@ -20,10 +20,17 @@ const ResetButton = () => {
  return (
   <>
    <Button
+    title="Reset Design"
     sx={{
-     mt: 1,
-     color: 'primary.main',
-     ':hover': { backgroundColor: 'red', color: 'white' },
+     fontSize: 18,
+     height: '50px',
+     //  color: 'primary.main',
+     color: 'rgba(255,255,255,0.8)',
+     //  color: 'rgba(136, 20, 20, 0.82)',
+     ':hover': {
+      backgroundColor: 'orange',
+      color: 'primary.main',
+     },
     }}
     onClick={handleOpen}
    >

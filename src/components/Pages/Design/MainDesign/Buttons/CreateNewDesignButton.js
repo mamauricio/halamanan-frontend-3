@@ -7,6 +7,7 @@ import Grow from '@mui/material/Grow';
 
 import ParkIcon from '@mui/icons-material/Park';
 import ExistingDesigns from './BlankDesigns';
+import { Typography } from '@mui/material';
 
 const CreateNewDesignButton = ({ handleCreateNewDesign }) => {
  const [open, setOpen] = useState(false);
@@ -16,6 +17,7 @@ const CreateNewDesignButton = ({ handleCreateNewDesign }) => {
   setOpen(true);
  };
  const handleClose = () => {
+  setOpenTemplate(false);
   setOpen(false);
  };
 
@@ -85,18 +87,18 @@ const CreateNewDesignButton = ({ handleCreateNewDesign }) => {
        borderRadius: 2,
       }}
      >
-      <Box
+      <Typography
        sx={{
         fontSize: '20px',
         color: 'primary.main',
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
+        mb: 1,
        }}
       >
-       {' '}
-       Create new design{' '}
-      </Box>
+       Create new design
+      </Typography>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
        {openTemplate && (
         <Grow in={openTemplate}>
@@ -109,12 +111,6 @@ const CreateNewDesignButton = ({ handleCreateNewDesign }) => {
           }}
          >
           <ExistingDesigns handleTemplate={handleTemplate} />
-          <Button
-           onClick={() => setOpenTemplate(false)}
-           sx={{ bgcolor: 'red', color: 'white', mt: 1 }}
-          >
-           Close{' '}
-          </Button>
          </Box>
         </Grow>
        )}
@@ -139,9 +135,17 @@ const CreateNewDesignButton = ({ handleCreateNewDesign }) => {
          m: 2,
         }}
        >
-        Or
+        <Typography sx={{ color: 'primary.main' }}>Or</Typography>
        </Box>
-       <Box sx={{ display: 'flex' }}>
+       <Box
+        sx={{
+         display: 'flex',
+         flexDirection: 'column',
+         //  bgcolor: 'white',
+         justifyContent: 'space-evenly',
+         alignItems: 'center',
+        }}
+       >
         <Button
          onClick={handleButtonClick}
          sx={{

@@ -19,13 +19,14 @@ import ApproveButton from './ApproveButton';
 import EditButton from './EditButton';
 import AddIcon from '@mui/icons-material/Add';
 import { motion } from 'framer-motion';
+import QuestionMark from '@mui/icons-material/QuestionMark';
 
 const ItemManagement = () => {
  const [openItem, setOpenItem] = useState(false);
  const [openAlert, setOpenAlert] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
  const [error, setError] = useState('');
- const [selectedItem, setSelectedItem] = useState();
+ const [selectedItem, setSelectedItem] = useState('');
  const handleOpenAlert = () => {
   setOpenAlert(true);
   const timeout = setTimeout(() => {
@@ -52,19 +53,14 @@ const ItemManagement = () => {
   if (selectedItem === item) {
    setOpenItem(false);
    const timer5 = setTimeout(() => {
-    setSelectedItem(null);
-   }, 800);
+    setSelectedItem('');
+   }, 300);
   } else {
-   const timer3 = setTimeout(() => {
-    setOpenItem(false);
-    const timer1 = setTimeout(() => {
-     setSelectedItem(item);
-    }, 500);
-   }, 400);
-
-   const timer2 = setTimeout(() => {
+   setOpenItem(false);
+   const timer = setTimeout(() => {
+    setSelectedItem(item);
     setOpenItem(true);
-   }, 900);
+   }, 300);
   }
  };
 
@@ -122,6 +118,7 @@ const ItemManagement = () => {
      },
     }
    );
+
    if (response) {
     setItemData({
      newItemName: '',
@@ -138,12 +135,24 @@ const ItemManagement = () => {
     handleOpenAlert();
    }
   } catch (error) {
+   console.log(error);
    setError(true);
    setAlertMessage(
     'Error adding item. Make Sure all the fields are correct and item is unique'
    );
-   setError(null);
   }
+ };
+
+ const labelStyle = {
+  color: 'orange',
+  pb: 1,
+  fontSize: '18px',
+ };
+
+ const textFieldStyle = {
+  style: {
+   color: 'white',
+  },
  };
 
  return (
@@ -154,18 +163,20 @@ const ItemManagement = () => {
   >
    <Container
     maxWidth="xl"
-    disableGutters={true}
-    spacing={2}
-    sx={{ borderRadius: 2, mt: 2 }}
+    disableGutters
+    sx={{
+     borderRadius: 1,
+     p: 2,
+    }}
    >
+    <Typography variant="h5">Item Requests</Typography>
+
     {openAlert && (
      <Grow in={openAlert}>
       <Alert
        variant="outlined"
        severity={error ? 'error' : 'success'}
        sx={{
-        //  bgcolor: 'white',
-        //  color: 'red',
         position: 'absolute',
         top: '20%',
         left: '50%',
@@ -177,15 +188,12 @@ const ItemManagement = () => {
       </Alert>
      </Grow>
     )}
-    <Box sx={{ mt: 2, bgcolor: 'white', height: '100%' }}>
+    <Box>
      <Grid
       container
       sx={{
-       backgroundColor: 'primary.main',
        height: 'auto',
-       //  mt: 3,
-       borderRadius: 2,
-       // width:
+       borderRadius: 1,
       }}
      >
       <Grid
@@ -193,51 +201,32 @@ const ItemManagement = () => {
        xs={3}
        sx={{
         overflowY: 'auto',
-        height: '75vh',
+        height: '82vh',
         borderColor: 'primary.main',
-        borderRadius: 2,
+        borderRadius: 1,
         width: '100%',
         mt: 2,
        }}
       >
        <Box
         sx={{
-         height: '100%',
+         height: 'auto',
          display: 'flex',
-         bgcolor: 'orange',
-         borderRadius: 2,
-
+         borderRadius: 1,
          overflowY: 'auto',
-         ml: 2,
          mb: 1,
         }}
        >
         <Box
          sx={{
           height: 'auto',
-          borderRadius: 2,
-          m: 1,
+          borderRadius: 1,
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
          }}
         >
-         <Box
-          sx={{
-           color: 'primary.main',
-           fontSize: '30px',
-           borderBottom: 'solid 1px ',
-           borderColor: 'primary.main',
-           borderColor: 'ActiveBorder',
-           width: '100%',
-           display: 'flex',
-           alignItems: 'center',
-           justifyContent: 'center',
-          }}
-         >
-          Item Requests
-         </Box>
          <Box sx={{ mt: 1 }}>
           <RequestedItems handleSelectedItem={handleSelectedItem} />
          </Box>
@@ -247,318 +236,407 @@ const ItemManagement = () => {
       <Grid
        item
        xs={9}
-       sx={{}}
+       sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+       }}
       >
-       <Box
-        sx={{
-         display: 'flex',
-         bgcolor: 'orange',
-         // flexDirection: 'column',
-         justifyContent: 'center',
-         alignItems: 'center',
-         borderRadius: 2,
-         m: 2,
-        }}
-       >
-        {selectedItem ? (
-         <Grow in={openItem}>
-          <div>
-           <Box
-            sx={{
-             bgcolor: 'primary.main',
-             // bgcolor: 'orange',
-             width: 'auto',
-             height: 'auto',
-             // m: 2,
-             p: 2,
-             borderRadius: 2,
-             border: 'solid 1px orange',
-             display: 'flex',
-             flexDirection: 'column',
-            }}
-           >
-            <Box
-             sx={{
-              height: '500px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 2,
-              mb: 1,
-              bgcolor: 'orange',
-             }}
-            >
-             <img
-              src={selectedItem.newItemUrl}
-              style={{
-               maxHeight: '100%',
-               objectFit: 'contain',
-              }}
-             />
-            </Box>
-            <Box sx={{ color: 'orange', fontSize: '18px' }}>
-             {' '}
-             Item Name:{' '}
-             <span style={{ color: 'white' }}>
-              {selectedItem.newItemName ? selectedItem.newItemName : 'null'}{' '}
-             </span>{' '}
-            </Box>
-            <Box sx={{ color: 'orange', fontSize: '18px' }}>
-             {' '}
-             Scientific Name:{' '}
-             {selectedItem.newItemScientificName ? (
-              <span style={{ color: 'white' }}>
-               <em>{selectedItem.newItemScientificName}</em>
-              </span>
-             ) : (
-              'null'
-             )}
-            </Box>
-            <Box sx={{ color: 'orange', fontSize: '18px' }}>
-             {' '}
-             Item Description:{' '}
-             <span style={{ color: 'white' }}>
-              {selectedItem.newItemDescription
-               ? selectedItem.newItemDescription
-               : 'null'}
-             </span>
-            </Box>
-            <Box sx={{ color: 'orange', fontSize: '18px' }}>
-             Item Category:{' '}
-             <span style={{ color: 'white' }}>
-              {selectedItem.newItemCategory
-               ? selectedItem.newItemCategory
-               : 'null'}
-             </span>
-            </Box>
-            <Box sx={{ color: 'orange', fontSize: '18px' }}>
-             Item Type:{' '}
-             <span style={{ color: 'white' }}>
-              {selectedItem.newItemType ? selectedItem.newItemType : 'null'}
-             </span>
-            </Box>
+       {selectedItem && (
+        <Grow in={openItem}>
+         <Box
+          sx={{
+           width: '80%',
+           height: '100%',
+           display: 'flex',
+           flexDirection: 'column',
+           bgcolor: 'rgba(255,255,255,0.3)',
+           borderRadius: 1,
+           m: 3,
+           alignItems: 'center',
+          }}
+         >
+          <Box
+           sx={{
+            width: '30%',
+            justifyContent: 'space-evenly',
+            display: 'flex',
+            alignItems: 'center',
+            bgcolor: 'primary.main',
+
+            borderRadius: 1,
+            mt: 5,
+            mb: 3,
+            px: 2,
+            py: 1.2,
+           }}
+          >
+           <>
+            <DeleteButton itemData={selectedItem} />
+            <EditButton newItemData={selectedItem} />
+            <ApproveButton itemData={selectedItem} />
+           </>
+          </Box>
+
+          <Box
+           sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 1,
+            width: '90%',
+            mt: 4,
+            p: 2,
+           }}
+          >
+           <Box sx={{ width: '100%' }}>
             <Box
              sx={{
               width: '100%',
-              justifyContent: 'space-evenly',
               display: 'flex',
-              alignItems: 'center',
-              bgcolor: 'white',
-              borderRadius: 2,
-              mt: 2,
-              // mt: 1,
-              py: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
              }}
             >
-             <DeleteButton itemData={selectedItem} />
-             <EditButton newItemData={selectedItem} />
-             <ApproveButton itemData={selectedItem} />
+             <Box>
+              <Box sx={labelStyle}>
+               {' '}
+               Item Name:{' '}
+               <span style={{ color: 'white' }}>
+                {selectedItem.newItemName ? selectedItem.newItemName : 'null'}{' '}
+               </span>{' '}
+              </Box>
+              <Box sx={labelStyle}>
+               {' '}
+               Scientific Name:{' '}
+               {selectedItem.newItemScientificName ? (
+                <span style={{ color: 'white' }}>
+                 <em>{selectedItem.newItemScientificName}</em>
+                </span>
+               ) : (
+                'null'
+               )}
+              </Box>
+              <Box sx={labelStyle}>
+               {' '}
+               Item Description:{' '}
+               <span style={{ color: 'white' }}>
+                {selectedItem.newItemDescription
+                 ? selectedItem.newItemDescription
+                 : 'null'}
+               </span>
+              </Box>
+              <Box sx={labelStyle}>
+               Item Category:{' '}
+               <span style={{ color: 'white' }}>
+                {selectedItem.newItemCategory
+                 ? selectedItem.newItemCategory
+                 : 'null'}
+               </span>
+              </Box>
+              <Box sx={labelStyle}>
+               Item Type:{' '}
+               <span style={{ color: 'white' }}>
+                {selectedItem.newItemType ? selectedItem.newItemType : 'null'}
+               </span>
+              </Box>
+             </Box>
+             <Box
+              sx={{
+               minHeight: '500px',
+               minWidth: '300px',
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+               borderRadius: 1,
+               bgcolor: 'rgba(255,255,255,0.8)',
+               p: 2,
+              }}
+             >
+              {selectedItem.newItemUrl === '' ? (
+               <Box
+                sx={{
+                 display: 'flex',
+                 flexDirection: 'column',
+                 height: '150px',
+                 width: 'auto',
+                 justifyContent: 'center',
+                 alignItems: 'center',
+                }}
+               >
+                <QuestionMark
+                 fontSize="large"
+                 sx={{ color: 'rgba(0,0,0,0.4)' }}
+                />
+                <Typography
+                 variant="h5"
+                 sx={{ color: 'rgba(0,0,0,0.4)', mt: 3 }}
+                >
+                 Upload Image
+                </Typography>
+               </Box>
+              ) : (
+               <img
+                src={selectedItem.newItemUrl}
+                style={{
+                 maxHeight: '100%',
+                 objectFit: 'contain',
+                }}
+               />
+              )}
+             </Box>
             </Box>
            </Box>
-          </div>
-         </Grow>
-        ) : (
-         <Grow in={!selectedItem}>
-          <Box sx={{ m: 2 }}>
-           <Box
+          </Box>
+         </Box>
+        </Grow>
+       )}
+
+       {!selectedItem && (
+        <Grow in={!selectedItem}>
+         <Box
+          sx={{
+           bgcolor: 'rgba(255,255,255,0.3)',
+           m: 2,
+           p: 2,
+           mt: 3,
+           borderRadius: 1,
+           //  pb: 7,
+           height: '78vh',
+          }}
+         >
+          <Box>
+           <Typography
+            variant="h5"
+            gutterBottom
             sx={{
-             p: 4,
-             width: 600,
-             maxWidth: '95%',
-             borderRadius: 2,
+             color: 'rgba(255,255,255,0.8)',
+             //  ml: 1,
             }}
            >
-            <Typography
-             variant="h5"
-             component="h2"
-             gutterBottom
-            >
-             Add Item
-            </Typography>
-            <FormControl onSubmit={handleSubmit}>
-             <form onSubmit={() => handleSubmit}>
+            Add New Item
+           </Typography>
+           <FormControl onSubmit={handleSubmit}>
+            <form onSubmit={() => handleSubmit}>
+             <Grid
+              container
+              direction="row"
+              spacing={2}
+             >
               <Grid
-               container
-               direction="row"
-               spacing={2}
+               item
+               xs={6}
+               sx={{ color: 'white' }}
               >
-               <Grid
-                item
-                xs={6}
+               <TextField
+                name="newItemName"
+                label="Item Name"
+                value={itemData.newItemName}
+                onChange={handleFormChange}
+                fullWidth
+                required
+                sx={{ my: 1 }}
+                inputProps={textFieldStyle}
+               />
+               <TextField
+                name="newItemDescription"
+                label="Item Description"
+                multiline
+                rows={2}
+                value={itemData.newItemDescription}
+                onChange={handleFormChange}
+                fullWidth
+                required
+                sx={{ my: 1 }}
+                inputProps={textFieldStyle}
+               />
+               <TextField
+                name="newItemScientificName"
+                label="Scientific Name"
+                value={itemData.newItemScientificName}
+                onChange={handleFormChange}
+                fullWidth
+                sx={{ my: 1 }}
+                inputProps={textFieldStyle}
+               />
+               <FormControl
+                fullWidth
+                sx={{ color: 'primary.main' }}
                >
-                <TextField
-                 name="newItemName"
-                 label="Item Name"
-                 value={itemData.newItemName}
-                 onChange={handleFormChange}
-                 fullWidth
+                <InputLabel id="itemCategoryLabel">Item Category</InputLabel>
+                <Select
+                 name="newItemCategory"
+                 labelId="itemCategoryLabel"
+                 value={itemData.newItemCategory}
+                 label="Item Category"
                  required
-                 sx={{ my: 1 }}
-                />
-                <TextField
-                 name="newItemDescription"
-                 label="Item Description"
-                 multiline
-                 rows={2}
-                 value={itemData.newItemDescription}
                  onChange={handleFormChange}
-                 fullWidth
-                 required
-                 sx={{ my: 1 }}
-                />
-                <TextField
-                 name="newItemScientificName"
-                 label="Scientific Name"
-                 value={itemData.newItemScientificName}
-                 onChange={handleFormChange}
-                 fullWidth
-                 sx={{ my: 1 }}
-                />
-                <FormControl
-                 fullWidth
-                 sx={{ color: 'primary.main' }}
+                 sx={{ my: 1, color: 'white' }}
+                 //  inputProps={textFieldStyle}
                 >
-                 <InputLabel id="itemCategoryLabel">Item Category</InputLabel>
-                 <Select
-                  name="newItemCategory"
-                  labelId="itemCategoryLabel"
-                  value={itemData.newItemCategory}
-                  label="Item Category"
-                  required
-                  onChange={handleFormChange}
-                  sx={{ my: 1 }}
+                 <MenuItem
+                  value=""
+                  disabled
                  >
-                  <MenuItem
-                   value=""
-                   disabled
-                  >
-                   <em> Select Item Category</em>
-                  </MenuItem>
-                  <MenuItem value="softscape">Softscape</MenuItem>
-                  <MenuItem value="hardscape">Hardscape</MenuItem>
-                 </Select>
-                </FormControl>
-                <TextField
-                 name="newItemType"
-                 label="Item Type"
-                 value={itemData.newItemType}
-                 onChange={handleFormChange}
-                 fullWidth
-                 required
-                 sx={{ my: 1 }}
-                />
-                <TextField
-                 name="newItemInformation"
-                 label="Item Information"
-                 multiline
-                 rows={2}
-                 value={itemData.newItemInformation}
-                 onChange={handleFormChange}
-                 fullWidth
-                 required
-                 sx={{ my: 1 }}
-                />
-                <TextField
-                 name="newItemImageSource"
-                 label="Image Source"
-                 multiline
-                 rows={2}
-                 value={itemData.newItemImageSource}
-                 onChange={handleFormChange}
-                 fullWidth
-                 required
-                 sx={{ my: 1 }}
-                />
-               </Grid>
-               <Grid
-                item
-                xs={6}
-               >
-                {' '}
-                {itemData.newItemUrl ? (
+                  <em> Select Item Category</em>
+                 </MenuItem>
+                 <MenuItem value="softscape">Softscape</MenuItem>
+                 <MenuItem value="hardscape">Hardscape</MenuItem>
+                </Select>
+               </FormControl>
+               <TextField
+                name="newItemType"
+                label="Item Type"
+                value={itemData.newItemType}
+                onChange={handleFormChange}
+                fullWidth
+                required
+                sx={{ my: 1 }}
+                inputProps={textFieldStyle}
+               />
+               <TextField
+                name="newItemInformation"
+                label="Item Information"
+                multiline
+                rows={2}
+                value={itemData.newItemInformation}
+                onChange={handleFormChange}
+                fullWidth
+                required
+                sx={{ my: 1 }}
+                inputProps={textFieldStyle}
+               />
+               <TextField
+                name="newItemImageSource"
+                label="Image Source"
+                multiline
+                rows={2}
+                value={itemData.newItemImageSource}
+                onChange={handleFormChange}
+                fullWidth
+                required
+                sx={{ my: 1 }}
+                inputProps={textFieldStyle}
+               />
+              </Grid>
+              <Grid
+               item
+               xs={6}
+              >
+               {' '}
+               {itemData.newItemUrl ? (
+                <Box
+                 sx={{
+                  width: '100%',
+                  objectFit: 'contain',
+                  overFlow: 'hidden',
+                  // bgcolor: 'yellow',
+                  // justifyContent: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                 }}
+                >
                  <Box
                   sx={{
-                   width: '100%',
                    objectFit: 'contain',
                    overFlow: 'hidden',
+                   bgcolor: 'rgba(255,255,255,0.8)',
+                   p: 2,
+                   m: 1,
+                   mb: 2,
+                   borderRadius: 1,
                   }}
                  >
-                  <Box
-                   sx={{
-                    objectFit: 'contain',
-                    overFlow: 'hidden',
-                   }}
-                  >
-                   <img
-                    src={itemData.newItemUrl}
-                    style={{ maxWidth: '100%', maxHeight: '100%' }}
-                   />
-                  </Box>
-
-                  <Button
-                   onClick={handleButtonClick}
-                   sx={{
-                    bgcolor: 'primary.main',
-                    color: 'white',
-                    width: '300px',
-                   }}
-                  >
-                   Replace Image
-                  </Button>
-                  <input
-                   type="file"
-                   id="fileInput"
-                   accept=".jpg,.jpeg,.png"
-                   onChange={handleImageUpload}
-                   style={{ display: 'none' }}
+                  <img
+                   src={itemData.newItemUrl}
+                   style={{ maxWidth: '100%', maxHeight: '100%' }}
                   />
                  </Box>
-                ) : (
-                 <>
-                  <Button onClick={handleButtonClick}>
-                   <Box
-                    sx={{
-                     color: 'orange',
-                     fontSize: '50px',
-                     backgroundColor: 'primary.main',
-                     p: 3,
-                     m: 2,
-                     borderRadius: 2,
-                     boxShadow: 10,
-                     ':hover': { opacity: 0.9, marginBottom: 1 },
-                    }}
-                   >
-                    <AddIcon fontSize="large" />
 
-                    <Box sx={{ color: 'inherit' }}>Add Image</Box>
-                   </Box>
-                  </Button>
-                  <input
-                   type="file"
-                   id="fileInput"
-                   accept=".jpg,.jpeg,.png"
-                   onChange={handleImageUpload}
-                   style={{ display: 'none' }}
-                  />
-                 </>
-                )}
-               </Grid>
+                 <Button
+                  onClick={handleButtonClick}
+                  sx={{
+                   bgcolor: 'primary.main',
+                   color: 'white',
+                   width: '300px',
+                  }}
+                 >
+                  Replace Image
+                 </Button>
+                 <input
+                  type="file"
+                  id="fileInput"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={handleImageUpload}
+                  style={{ display: 'none' }}
+                 />
+                </Box>
+               ) : (
+                <>
+                 <Button onClick={handleButtonClick}>
+                  <Box
+                   sx={{
+                    color: 'orange',
+                    fontSize: '50px',
+                    backgroundColor: 'primary.main',
+                    p: 3,
+                    m: 2,
+                    borderRadius: 1,
+                    boxShadow: 10,
+                    ':hover': { opacity: 0.9, marginBottom: 1 },
+                   }}
+                  >
+                   <AddIcon fontSize="large" />
+
+                   <Box sx={{ color: 'inherit' }}>Add Image</Box>
+                  </Box>
+                 </Button>
+                 <input
+                  type="file"
+                  id="fileInput"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={handleImageUpload}
+                  style={{ display: 'none' }}
+                 />
+                </>
+               )}
               </Grid>
-
+             </Grid>
+             <Box
+              sx={{
+               width: '100%',
+               display: 'flex',
+               justifyContent: 'center',
+               //  alignItems: 'center',
+              }}
+             >
               <Button
+               title="Add Item"
                type="submit"
-               variant="contained"
-               sx={{ mt: 2 }}
+               // variant="contained"
+               sx={{
+                mt: 6,
+                fontSize: '20px',
+                color: 'orange',
+                bgcolor: 'primary.main',
+                width: '50%',
+                ':hover': {
+                 bgcolor: 'rgba(255,255,255,0.3)',
+                 // bgcolor: 'rgba(0,0,0,0.8)',
+                 color: 'white',
+                },
+               }}
               >
-               Submit
+               Add Item
               </Button>
-             </form>
-            </FormControl>
-           </Box>
+             </Box>
+            </form>
+           </FormControl>
           </Box>
-         </Grow>
-        )}
-       </Box>
+         </Box>
+        </Grow>
+       )}
       </Grid>
      </Grid>
     </Box>

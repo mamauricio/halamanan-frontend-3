@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Box, Modal } from '@mui/material';
 import axios from 'axios';
 import { useNewItemsContext } from '../../hooks/uewNewItemsContext';
-
+import CheckIcon from '@mui/icons-material/Check';
 const ApproveButton = (itemData) => {
  const [open, setOpen] = useState(false);
  const handleOpen = () => setOpen(true);
@@ -50,10 +50,16 @@ const ApproveButton = (itemData) => {
  return (
   <>
    <Button
+    title="Approve Request"
     onClick={handleOpen}
-    sx={{ color: 'white', bgcolor: 'primary.main', width: 'auto' }}
+    sx={{
+     color: 'rgba(255,255,255,0.8)',
+     bgcolor: 'primary.main',
+     width: 'auto',
+    }}
    >
-    Approve
+    {/* Approve */}
+    <CheckIcon />
    </Button>
    <Modal
     open={open}

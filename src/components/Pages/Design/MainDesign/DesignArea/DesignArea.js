@@ -4,21 +4,16 @@ import './DesignArea.css';
 import Item from '../Items/Item';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 
-const DesignArea = ({ backgroundImage, backgroundAspectRatio }) => {
+const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
  const [selectedItem, setSelectedItem] = useState(null);
  const { items, dispatch } = useItemsContext();
  const [backgroundSize, setBackgroundSize] = useState({ width: 0, height: 0 });
-
- //  useEffect(() => {
- //   dispatch({ type: 'GET_ITEMS', payload: [] });
- //  }, []);
 
  const mainContainerStyle = {
   position: 'relative',
   width: '100%',
   aspectRatio: backgroundAspectRatio.toString(),
   overflow: 'hidden',
-  border: 'solid 1px yellow',
  };
 
  const backgroundImageStyle = {
@@ -65,12 +60,16 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio }) => {
  return (
   <>
    <Box
+    className="backgroundImageContainer"
     id="backgroundImageContainer"
     sx={mainContainerStyle}
    >
     <Box
      id="background"
+     droppable="true"
      sx={backgroundImageStyle}
+     onDrop={handleDrop}
+     onDragOver={(event) => event.preventDefault()}
     >
      {items.map((designAreaItem, index) => (
       <Box
