@@ -281,6 +281,8 @@ const Users = () => {
      //  bgcolor: 'primary.main',
      p: 2,
      borderRadius: 1,
+     height: '70vh',
+     overflowY: 'scroll',
     }}
    >
     <Typography

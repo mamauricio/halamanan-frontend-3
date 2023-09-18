@@ -345,6 +345,7 @@ const ItemManagement = () => {
               sx={{
                minHeight: '500px',
                minWidth: '300px',
+               maxWidth: '300px',
                display: 'flex',
                alignItems: 'center',
                justifyContent: 'center',
@@ -359,7 +360,7 @@ const ItemManagement = () => {
                  display: 'flex',
                  flexDirection: 'column',
                  height: '150px',
-                 width: 'auto',
+                 width: 'inherit',
                  justifyContent: 'center',
                  alignItems: 'center',
                 }}
@@ -380,6 +381,7 @@ const ItemManagement = () => {
                 src={selectedItem.newItemUrl}
                 style={{
                  maxHeight: '100%',
+                 maxWidth: '100%',
                  objectFit: 'contain',
                 }}
                />
