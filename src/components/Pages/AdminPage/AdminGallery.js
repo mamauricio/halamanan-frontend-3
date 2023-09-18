@@ -44,7 +44,6 @@ const AdminGallery = () => {
  });
 
  const handleFormChange = (event) => {
-  console.log(event.target.value);
   setItemData({
    ...itemData,
    [event.target.name]: event.target.value,
@@ -68,15 +67,10 @@ const AdminGallery = () => {
     )
 
     .then((response) => {
-     console.log(response.data);
      const fetchedItems = response.data.items;
-     //  console.log(fetchedItems);
      if (response.data.page < response.data.totalPages) {
       setItems((prevItems) => [...prevItems, ...fetchedItems]);
-      //   console.log('hello');
-      //   setItems((prevItems) => [...prevItems, ...fetchedItems]);
      }
-     console.log(fetchedItems);
      totalPageRef.current = response.data.totalPages;
      setFetchingItems(false);
      setIsLoading(false);
@@ -90,7 +84,6 @@ const AdminGallery = () => {
  };
 
  const handleSelectedItem = (item, itemIndex) => {
-  console.log('render');
   if (selectedItem === item) {
    setItemIndex('');
    setSelectedItem('');
@@ -126,7 +119,6 @@ const AdminGallery = () => {
    imageUrl: item.imageUrl,
   });
   setItemId(item._id);
-  console.log(item);
  };
 
  const handleClose = () => {
@@ -157,10 +149,9 @@ const AdminGallery = () => {
     handleAlert();
     setSelectedItem('');
     setEditing(false);
-    // console.log(response.json);
    }
   } catch (error) {
-   console.log(error);
+   //setError(error)
   }
  };
 

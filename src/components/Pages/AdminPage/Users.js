@@ -281,8 +281,8 @@ const Users = () => {
      //  bgcolor: 'primary.main',
      p: 2,
      borderRadius: 1,
-     height: '70vh',
-     overflowY: 'scroll',
+     //  height: '70vh',
+     //  overflowY: 'scroll',
     }}
    >
     <Typography
@@ -311,280 +311,290 @@ const Users = () => {
         </Alert>
        </Grow>
       )}
-      <TableContainer
-       component={Paper}
-       sx={{ bgcolor: 'rgba(255,255,255,0.2)' }}
+      <Box
+       sx={{
+        bgcolor: 'rgba(255,255,255,0.2)',
+        height: '85vh',
+        overflowY: 'scroll',
+       }}
       >
-       <Table
-        sx={{ minWidth: 650 }}
-        size="large"
-        aria-label="a dense table"
+       <TableContainer
+        component={Paper}
+        sx={{
+         bgcolor: 'rgba(255,255,255,0.2)',
+        }}
        >
-        <TableHead>
-         <TableRow>
-          <TableCell sx={{ color: 'orange' }}>User Email</TableCell>
-          <TableCell
-           align="right"
-           sx={{ color: 'orange' }}
-          >
-           First Name
-          </TableCell>
-          <TableCell
-           align="right"
-           sx={{ color: 'orange' }}
-          >
-           Last Name
-          </TableCell>
-          <TableCell
-           align="right"
-           sx={{ color: 'orange' }}
-          >
-           Role
-          </TableCell>
+        <Table
+         sx={{ minWidth: 650 }}
+         size="large"
+         aria-label="a dense table"
+        >
+         <TableHead>
+          <TableRow>
+           <TableCell sx={{ color: 'orange' }}>User Email</TableCell>
+           <TableCell
+            align="right"
+            sx={{ color: 'orange' }}
+           >
+            First Name
+           </TableCell>
+           <TableCell
+            align="right"
+            sx={{ color: 'orange' }}
+           >
+            Last Name
+           </TableCell>
+           <TableCell
+            align="right"
+            sx={{ color: 'orange' }}
+           >
+            Role
+           </TableCell>
 
-          <TableCell
-           sx={{
-            justifyContent: 'center',
-            display: 'flex',
-            alignItems: 'center',
-            color: 'orange',
-           }}
-          >
-           Actions
-          </TableCell>
-         </TableRow>
-        </TableHead>
-        <TableBody>
-         {userList &&
-          userList.map((user) => (
-           <>
-            {user._id === selectedUser._id && (
-             <>
-              <Modal
-               open={open}
-               onClose={handleClose}
-              >
-               <Box sx={modalStyle}>
-                {modalMessage}
-
-                {deleteUser && (
-                 <Box sx={style}>
-                  <Button
-                   onClick={() => handleDelete(user._id)}
-                   sx={yesButton}
-                  >
-                   Yes
-                  </Button>
-                  <Button onClick={handleClose}>No</Button>
-                 </Box>
-                )}
-
-                {demoteUser && (
-                 <Box sx={style}>
-                  <Button
-                   onClick={() => handleDemote(user._id)}
-                   sx={yesButton}
-                  >
-                   Yes
-                  </Button>
-                  <Button onClick={handleClose}>No</Button>
-                 </Box>
-                )}
-                {promoteUser && (
-                 <Box sx={{ style }}>
-                  <Button
-                   onClick={() => handlePromote(user._id)}
-                   sx={yesButton}
-                  >
-                   Yes
-                  </Button>
-                  <Button onClick={handleClose}>No</Button>
-                 </Box>
-                )}
-               </Box>
-              </Modal>
-             </>
-            )}
-
-            <TableRow
-             key={user.email}
-             sx={{
-              '&:last-child td, &:last-child th': { border: 0 },
-              // color: 'white',
-             }}
-            >
-             <TableCell
-              component="th"
-              scope="row"
-              sx={{
-               ...tableTextStyle,
-               color: user.role === 'admin' ? 'white' : 'primary.main',
-              }}
-             >
-              {user.email}
-             </TableCell>
-             <TableCell
-              align="right"
-              sx={{
-               ...tableTextStyle,
-               color: user.role === 'admin' ? 'white' : 'primary.main',
-              }}
-             >
-              {user.firstName}
-             </TableCell>
-             <TableCell
-              align="right"
-              sx={{
-               ...tableTextStyle,
-               color: user.role === 'admin' ? 'white' : 'primary.main',
-              }}
-             >
-              {user.lastName}
-             </TableCell>
-             <TableCell
-              align="right"
-              sx={{
-               ...tableTextStyle,
-               color: user.role === 'admin' ? 'white' : 'primary.main',
-              }}
-             >
-              {user.role}
-             </TableCell>
-             <TableCell
-              align="right"
-              sx={{
-               justifyContent: 'center',
-               alignItems: 'center',
-               display: 'flex',
-              }}
-             >
-              {/* cannot demote admin to user */}
-              {user.email === 'admin@admin.com' && (
-               <Box sx={{ m: 2, fontSize: '20px' }}></Box>
-              )}
-              {user.email !== 'admin@admin.com' && (
-               <Box
-                sx={{
-                 //  bgcolor: 'white',
-                 width: '80%',
-                 display: 'flex',
-                 justifyContent: 'space-evenly',
-                }}
+           <TableCell
+            sx={{
+             justifyContent: 'center',
+             display: 'flex',
+             alignItems: 'center',
+             color: 'orange',
+            }}
+           >
+            Actions
+           </TableCell>
+          </TableRow>
+         </TableHead>
+         <TableBody>
+          {userList &&
+           userList.map((user) => (
+            <>
+             {user._id === selectedUser._id && (
+              <>
+               <Modal
+                open={open}
+                onClose={handleClose}
                >
-                {user.role !== 'admin' ? (
-                 <Button
-                  title="Promote user to admin role"
-                  onClick={() => handleOpen('promote', user)}
-                  sx={{
-                   bgcolor: 'rgba(255,255,255,0.2)',
-                   color: 'primary.main',
-                   width: '200px',
-                  }}
-                 >
-                  Promote to Admin
-                 </Button>
-                ) : (
-                 <Button
-                  title="Remove user's admin role"
-                  onClick={() => handleOpen('demote', user)}
-                  sx={{
-                   bgcolor: 'rgba(255,255,255,0.4)',
-                   color: 'white',
-                   width: '200px',
-                  }}
-                 >
-                  {' '}
-                  Remove as Admin
-                 </Button>
-                )}
+                <Box sx={modalStyle}>
+                 {modalMessage}
 
-                <Button
-                 title="Edit User Information"
-                 onClick={() => handleOpenEdit(user)}
-                 sx={{ bgcolor: 'rgba(255,255,255,0.2)' }}
-                >
-                 Edit
-                </Button>
-                {selectedUser._id === user._id && (
-                 <Modal
-                  open={openEdit}
-                  onClose={handleCloseEdit}
-                 >
-                  <Box
-                   sx={modalStyle}
-                   component="form"
-                   onSubmit={handleEdit}
-                  >
-                   <TextField
-                    name="firstName"
-                    value={userData.firstName}
-                    label="First Name"
-                    required
-                    onChange={(event) => handleFormChange(event)}
-                    sx={textFieldStyle}
-                   />
-                   <TextField
-                    name="lastName"
-                    value={userData.lastName}
-                    label="Last Name"
-                    required
-                    onChange={(event) => handleFormChange(event)}
-                    sx={textFieldStyle}
-                   />
-                   <TextField
-                    name="email"
-                    value={userData.email}
-                    label="Email"
-                    required
-                    type="email"
-                    onChange={(event) => handleFormChange(event)}
-                    sx={textFieldStyle}
-                   />
-
+                 {deleteUser && (
+                  <Box sx={style}>
                    <Button
-                    type="submit"
-                    sx={{
-                     mt: 2,
-                     bgcolor: 'primary.main',
-                     color: 'orange',
-                     ':hover': {
-                      color: 'orange',
-                      bgcolor: 'primary.main',
-                      opacity: 0.9,
-                     },
-                    }}
+                    onClick={() => handleDelete(user._id)}
+                    sx={yesButton}
                    >
-                    {' '}
-                    Submit{' '}
+                    Yes
                    </Button>
-                   <Button onClick={handleCloseEdit}>Cancel</Button>
+                   <Button onClick={handleClose}>No</Button>
                   </Box>
-                 </Modal>
-                )}
-                <Button
-                 title="Delete User"
-                 onClick={() => handleOpen('delete', user)}
+                 )}
+
+                 {demoteUser && (
+                  <Box sx={style}>
+                   <Button
+                    onClick={() => handleDemote(user._id)}
+                    sx={yesButton}
+                   >
+                    Yes
+                   </Button>
+                   <Button onClick={handleClose}>No</Button>
+                  </Box>
+                 )}
+                 {promoteUser && (
+                  <Box sx={{ style }}>
+                   <Button
+                    onClick={() => handlePromote(user._id)}
+                    sx={yesButton}
+                   >
+                    Yes
+                   </Button>
+                   <Button onClick={handleClose}>No</Button>
+                  </Box>
+                 )}
+                </Box>
+               </Modal>
+              </>
+             )}
+
+             <TableRow
+              key={user.email}
+              sx={{
+               '&:last-child td, &:last-child th': { border: 0 },
+               // color: 'white',
+              }}
+             >
+              <TableCell
+               component="th"
+               scope="row"
+               sx={{
+                ...tableTextStyle,
+                color: user.role === 'admin' ? 'white' : 'primary.main',
+               }}
+              >
+               {user.email}
+              </TableCell>
+              <TableCell
+               align="right"
+               sx={{
+                ...tableTextStyle,
+                color: user.role === 'admin' ? 'white' : 'primary.main',
+               }}
+              >
+               {user.firstName}
+              </TableCell>
+              <TableCell
+               align="right"
+               sx={{
+                ...tableTextStyle,
+                color: user.role === 'admin' ? 'white' : 'primary.main',
+               }}
+              >
+               {user.lastName}
+              </TableCell>
+              <TableCell
+               align="right"
+               sx={{
+                ...tableTextStyle,
+                color: user.role === 'admin' ? 'white' : 'primary.main',
+               }}
+              >
+               {user.role}
+              </TableCell>
+              <TableCell
+               align="right"
+               sx={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                display: 'flex',
+               }}
+              >
+               {/* cannot demote admin to user */}
+               {user.email === 'admin@admin.com' && (
+                <Box sx={{ m: 2, fontSize: '20px' }}></Box>
+               )}
+               {user.email !== 'admin@admin.com' && (
+                <Box
                  sx={{
-                  bgcolor: 'red',
-                  color: 'white',
-                  // opacity: '0.4',
-                  ':hover': {
-                   opacity: 1,
-                   bgcolor: 'red',
-                  },
+                  //  bgcolor: 'white',
+                  width: '80%',
+                  display: 'flex',
+                  justifyContent: 'space-evenly',
                  }}
                 >
-                 Delete
-                </Button>
-               </Box>
-              )}
-             </TableCell>
-            </TableRow>
-           </>
-          ))}
-        </TableBody>
-       </Table>
-      </TableContainer>
+                 {user.role !== 'admin' ? (
+                  <Button
+                   title="Promote user to admin role"
+                   onClick={() => handleOpen('promote', user)}
+                   sx={{
+                    bgcolor: 'rgba(255,255,255,0.2)',
+                    color: 'primary.main',
+                    width: '200px',
+                   }}
+                  >
+                   Promote to Admin
+                  </Button>
+                 ) : (
+                  <Button
+                   title="Remove user's admin role"
+                   onClick={() => handleOpen('demote', user)}
+                   sx={{
+                    bgcolor: 'rgba(255,255,255,0.4)',
+                    color: 'white',
+                    width: '200px',
+                   }}
+                  >
+                   {' '}
+                   Remove as Admin
+                  </Button>
+                 )}
+
+                 <Button
+                  title="Edit User Information"
+                  onClick={() => handleOpenEdit(user)}
+                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', mx: 1 }}
+                 >
+                  Edit
+                 </Button>
+                 {selectedUser._id === user._id && (
+                  <Modal
+                   open={openEdit}
+                   onClose={handleCloseEdit}
+                  >
+                   <Box
+                    sx={modalStyle}
+                    component="form"
+                    onSubmit={handleEdit}
+                   >
+                    <TextField
+                     name="firstName"
+                     value={userData.firstName}
+                     label="First Name"
+                     required
+                     onChange={(event) => handleFormChange(event)}
+                     sx={textFieldStyle}
+                    />
+                    <TextField
+                     name="lastName"
+                     value={userData.lastName}
+                     label="Last Name"
+                     required
+                     onChange={(event) => handleFormChange(event)}
+                     sx={textFieldStyle}
+                    />
+                    <TextField
+                     name="email"
+                     value={userData.email}
+                     label="Email"
+                     required
+                     type="email"
+                     onChange={(event) => handleFormChange(event)}
+                     sx={textFieldStyle}
+                    />
+
+                    <Button
+                     type="submit"
+                     sx={{
+                      mt: 2,
+                      bgcolor: 'primary.main',
+                      color: 'orange',
+                      ':hover': {
+                       color: 'orange',
+                       bgcolor: 'primary.main',
+                       opacity: 0.9,
+                      },
+                     }}
+                    >
+                     {' '}
+                     Submit{' '}
+                    </Button>
+                    <Button onClick={handleCloseEdit}>Cancel</Button>
+                   </Box>
+                  </Modal>
+                 )}
+                 <Button
+                  title="Delete User"
+                  onClick={() => handleOpen('delete', user)}
+                  sx={{
+                   bgcolor: 'red',
+                   color: 'white',
+                   // opacity: '0.4',
+                   ':hover': {
+                    opacity: 1,
+                    bgcolor: 'red',
+                   },
+                  }}
+                 >
+                  Delete
+                 </Button>
+                </Box>
+               )}
+              </TableCell>
+             </TableRow>
+            </>
+           ))}
+         </TableBody>
+        </Table>
+       </TableContainer>
+      </Box>
      </div>
     </Grow>
    </Container>
