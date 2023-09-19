@@ -157,20 +157,14 @@ const DashBoard = ({ setValue }) => {
             <Box
              sx={{ width: 'inherit', display: 'flex', p: 1, maxWidth: '100%' }}
             >
-             <Typography
-              variant="h6"
-              sx={{ mr: 1 }}
-             >
+             <Typography sx={{ mr: 1, fontSize: '20px' }}>
               Admin Count:
               {adminCountRef.current === null
                ? 'Fetching data'
                : adminCountRef.current}
              </Typography>
 
-             <Typography
-              variant="h6"
-              sx={{ mr: 1 }}
-             >
+             <Typography sx={{ mr: 1, fontSize: '20px' }}>
               User Count:
               {userCountRef.current === null
                ? 'Fetching data'

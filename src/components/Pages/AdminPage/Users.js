@@ -279,6 +279,7 @@ const Users = () => {
      alignItems: 'center',
      p: 2,
      borderRadius: 1,
+     bgcolor: 'primary.main',
     }}
    >
     <Typography
