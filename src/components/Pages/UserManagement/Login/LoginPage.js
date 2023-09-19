@@ -83,11 +83,9 @@ const LoginPage = ({ handleAuthenticate }) => {
   event.preventDefault();
 
   if (validatePassword() != true) {
-   console.log('password format not correct');
    return false;
   }
   if (checkIfSame() != true) {
-   console.log('password not same');
    return false;
   }
   const response = await axios({
@@ -116,7 +114,6 @@ const LoginPage = ({ handleAuthenticate }) => {
       setErrorMessage('A user with this email already exists.');
      }
      handleOpen();
-     console.log('error');
     } else {
     }
    });

@@ -11,8 +11,10 @@ import FadeLoader from 'react-spinners/FadeLoader';
 const DashBoard = ({ setValue }) => {
  const [itemRequests, setItemRequests] = useState('');
  const [users, setUsers] = useState('');
- const userCountRef = useRef(null);
- const adminCountRef = useRef(null);
+ const [adminCount, setAdminCount] = useState(0);
+ const [userCount, setUserCount] = useState(0);
+ const [fetching, setFetching] = useState(true);
+ const [color, setColor] = useState('#ECAB00');
 
  const [error, setError] = useState('');
 
@@ -51,11 +53,10 @@ const DashBoard = ({ setValue }) => {
    users &&
     users.map((user) => (
      <>
-      {user.role === 'admin' ? (
-       <>{(adminCountRef.current = adminCountRef.current + 1)}</>
-      ) : (
-       <>{(userCountRef.current = userCountRef.current + 1)}</>
-      )}
+      {user.role === 'admin'
+       ? setAdminCount((adminCountPrev) => adminCountPrev + 1)
+       : //  <>{(userCountRef.current = userCountRef.current + 1)}</>
+         setUserCount((userCountPrev) => userCountPrev + 1)}
      </>
     ));
   }
@@ -70,6 +71,7 @@ const DashBoard = ({ setValue }) => {
    const data = await response.json();
    if (data) {
     setItemRequests(data);
+    setFetching(false);
    } else {
    }
   } catch (error) {
@@ -158,17 +160,11 @@ const DashBoard = ({ setValue }) => {
              sx={{ width: 'inherit', display: 'flex', p: 1, maxWidth: '100%' }}
             >
              <Typography sx={{ mr: 1, fontSize: '20px' }}>
-              Admin Count:
-              {adminCountRef.current === null
-               ? 'Fetching data'
-               : adminCountRef.current}
+              Admin Count: {adminCount && adminCount}
              </Typography>
 
              <Typography sx={{ mr: 1, fontSize: '20px' }}>
-              User Count:
-              {userCountRef.current === null
-               ? 'Fetching data'
-               : userCountRef.current}
+              User Count: {userCount && userCount}
              </Typography>
             </Box>
 
@@ -245,7 +241,8 @@ const DashBoard = ({ setValue }) => {
          >
           <Box sx={{ p: 1 }}>
            <Typography variant="h6">
-            Pending requests: {itemRequests.length}
+            Pending requests:{' '}
+            {itemRequests !== '' ? itemRequests.length : 'Fetching data'}
            </Typography>
           </Box>
           <Box
@@ -259,6 +256,30 @@ const DashBoard = ({ setValue }) => {
             justifyContent: 'space-around',
            }}
           >
+           {itemRequests === '' && (
+            <Box
+             sx={{
+              justifyContent: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+             }}
+            >
+             <Typography
+              variant="h5"
+              sx={{ mb: 3 }}
+             >
+              Fetching Data
+             </Typography>
+             <FadeLoader
+              color={color}
+              loading={fetching}
+              size={200}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+             />
+            </Box>
+           )}
            {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', width: 'inherit' }}> */}
            {itemRequests &&
             itemRequests.map((items, index) => (

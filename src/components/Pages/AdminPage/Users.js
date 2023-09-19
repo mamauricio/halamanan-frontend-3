@@ -279,7 +279,7 @@ const Users = () => {
      alignItems: 'center',
      p: 2,
      borderRadius: 1,
-     bgcolor: 'primary.main',
+     //  bgcolor: 'primary.main',
     }}
    >
     <Typography
@@ -310,13 +310,15 @@ const Users = () => {
       )}
       <Box
        sx={{
-        bgcolor: 'rgba(255,255,255,0.2)',
         height: '85vh',
         overflowY: 'scroll',
         borderRadius: 1,
        }}
       >
-       <TableContainer component={Paper}>
+       <TableContainer
+        component={Paper}
+        sx={{ bgcolor: 'rgba(255,255,255,0.2)' }}
+       >
         <Table
          sx={{ minWidth: 650 }}
          size="large"

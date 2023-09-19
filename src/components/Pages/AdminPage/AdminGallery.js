@@ -50,11 +50,6 @@ const AdminGallery = () => {
   });
  };
 
- //  const classes = useStyles();
- //  useEffect(() => {
- //   fetchGallery();
- //  }, []);
-
  useEffect(() => {
   fetchGallery();
  }, [page]);
@@ -228,7 +223,7 @@ const AdminGallery = () => {
      >
       {items &&
        items.map((item, index) => (
-        <>
+        <Box key={index}>
          <Modal
           open={index === itemIndex}
           onClose={handleClose}
@@ -534,7 +529,7 @@ const AdminGallery = () => {
            {item.itemName}
           </Typography>
          </Box>
-        </>
+        </Box>
        ))}
      </Box>
     </Grow>

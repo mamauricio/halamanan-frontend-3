@@ -98,7 +98,8 @@ const MainDesign = () => {
 
  const handleDrop = (event) => {
   event.preventDefault();
-  const droppableArea = document.getElementById('backgroundImageContainer');
+  // const droppableArea = document.getElementById('backgroundImageContainer');
+  const droppableArea = document.getElementById('background');
 
   const offsetX = event.clientX - droppableArea.getBoundingClientRect().left;
   const offsetY = event.clientY - droppableArea.getBoundingClientRect().top;
@@ -113,7 +114,9 @@ const MainDesign = () => {
   mouseOffsetX,
   mouseOffsetY,
  }) => {
-  const droppableArea = document.getElementById('backgroundImageContainer');
+  const droppableArea = document.getElementById('background');
+
+  // const droppableArea = document.getElementById('backgroundImageContainer');
   const droppableAreaRect = droppableArea.getBoundingClientRect();
   if (
    coordinates.x - mouseOffsetX > 0 &&
@@ -218,7 +221,7 @@ const MainDesign = () => {
             alignItems: 'center',
            }}
           >
-           Fetching Items
+           Fetching Design
           </Box>
           <FadeLoader
            color={color}

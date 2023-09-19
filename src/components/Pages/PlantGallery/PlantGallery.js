@@ -109,8 +109,6 @@ const PlantGallery = ({ isGuest }) => {
      `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=12&category=${selectedCategory}&type=${selectedFilters}`
     )
     .then((response) => {
-     //  console.log('hello');
-     //  console.log(response.data.totalCount);
      totalCountRef.current = response.data.totalCount;
      const fetchedItems = response.data.items;
      if (response.data.page < response.data.totalPages) {
@@ -247,7 +245,6 @@ const PlantGallery = ({ isGuest }) => {
 
  const handleKeyDown = (event) => {
   if (event.key === 'ArrowLeft') {
-   //  console.log('left key ');
    handlePreviousItem();
   } else if (event.key === 'ArrowRight') {
    handleNextItem();
@@ -286,7 +283,6 @@ const PlantGallery = ({ isGuest }) => {
 
  const handleSuccess = () => {
   setAlertMessage('Successfully sent request to admin');
-  console.log('hello world');
   openAlert();
  };
 

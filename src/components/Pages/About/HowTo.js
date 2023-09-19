@@ -38,19 +38,13 @@ const HowTo = () => {
 
  const CustomBody = (props) => {
   return (
-   <Typography
-    // variant="h6"
-    sx={{ color: 'rgba(255,255,255,0.8)', fontSize: '23px', mt: 1 }}
-   >
+   <Typography sx={{ color: 'rgba(255,255,255,0.8)', fontSize: '23px', mt: 1 }}>
     {props.children}
    </Typography>
   );
  };
 
  const ImageContainer = ({ image }) => {
-  // {
-  //  console.log(image);
-  // }
   return (
    <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
     <img
@@ -64,7 +58,6 @@ const HowTo = () => {
  const handleChange = (event, newValue) => {
   setShow(false);
   setValue(newValue);
-  // console.log('changing value');
   const timer = setTimeout(() => {
    setShow(true);
   }, 50);

@@ -68,7 +68,6 @@ const DesignPage = () => {
  }, [selectedDesign]);
 
  const handleEditDesign = (design) => {
-  // console.log(design._id);
   navigate(`/designs/${design._id}`, { state: { design } });
  };
 
@@ -121,9 +120,6 @@ const DesignPage = () => {
 
  const copyToClipboard = (e) => {
   var copyText = document.querySelector('#itemList');
-  console.log(copyText);
-
-  console.log(copyText.innerText);
   navigator.clipboard.writeText(copyText.innerText);
   setAlertMessage('Copied to Clipboard');
   handleOpenAlert();

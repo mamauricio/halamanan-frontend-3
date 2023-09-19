@@ -12,12 +12,10 @@ const ForgotPassword = ({ handleBack }) => {
 
  const handleReset = (event) => {
   event.preventDefault();
-  console.log(email);
   const response = axios.post(
    `https://halamanan-197e9734b120.herokuapp.com/reset-password?${email}`
   );
   if (response) {
-   console.log(response.json);
    //    setEmailSent(true);
   } else {
   }

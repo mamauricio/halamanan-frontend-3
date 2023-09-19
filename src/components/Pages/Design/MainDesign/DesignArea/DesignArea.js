@@ -11,20 +11,31 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
 
  const mainContainerStyle = {
   position: 'relative',
-  width: '100%',
+  //   width: '100%',
+  //   height: '100%',
   aspectRatio: backgroundAspectRatio.toString(),
   overflow: 'hidden',
+  display: 'flex',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  bgcolor: 'pink',
+  maxHeight: '80vh',
  };
 
  const backgroundImageStyle = {
   position: 'absolute',
   width: '100%',
   height: '100%',
+  //   width: backgroundSize.width,
+  //   height: '80vh',
   backgroundImage: `url(${backgroundImage})`,
   backgroundPosition: 'center',
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
   backgroundColor: 'green',
+
+  overflow: 'hidden',
+  maxHeight: '80vh',
  };
 
  const reorderItems = (array, selectedIndex) => {
@@ -64,6 +75,7 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
     id="backgroundImageContainer"
     sx={mainContainerStyle}
    >
+    {/* <Box sx={{ display: 'flex', alignItems: 'center' }}> */}
     <Box
      id="background"
      droppable="true"
@@ -71,6 +83,7 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
      onDrop={handleDrop}
      onDragOver={(event) => event.preventDefault()}
     >
+     {/* <img src={`url(${backgroundImage})`} /> */}
      {items.map((designAreaItem, index) => (
       <Box
        key={designAreaItem.itemKey}
@@ -92,6 +105,7 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
        />
       </Box>
      ))}
+     {/* </Box> */}
     </Box>
    </Box>
   </>

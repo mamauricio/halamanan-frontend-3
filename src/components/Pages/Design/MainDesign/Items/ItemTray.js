@@ -5,7 +5,7 @@ import {
  Button,
  ImageListItemBar,
  IconButton,
- Fade,
+ Typography,
  Modal,
  Box,
  Grow,
@@ -20,6 +20,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import Filters from '../../../PlantGallery/Filters';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 import { useMediaQuery } from '@mui/material';
+import FadeLoader from 'react-spinners/FadeLoader';
 import axios from 'axios';
 
 const ItemTray = ({ handleAddItem }) => {
@@ -43,11 +44,13 @@ const ItemTray = ({ handleAddItem }) => {
  const [error, setError] = useState([]);
  const [showAlert, setShowAlert] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
-
+ // const [fetching, isFetching] = useState(true);
  const [imageDimensions, setImageDimensions] = useState({
   width: null,
   height: null,
  });
+
+ const [color, setColor] = useState('#ECAB00');
 
  const openAlert = () => {
   setShowAlert(true);
@@ -81,6 +84,7 @@ const ItemTray = ({ handleAddItem }) => {
 
  const fetchGalleryItems = () => {
   setIsLoading(true);
+  setFetching(true);
   if (selectedCategory === 'favorites') {
    const token = sessionStorage.getItem('token');
    axios
@@ -102,7 +106,6 @@ const ItemTray = ({ handleAddItem }) => {
     )
     .then((response) => {
      const fetchedItems = response.data.items;
-     //  console.log(fetchedItems);
      if (response.data.page < response.data.totalPages) {
       setItemTrayItems((prevItems) => [...prevItems, ...fetchedItems]);
      }
@@ -429,8 +432,12 @@ const ItemTray = ({ handleAddItem }) => {
            >
             {isItemInFavorites(item._id) ? <StarIcon /> : <StarBorderIcon />}
            </Button>
-
-           <img src={item.imageUrl} />
+           <Box sx={{ height: '400px' }}>
+            <img
+             src={item.imageUrl}
+             style={{ objectFit: 'contain', height: '100%', width: '100%' }}
+            />
+           </Box>
            <Button
             sx={{
              height: '50px',
@@ -482,6 +489,29 @@ const ItemTray = ({ handleAddItem }) => {
        </Modal>
       </div>
      ))
+    )}
+    {fetching && (
+     <Box
+      sx={{
+       width: '220px',
+       height: '200px',
+       display: 'flex',
+       justifyContent: 'center',
+       alignItems: 'center',
+       borderRadius: 1,
+       bgcolor: 'rgba(255,255,255,0.2)',
+       flexDirection: 'column',
+      }}
+     >
+      <Typography sx={{ fontSize: '22px', mb: 3 }}> Fetching Items </Typography>
+      <FadeLoader
+       color={color}
+       loading={fetching}
+       size={200}
+       aria-label="Loading Spinner"
+       data-testid="loader"
+      />
+     </Box>
     )}
    </ImageList>
   </Box>

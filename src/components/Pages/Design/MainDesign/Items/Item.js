@@ -67,9 +67,9 @@ const Item = (props) => {
     size={{ height: height, width: width }}
     position={{ x, y }}
     enableResizing={{ bottomRight: true, topRight: true, bottomLeft: true }}
-    disableDragging={false}
+    // disableDragging={false}
     lockAspectRatio={true}
-    onDrag={changePosition}
+    onDragStop={changePosition}
     onResize={handleResize}
     resizeHandleClasses={['bottomRight', 'topRight', 'bottomLeft']}
     onMouseEnter={() => setIsHovered(true)}

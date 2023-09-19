@@ -8,9 +8,6 @@ import { NavLink } from 'react-router-dom';
 import './NavBar.css';
 
 const NavBar = ({ handleLogout, isGuest }) => {
- //  const isAuthenticated = localStorage.getItem('isAuthenticated');
- //  console.log(isAuthenticated);
-
  return (
   <Box sx={{ flexGrow: 1 }}>
    <AppBar position="static">

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDesignContext } from '../../../../hooks/useDesignContext';
-import { Button, Alert, Zoom, Grow } from '@mui/material';
+import { Button, Alert, Zoom, Grow, filledInputClasses } from '@mui/material';
 
 import SaveIcon from '@mui/icons-material/Save';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 
 const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
- const [open, setOpen] = useState(false);
+ const [open, setOpen] = useState(filledInputClasses);
  const { designs, dispatch } = useDesignContext();
  const { id } = useParams();
  const [error, setError] = useState(null);
@@ -105,7 +105,6 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
      height: 50,
      color: 'rgba(255,255,255,0.8)',
      ':hover': {
-      //   bgcolor: 'rgba(255,255,255,0.6)',
       bgcolor: 'rgba(255,255,255,0.2)',
 
       color: 'primary.main',
@@ -123,19 +122,15 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
     <Grow in={isSaving}>
      <Alert
       onClose={handleCloseSecond}
-      variant="outlined"
-      severity="success"
       sx={{
        bgcolor: 'primary.main',
        color: 'white',
        position: 'absolute',
-       top: '20%',
-       left: '50%',
-       transform: 'translate(-50%, -50%)',
+       left: '40%',
        zIndex: 2,
       }}
      >
-      Attempting to save design
+      Saving Design
      </Alert>
     </Grow>
    )}
@@ -151,8 +146,8 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
       position: 'absolute',
       zIndex: 1,
       height: '40px',
-      left: '35%',
-      top: '7%',
+      left: '40%',
+      top: '11%',
      }}
     >
      {!error ? 'Saved Successfully' : error}

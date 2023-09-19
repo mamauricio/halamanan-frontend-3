@@ -167,14 +167,10 @@ const UserProfile = () => {
    );
    if (response) {
     const user = response.data;
-    console.log(user);
-    // console.log(response.data);
     setUser(user);
     setEditing(false);
    }
   } catch (response) {
-   console.log(response.response.data.error);
-   //    console.log(error);
    setError(response.response.data.error);
   }
  };
@@ -305,7 +301,6 @@ const UserProfile = () => {
                sx={{ width: '300px' }}
               />
              )}
-             {/* {console.log(user)} */}
              {!editing && (
               <Typography sx={{ ml: 1 }}>{user.firstName}</Typography>
              )}
