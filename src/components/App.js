@@ -21,7 +21,7 @@ const App = () => {
   if (id === 'admin') {
    sessionStorage.setItem('adminAuth', true);
    sessionStorage.setItem('authenticated', true);
-   window.location.href = 'http://localhost:3000/admin/dashboard';
+   window.location.href = 'https://halamanan.netlify.app/admin/dashboard';
    return;
   }
 
