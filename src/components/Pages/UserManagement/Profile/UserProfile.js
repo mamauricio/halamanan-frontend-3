@@ -151,7 +151,7 @@ const UserProfile = () => {
 
  const textStyle = {
   color: 'rgba(255,255,255,0.8)',
-  width: '400px',
+  width: '250px',
   justifyContent: 'right',
   display: 'flex',
   mr: 1,
