@@ -174,8 +174,15 @@ const Item = (props) => {
          }}
         >
          <Button
+          title="Close Options"
           onClick={() => {
            handleCloseItem();
+          }}
+          sx={{
+           bgcolor: 'rgba(255,255,255,1)',
+           mb: 1,
+           zIndex: 2,
+           ':hover': { bgcolor: 'orange' },
           }}
          >
           Close
