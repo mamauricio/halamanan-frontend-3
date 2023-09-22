@@ -21,7 +21,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
   setOpen(true);
   setTimeout(() => {
    setOpen(false);
-  }, 3 * 1000);
+  }, 300);
  };
 
  const handleClose = () => {

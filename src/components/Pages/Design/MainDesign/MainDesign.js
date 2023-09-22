@@ -52,6 +52,7 @@ const MainDesign = () => {
       `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`
      );
      const fetchedItem = response.data;
+     console.log(fetchedItem.items);
      setDesignName(fetchedItem.designName);
      dispatch({ type: 'GET_ITEMS', payload: fetchedItem.items });
 
@@ -127,7 +128,9 @@ const MainDesign = () => {
     droppableAreaRect.bottom - droppableAreaRect.top
   ) {
    if (designAreaItem) {
+    // console.log(designAreaItem);
     const newItem = {
+     selected: true,
      itemKey: itemKey,
      itemName: designAreaItem.itemName,
      width: 200,
@@ -135,6 +138,8 @@ const MainDesign = () => {
      x: coordinates.x - mouseOffsetX,
      y: coordinates.y - mouseOffsetY,
      imageUrl: designAreaItem.imageUrl,
+     flip: false,
+     rotate: 0,
     };
     dispatch({
      type: 'ADD_NEW_ITEM',
@@ -294,7 +299,17 @@ const MainDesign = () => {
             </Button>
            </Box>
           </Box>
-          <Box sx={{ mt: 2 }}>
+          <Box
+           sx={{
+            mt: 2,
+            // bgcolor: 'white',
+            display: 'flex',
+            flexDirection: 'row',
+            width: '100%',
+            height: '80vh',
+            justifyContent: 'center',
+           }}
+          >
            <DesignArea
             backgroundImage={backgroundImage}
             items={items ? items : ''}

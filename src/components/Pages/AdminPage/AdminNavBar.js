@@ -18,32 +18,6 @@ const AdminNavBar = ({ handleLogout }) => {
       Halamanan
      </Typography>
      <Box>
-      {/* <NavLink
-       to="/admin/dashboard"
-       underline="none"
-      >
-       Dashboard
-      </NavLink>
-
-      <NavLink
-       to="/admin/users"
-       underline="none"
-      >
-       User Management
-      </NavLink>
-      <NavLink
-       to="/admin/items"
-       underline="none"
-      >
-       Item Management
-      </NavLink>
-      <NavLink
-       to="/admin/design-quotes"
-       underline="none"
-      >
-       Design Quotes
-      </NavLink> */}
-
       <NavLink
        to="/login"
        underline="none"

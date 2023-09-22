@@ -142,16 +142,13 @@ const UserProfile = () => {
 
  const boxStyle = {
   display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  width: '100%',
   p: 1,
   color: 'orange',
  };
 
  const textStyle = {
   color: 'rgba(255,255,255,0.8)',
-  width: '250px',
+  width: '100px',
   justifyContent: 'right',
   display: 'flex',
   mr: 1,
@@ -185,7 +182,6 @@ const UserProfile = () => {
  };
 
  return (
-  //   <Fade in={openMain}>
   <motion.div
    initial={{ opacity: 0, transition: { duration: 0.3 } }}
    animate={{ opacity: 1, transition: { duration: 0.3 } }}
@@ -202,7 +198,6 @@ const UserProfile = () => {
      disableGutters={true}
      sx={{
       height: '65vh',
-      //   bgcolor: 'orange',
       bgcolor: 'rgba(255,255,255,0.1)',
       borderRadius: 2,
       m: 1,
@@ -271,7 +266,6 @@ const UserProfile = () => {
         {value === 0 && (
          <Box
           sx={{
-           //    bgcolor: 'white',
            justifyContent: 'center',
            alignItems: 'center',
            display: 'flex',

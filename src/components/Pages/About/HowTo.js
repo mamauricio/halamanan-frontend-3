@@ -111,8 +111,6 @@ const HowTo = () => {
      sx={{
       height: '78vh',
       mt: 2,
-      // border: 'solid 1px',
-      // borderColor: '212121',
       borderRadius: 1,
       overflow: 'hidden',
      }}
@@ -298,8 +296,9 @@ const HowTo = () => {
               <br />
               2) An information icon could be found at the bottom right corner
               of every item. Clicking the icon would reveal information about
-              the item. 3) Drag an item from the tray over desired area on the
-              design.
+              the item.
+              <br />
+              3) Drag an item from the tray over desired area on the design.
               <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
                <ImageContainer image="/Design/ItemInformation" />
                <ImageContainer image="/Design/ItemInformation2" />
@@ -314,10 +313,17 @@ const HowTo = () => {
               <a />
               where the item could be resized.
               <br />
-              <a></a>4b.) Click on an item and hold down the Descriptiono be
-              deleted and a white delete icon would appear at the top left
-              corner. Hovering over the icon would turn it to orange. Clicking
-              the icon would remove the item from the design.
+              <a></a>4b.) Click on an item and hold down the mouse pointer to
+              drag item across the design. <br />
+              <strong style={{ color: 'orange' }}>
+               <a></a>
+               <a></a>**Dragging an item would bring it on top of other items
+              </strong>
+              <br />
+              5) To delete an item, hover over desired item to be deleted and a
+              white delete icon would appear at the top left corner. Hovering
+              over the icon would turn it to orange. Clicking the icon would
+              remove the item from the design.
               <ImageContainer image="/Design/Item2" />
              </CustomBody>
             </Box>
@@ -478,98 +484,6 @@ const HowTo = () => {
       </Grid>
      </TabContext>
     </Grid>
-
-    {/* <Box
-     sx={{
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 2,
-     }}
-    >
-    
-      <Box
-      sx={{
-       color: 'orange',
-       fontSize: '30px',
-       overflowY: 'auto',
-       height: '100%',
-      }}
-     >
-      <br />
-      Features
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-       <Header>Designs Tab</Header>
-       <CustomBody
-        component="span"
-        sx={{ color: 'white' }}
-       >
-        Access existing designs and see more in depth information about each
-        design (item list). CREATE, SAVE TO DEVICE, EDIT, and DELETE existing
-        designs.
-       </CustomBody>
-      </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-       <Header>Creating a design</Header>
-       <CustomBody>
-        Through the DESIGNS page, USERS would be asked to UPLOAD an IMAGE
-        (BACKGROUND) of a space they would want to design. USERS would then be
-        redirected to the MDP and would be shown a sidebar of ITEMS on the
-        right.
-       </CustomBody>
-       <ul>
-        <li>
-         Each ITEM has an information (i) button that would show the item's
-         infomation.
-        </li>
-        <li>
-         Drag an item from the item tray onto the design area to add it in the
-         design.
-        </li>
-        <ul>
-         ITEMS could be dragged, resized, and deleted.
-         <li>
-          To DRAG an ITEM, Hold down Left Mouse click over item and drag it onto
-          desired position.
-         </li>
-         <li>
-          To RESIZE an ITEM, HOVER over the ITEM to be RESIZED and ARROWS on the
-          top right, bottom right, and bottom left would be visible. You can
-          Drag from the corners to resize.
-         </li>
-         <li>
-          To DELETE an ITEM, HOVER over the item to be DELETED and an ORANGE
-          MINUS BUTTON would be visible on the TOP LEFT CORNER of the ITEM. It
-          would remove the ITEM from the DA
-         </li>
-        </ul>
-
-        <li>
-         DESIGNS could be SAVED manually with the SAVE BUTTON on top of the DA,
-         but an AUTOSAVE feature is running on the background every minute
-        </li>
-        <ul>
-         Other functions in the Main Design Page:
-         <li>
-          Replace Button - allows the USER to REPLACE the BACKGROUND image,
-         </li>
-         <li>Download Button - SAVE the the DESIGN to their device (PNG)</li>
-         <li>Reset button - Clear all the items inside the DA.</li>
-        </ul>
-       </ul>
-      </Box>
-      <Box sx={boxStyle}>
-       GALLERY - VIEW different items within the database and FILTER them
-       between two categories - softscape and hardscape - and different
-       subcategories trees, pots, shrubs, etc.). REQUEST for new items to be
-       uploaded in the database.{' '}
-      </Box>
-      <Box sx={boxStyle}>
-       PROFILE - VIEW account information through the Information Tab. VIEW
-       and/or DELETE pending requests through the Requested Items tab.
-      </Box>
-     </Box> 
-    </Box>  */}
    </Container>
   </motion.div>
  );

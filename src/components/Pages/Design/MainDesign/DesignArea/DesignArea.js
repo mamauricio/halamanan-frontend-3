@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Box, Button } from '@mui/material';
 import './DesignArea.css';
 import Item from '../Items/Item';
@@ -6,19 +6,15 @@ import { useItemsContext } from '../../../../hooks/useItemsContext';
 
 const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
  const [selectedItem, setSelectedItem] = useState(null);
+ const selectedItemRef = useRef('');
  const { items, dispatch } = useItemsContext();
  const [backgroundSize, setBackgroundSize] = useState({ width: 0, height: 0 });
 
  const mainContainerStyle = {
   position: 'relative',
-  //   width: '100%',
-  //   height: '100%',
   aspectRatio: backgroundAspectRatio.toString(),
   overflow: 'hidden',
   display: 'flex',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  bgcolor: 'pink',
   maxHeight: '80vh',
  };
 
@@ -26,13 +22,10 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
   position: 'absolute',
   width: '100%',
   height: '100%',
-  //   width: backgroundSize.width,
-  //   height: '80vh',
   backgroundImage: `url(${backgroundImage})`,
   backgroundPosition: 'center',
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
-  backgroundColor: 'green',
 
   overflow: 'hidden',
   maxHeight: '80vh',
@@ -46,10 +39,30 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
   return updatedItems;
  };
 
+ useEffect(() => {
+  const isSelected = checkSelected();
+  {
+   console.log('checking if item is selected: ' + isSelected);
+  }
+ }, [selectedItem]);
+
  const handleSelect = (index) => {
   setSelectedItem(index);
+  console.log('handling item select: ' + selectedItem);
+
   const updatedItems = reorderItems(items, index);
   dispatch({ type: 'GET_ITEMS', payload: updatedItems });
+  //   }
+ };
+
+ const checkSelected = (index) => {
+  if (selectedItem === index) {
+   return true;
+  } else return false;
+ };
+
+ const handleCloseItem = (index) => {
+  setSelectedItem('');
  };
 
  useEffect(() => {
@@ -68,6 +81,8 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
   };
  }, []);
 
+ const handleClick = (event) => {};
+
  return (
   <>
    <Box
@@ -75,15 +90,15 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
     id="backgroundImageContainer"
     sx={mainContainerStyle}
    >
-    {/* <Box sx={{ display: 'flex', alignItems: 'center' }}> */}
     <Box
+     onClick={(event) => handleClick(event)}
      id="background"
      droppable="true"
      sx={backgroundImageStyle}
      onDrop={handleDrop}
      onDragOver={(event) => event.preventDefault()}
     >
-     {/* <img src={`url(${backgroundImage})`} /> */}
+     {console.log(selectedItem)}
      {items.map((designAreaItem, index) => (
       <Box
        key={designAreaItem.itemKey}
@@ -92,20 +107,30 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
         width: '100px',
         backgroundColor: 'orange',
         zIndex: index === selectedItem ? 1 : 'auto',
+        // zIndex: index === selectedItemRef.current ? 1 : 'auto',
        }}
       >
+       {console.log('index: ' + index)}
+       {console.log('selected Item: ' + selectedItem)}
        <Item
+        // handleSelect = {handleSelect}
+        // checkSelected={checkSelected}
+        handleCloseItem={handleCloseItem}
+        index={index}
+        selected={selectedItem === index}
+        // selected={selectedItemRef.current === index}
         itemKey={designAreaItem.itemKey}
         itemName={designAreaItem.itemName}
         imageUrl={designAreaItem.imageUrl}
-        width={designAreaItem.width || 200}
-        height={designAreaItem.height || 200}
-        x={designAreaItem.x || 100}
-        y={designAreaItem.y || 100}
+        width={designAreaItem.width}
+        height={designAreaItem.height}
+        x={designAreaItem.x}
+        y={designAreaItem.y}
+        rotate={designAreaItem.rotate}
+        flip={designAreaItem.flip}
        />
       </Box>
      ))}
-     {/* </Box> */}
     </Box>
    </Box>
   </>

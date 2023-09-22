@@ -27,3 +27,7 @@
     border-width: 3px;
     background-color: none;
 }
+
+.arrowIcon:hover .cursor {
+    transform:translate(-50%,-50%) , scale(8)
+}

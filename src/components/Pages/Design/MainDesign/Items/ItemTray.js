@@ -302,10 +302,26 @@ const ItemTray = ({ handleAddItem }) => {
      width: xl ? '90vw' : null,
      height: '80vh',
      pr: 2,
+     bgcolor: 'rgba(255,255,255,0.2)',
+     borderRadius: 1,
     }}
    >
-    {filteredItems === 0 ? (
-     <Box sx={{ translate: 'transform(-50%, -50%)' }}> No Items Found </Box>
+    {filteredItems.length === 0 ? (
+     <Box
+      sx={{
+       bgcolor: 'pink',
+       height: '250px',
+       ml: 2,
+       mt: 2,
+       display: 'flex',
+       justifyContent: 'center',
+       alignItems: 'center',
+       bgcolor: 'rgba(255,255,255,0.1)',
+       borderRadius: 1,
+      }}
+     >
+      <Typography variant="h6">No Items Found</Typography>
+     </Box>
     ) : (
      filteredItems.map((item, index) => (
       <div key={item._id + items.length + index}>

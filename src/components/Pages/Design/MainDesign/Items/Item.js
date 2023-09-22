@@ -1,20 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Item.css';
 import { Rnd } from 'react-rnd';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Grow from '@mui/material/Grow';
 
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 import RemoveIcon from '@mui/icons-material/Remove';
+import FlipIcon from '@mui/icons-material/Flip';
+// import CircleIcon from '@mui/icons-material/Circle';
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+// const Item = (props) => {
 const Item = (props) => {
+ const indexRef = useRef(props.index);
  const [width, setWidth] = useState(props.width);
  const [height, setHeight] = useState(props.height);
  const [x, setX] = useState(props.x);
  const [y, setY] = useState(props.y);
- const [selectedItem, setSelectedItem] = useState(null);
  const [isHovered, setIsHovered] = useState(false);
  const { items, dispatch } = useItemsContext();
+ const [isRotating, setIsRotating] = useState(false);
+ const [flip, setFlip] = useState(props.flip);
+ const [rotate, setRotate] = useState(props.rotate);
+
+ const { handleCloseItem } = props;
+
+ const [scrollPosition, setScrollPosition] = useState(192 / 2 - 15);
+
+ const isDraggingDisabledRef = useRef(true);
 
  useEffect(() => {
   const newData = { width, height, x, y };
@@ -38,6 +52,28 @@ const Item = (props) => {
   });
  }, [x, y, props.itemKey, dispatch]);
 
+ useEffect(() => {
+  const newData = { rotate };
+  dispatch({
+   type: 'ROTATE_ITEM',
+   payload: {
+    itemKey: props.itemKey,
+    newData,
+   },
+  });
+ }, [rotate, props.itemKey, dispatch]);
+
+ useEffect(() => {
+  const newData = { flip };
+  dispatch({
+   type: 'FLIP_ITEM',
+   payload: {
+    itemKey: props.itemKey,
+    newData,
+   },
+  });
+ }, [flip, props.itemKey, dispatch]);
+
  const changePosition = (e, item) => {
   setX(item.x);
   setY(item.y);
@@ -50,7 +86,7 @@ const Item = (props) => {
  };
 
  const handleClick = (itemKey) => {
-  setSelectedItem(itemKey);
+  setIsHovered(true);
  };
 
  const removeItem = (itemKey) => {
@@ -60,6 +96,34 @@ const Item = (props) => {
   });
  };
 
+ const handleRotate = (event, item) => {
+  event.stopPropagation();
+  //   console.log(item.x);
+  isDraggingDisabledRef.current = true;
+  const ratio = 180 / (192 + 15);
+  const offset = item.x - 192 / 2 + 15;
+
+  if (item.x <= 192) {
+   setRotate(ratio * offset);
+
+   setScrollPosition(item.x);
+  }
+ };
+
+ const disableDrag = (event) => {
+  event.stopPropagation();
+  isDraggingDisabledRef.current = true;
+ };
+
+ const handleFlip = () => {
+  setFlip(!flip);
+ };
+
+ const enableDrag = () => {
+  //   setIsHovered(true);
+  isDraggingDisabledRef.current = false;
+ };
+
  return (
   <>
    <Rnd
@@ -67,13 +131,20 @@ const Item = (props) => {
     size={{ height: height, width: width }}
     position={{ x, y }}
     enableResizing={{ bottomRight: true, topRight: true, bottomLeft: true }}
-    // disableDragging={false}
+    disableDragging={isDraggingDisabledRef.current}
     lockAspectRatio={true}
+    onMouseEnter={() => {
+     enableDrag();
+    }}
     onDragStop={changePosition}
     onResize={handleResize}
     resizeHandleClasses={['bottomRight', 'topRight', 'bottomLeft']}
-    onMouseEnter={() => setIsHovered(true)}
-    onMouseLeave={() => setIsHovered(false)}
+    onClick={() => {
+     handleClick();
+    }}
+    style={{
+     backgroundColor: props.selected ? 'rgba(255, 170, 0, 0.254)' : null,
+    }}
    >
     <Box
      sx={{
@@ -82,59 +153,178 @@ const Item = (props) => {
       display: 'flex',
      }}
     >
-     {isHovered && (
+     {props.selected && (
       <>
-       <Button
-        onClick={() => removeItem(props.itemKey)}
+       <Box
         sx={{
-         left: 2,
-         top: 2,
-         width: '20px',
          position: 'absolute',
-         bgcolor: 'rgba(255,255,255,0.7)',
-         zIndex: 2,
-         ':hover': { bgcolor: 'orange' },
+         left: -70,
+         top: -40,
+         display: 'flex',
+         flexDirection: 'row',
         }}
        >
-        <RemoveIcon fontSize="small" />
-       </Button>
+        <Box
+         sx={{
+          bgcolor: 'white',
+          display: 'flex',
+          flexDirection: 'column',
+          //   ':hover': { bgcolor: 'orange' },
+          bgcolor: 'null',
+         }}
+        >
+         <Button
+          onClick={() => {
+           handleCloseItem();
+          }}
+         >
+          Close
+         </Button>
+         <Button
+          title="Remove Item"
+          onClick={() => removeItem(props.itemKey)}
+          sx={{
+           bgcolor: 'rgba(255,255,255,1)',
+           mb: 1,
+           zIndex: 2,
+           ':hover': { bgcolor: 'orange' },
+          }}
+         >
+          <RemoveIcon fontSize="small" />
+         </Button>
+         <Button
+          title="Flip Item"
+          onClick={() => handleFlip()}
+          sx={{ bgcolor: 'white', mb: 1, ':hover': { bgcolor: 'orange' } }}
+         >
+          <FlipIcon />
+         </Button>
+         <Button
+          title="Open rotate slider"
+          onClick={() => setIsRotating(!isRotating)}
+          sx={{ bgcolor: 'white', ':hover': { bgcolor: 'orange' } }}
+         >
+          {' '}
+          <RotateLeftIcon />{' '}
+         </Button>
+        </Box>
+        {isRotating && (
+         //  <Grow in={isRotating}>
+         <>
+          <Box
+           sx={{
+            //    ml: 2,
+            position: 'absolute',
+            ml: 9,
+            width: `${scrollPosition + 17}px`,
+            // width: `${rotate / scrollRatio + 15}px`,
+            bgcolor: 'rgba(255,165,0, 0.8)',
+            height: '10px',
+            display: 'flex',
+            justifyContent: 'center',
+            borderRadius: 10,
+            border: 'solid 1px black',
+           }}
+          />
+
+          <Box
+           className="scrollbar"
+           sx={{
+            //    ml: 2,
+            ml: 1,
+            mb: 4,
+            // pr: 2,
+            width: `192px`,
+            bgcolor: 'rgba(37,57,38, 0.2)',
+            height: '10px',
+            display: 'flex',
+            justifyContent: 'center',
+            borderRadius: 0.5,
+            border: 'solid 1px black',
+           }}
+          >
+           <Rnd
+            position={{ x: scrollPosition, y: 0 }}
+            enableResizing={false}
+            dragAxis="x"
+            maxWidth={100}
+            bounds="parent"
+            resizable="false"
+            disableDragging={!isDraggingDisabledRef.current}
+            onMouseEnter={(event) => disableDrag(event)}
+            onDrag={(event, item) => handleRotate(event, item)}
+            onDragStop={() => enableDrag()}
+            onMouseLeave={() => enableDrag()}
+           >
+            <Box
+             className="scrollTracker"
+             sx={{
+              position: 'absolute',
+              top: -4,
+              height: '15px',
+              width: '15px',
+              //   bgcolor: 'rgba(255,165,0, 0.8)',
+              bgcolor: 'rgba(37,57,38, 0.8)',
+
+              //   bgcolor: 'primary.main',
+              border: 'solid white 2px',
+              borderRadius: '20px',
+              ':hover': { cursor: 'grab' },
+             }}
+            />
+           </Rnd>
+           {/* </Box> */}
+          </Box>
+         </>
+         //  </Grow>
+        )}
+       </Box>
 
        <KeyboardArrowRightIcon
-        fontSize="large"
+        className="arrowIcon"
         sx={{
          position: 'absolute',
-         right: 0,
-         bottom: 0,
+         right: -18,
+         bottom: -18,
          color: 'primary.main',
          zIndex: 0,
          transform: 'rotate(45deg)',
+         fontSize: '50px',
+         ':hover': {
+          cursorSize: '300px',
+         },
         }}
        />
+
        <KeyboardArrowRightIcon
-        fontSize="large"
+        className="arrowIcon"
         sx={{
          position: 'absolute',
-         top: 0,
-         right: 0,
+         top: -18,
+         right: -18,
          color: 'primary.main',
          zIndex: 0,
+
          transform: 'rotate(-45deg)',
+         fontSize: '50px',
         }}
        />
        <KeyboardArrowRightIcon
-        fontSize="large"
+        className="arrowIcon"
         sx={{
          position: 'absolute',
-         bottom: 0,
-         left: 0,
+         bottom: -18,
+         left: -18,
+         //  p: -3,
          color: 'primary.main',
          zIndex: 0,
          transform: 'rotate(135deg)',
+         fontSize: '50px',
         }}
        />
       </>
      )}
-
+     {/* {console.log(`${props.itemName} ${props.selected}`)} */}
      <img
       className="image"
       key={props.itemKey}
@@ -143,8 +333,11 @@ const Item = (props) => {
       height={height}
       onClick={() => handleClick(props.itemKey)}
       style={{
-       zIndex: selectedItem === props.itemKey ? 1 : 0,
        objectFit: 'contain',
+
+       transform: flip
+        ? `scaleX(-1) rotate(${rotate}deg)`
+        : `rotate(${rotate}deg)`,
       }}
      />
     </Box>
