@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDesignContext } from '../../../../hooks/useDesignContext';
-import { Button, Alert, Zoom, Grow, filledInputClasses } from '@mui/material';
+import { Button, Alert, Zoom, Grow } from '@mui/material';
 
 import SaveIcon from '@mui/icons-material/Save';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 
 const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
- const [open, setOpen] = useState(filledInputClasses);
+ const [open, setOpen] = useState(false);
  const { designs, dispatch } = useDesignContext();
  const { id } = useParams();
  const [error, setError] = useState(null);
@@ -19,10 +19,13 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  };
  const handleOpen = () => {
   setOpen(true);
+ };
+
+ useEffect(() => {
   setTimeout(() => {
    setOpen(false);
-  }, 300);
- };
+  }, 400);
+ }, [open]);
 
  const handleClose = () => {
   setOpen(false);
@@ -55,7 +58,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
     items,
    };
    const response2 = axios.patch(
-    `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`,
+    `http://localhost:3001/designs/${id}`,
     newData
    );
 
@@ -67,7 +70,8 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
     },
    });
    const saved = await response2;
-   if (response2) {
+   if (saved) {
+    // console.log('hello');
     setIsSaving(false);
     setError(null);
    }
@@ -134,25 +138,29 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
      </Alert>
     </Grow>
    )}
-   <Zoom
-    in={open}
-    onClose={handleClose}
-   >
-    <Alert
-     onClose={handleClose}
-     severity={!error ? 'success' : 'error'}
-     sx={{
-      backgroundColor: !error ? 'primary.main' : 'red',
-      position: 'absolute',
-      zIndex: 1,
-      height: '40px',
-      left: '40%',
-      top: '11%',
-     }}
+   {open && (
+    <Grow
+     in={open}
+     // sx={{ height: '30px' }}
     >
-     {!error ? 'Saved Successfully' : error}
-    </Alert>
-   </Zoom>
+     <Alert
+      onClose={handleClose}
+      severity={!error ? 'success' : 'error'}
+      sx={{
+       backgroundColor: !error ? 'primary.main' : 'red',
+       position: 'absolute',
+       zIndex: 1,
+       height: '40px',
+       left: '40%',
+       top: '11%',
+       //   height: '30px',
+       overflowY: 'hidden',
+      }}
+     >
+      {!error ? 'Saved Successfully' : error}
+     </Alert>
+    </Grow>
+   )}
   </>
  );
 };
