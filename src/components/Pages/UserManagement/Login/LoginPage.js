@@ -140,6 +140,7 @@ const LoginPage = ({ handleAuthenticate }) => {
      handleAuthenticate('admin');
     } else if (response.data) {
      const hashedUserId = response.data.userId;
+
      setAlertMessage('Authenticating');
      const timer = setTimeout(() => {
       handleAuthenticate(hashedUserId);
@@ -148,8 +149,9 @@ const LoginPage = ({ handleAuthenticate }) => {
     }
    })
    .catch((error) => {
+    setError(true);
+    setAlertMessage(error.response.data.error);
     setErrorMessage(error.response.data.error);
-
     return;
    });
  };
@@ -167,13 +169,14 @@ const LoginPage = ({ handleAuthenticate }) => {
  const handleEmail = (event) => {
   setuserNameError(false);
   setErrorMessage('');
+  setError(false);
   setEmail(event);
  };
 
  const handlePassword = (event) => {
   setPasswordError(false);
-
   setErrorMessage('');
+  setError(false);
   setPassword(event);
  };
  const handleConfirmPassword = (event) => {
@@ -201,21 +204,14 @@ const LoginPage = ({ handleAuthenticate }) => {
   px: 2,
   mb: 1,
   width: '100px',
-  // fontSize: 20,
   ':hover': {
    color: 'primary.main',
-   //  opacity: 0.9,
    backgroundColor: 'rgba(0,0,0,0.18)',
-   //  bgcolor: 'rgba(255,255,255,0.18)',
   },
  };
 
  return (
   <ThemeProvider theme={theme}>
-   {/* <Fade
-    in={initialize}
-    //  sx={{ bgcolor: 'primary.main', height: '100vh' }}
-   > */}
    <motion.div
     initial={{ opacity: 0, transition: { duration: 0.3 } }}
     animate={{ opacity: 1, transition: { duration: 0.3 } }}
@@ -286,13 +282,14 @@ const LoginPage = ({ handleAuthenticate }) => {
            severity={error ? 'error' : 'success'}
            onClose={handleClose}
            sx={{
-            color: 'primary.main',
-            backgroundColor: error ? 'red' : 'orange',
+            color: error ? 'white' : 'primary.main',
+            backgroundColor: error ? 'rgba(255,0,0,0.5)' : 'orange',
+
             boxShadow: 5,
             mb: 2,
            }}
           >
-           {error ? error : alertMessage}
+           {error ? errorMessage : alertMessage}
           </Alert>
          </Grow>
         )}
@@ -335,7 +332,6 @@ const LoginPage = ({ handleAuthenticate }) => {
            </Box>
            <Box
             sx={{
-             //  bgcolor: 'white',
              width: '100%',
              display: 'flex',
              flexDirection: 'column',
@@ -379,56 +375,19 @@ const LoginPage = ({ handleAuthenticate }) => {
              }}
             />
            </Box>
-           {/* <Box
-            sx={{
-             width: '100%',
-             display: 'flex',
-             justifyContent: 'center',
-             //  bgcolor: 'pink',
-            }}
-           >
-            <Button sx={{ my: 2.2, bgcolor: 'white', width: '50%' }}>
-            <Typography
-             onClick={handleForgotPassword}
-             variant="body2"
-             sx={{
-              fontSize: '15px',
-              cursor: 'pointer',
-              bgcolor: 'transparent',
-              color: 'primary.main',
-              p: 1,
-              my: 2.2,
-              borderRadius: 1,
-              transition: 'background-color ease-in-out 0.2s',
-              ':hover': {
-               color: 'primary.main',
-               bgcolor: 'rgba(255,255,255,0.18)',
-              },
-             }}
-            >
-             Forgot your password?{' '}
-            </Typography>
-            </Button>
-           </Box> */}
+
            <Box
             sx={{
-             //  bgcolor: 'white',
-             //  width: '50%',
              justifyContent: 'center',
-             //  pt: 1,
              display: 'flex',
              mt: 3,
-             //  flexDirection: 'row',
-             //  justifyContent: 'space-evenly',
             }}
            >
             <Box
              sx={{
               width: '45%',
-              // bgcolor: 'white',
               display: 'flex',
               justifyContent: 'space-between',
-              // bgcolor: 'white',
              }}
             >
              <Button
@@ -436,18 +395,6 @@ const LoginPage = ({ handleAuthenticate }) => {
               color="primary"
               type="button"
               onClick={toggleForm}
-              // sx={{
-              //  bgcolor: 'primary.main',
-              //  mr: 1,
-              //  py: 1,
-              //  px: 2,
-              //  width: '100px',
-              //  color: 'white',
-              //  ':hover': {
-              //   color: 'primary.main',
-              //   opacity: 0.8,
-              //  },
-              // }}
               sx={buttonStyle}
              >
               Register
@@ -455,17 +402,6 @@ const LoginPage = ({ handleAuthenticate }) => {
 
              <Button
               type="submit"
-              // sx={{
-              //  backgroundColor: 'primary.main',
-              //  color: 'white',
-              //  ml: 2,
-              //  py: 1,
-              //  width: '100px',
-              //  ':hover': {
-              //   color: 'primary.main',
-              //   opacity: 0.8,
-              //  },
-              // }}
               sx={buttonStyle}
              >
               Login
@@ -482,7 +418,6 @@ const LoginPage = ({ handleAuthenticate }) => {
            component="form"
            onSubmit={handleSignUp}
            sx={{
-            // bgcolor: 'rgba(255,255,255,0.18)',
             bgcolor: 'orange',
 
             p: 2,
@@ -506,7 +441,6 @@ const LoginPage = ({ handleAuthenticate }) => {
              variant="h6"
              sx={{
               mb: 1,
-              // color: 'orange',
               color: 'primary.main',
              }}
             >
@@ -528,9 +462,6 @@ const LoginPage = ({ handleAuthenticate }) => {
              value={lastName}
              onChange={(e) => setLastName(e.target.value)}
              required
-             //  sx={{
-             //   my: 2,
-             //  }}
             />
            </Box>
            <TextField
@@ -612,64 +543,16 @@ const LoginPage = ({ handleAuthenticate }) => {
             >
              Already have an account? Click here to login
             </Typography>
-            {/* <Box
-             sx={{
-              // mt: 3,
-              // mb: 1,
-              // bgcolor: 'white',
-              width: '50%',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              // bgcolor: 'white',
-             }}
-            > */}
-            {/* <Button
-              type="button"
-              onClick={toggleForm}
-              //  sx={{
-              //   backgroundColor: 'primary.main',
-              //   color: 'white',
-              //   opacity: 1,
-              //   //  transition: 'opacity 0.3s, backgroundColor 2s, color 0.3s',
-              //   ':hover': {
-              //    color: 'primary.main',
-              //    //  opacity: 0.9,
-              //    // backgroundColor: 'white',
-              //   },
-              //  }}
-              sx={buttonStyle}
-             >
-              Login
-             </Button> */}
+
             <Button
              title="Create an account"
-             // variant="contained"
              type="submit"
-             //  sx={{
-             //   bgcolor: 'primary.main',
-             //   color: 'rgba(255,255,255,0.9)',
-             //   px: 2,
-             //   mb: 1,
-             //   ':hover': {
-             //    color: 'primary.main',
-             //    //  opacity: 0.9,
-             //    backgroundColor: 'rgba(0,0,0,0.18)',
-             //    //  bgcolor: 'rgba(255,255,255,0.18)',
-             //   },
-             //  }}
              sx={buttonStyle}
             >
-             <Typography
-              variant="body"
-              // sx={{ fontSize: '20px' }}
-             >
-              Register
-             </Typography>
+             <Typography variant="body">Register</Typography>
             </Button>
            </Box>
           </Box>
-          {/* </Box> */}
          </Fade>
         )}
 
