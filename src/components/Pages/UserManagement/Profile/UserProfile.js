@@ -15,6 +15,7 @@ import {
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import ApprovedItems from './ApprovedItems';
 
 const UserProfile = () => {
  const [value, setValue] = useState(0);
@@ -71,11 +72,14 @@ const UserProfile = () => {
 
  useEffect(() => {
   const fetchUser = async () => {
-   const response = await fetch(`http://localhost:3001/profile/`, {
-    headers: {
-     token: `${sessionStorage.getItem('token')}`,
-    },
-   });
+   const response = await fetch(
+    `https://halamanan-197e9734b120.herokuapp.com/profile/`,
+    {
+     headers: {
+      token: `${sessionStorage.getItem('token')}`,
+     },
+    }
+   );
 
    try {
     const user = await response.json();
@@ -94,11 +98,14 @@ const UserProfile = () => {
 
  useEffect(() => {
   const fetchPendingItems = async () => {
-   const response = await fetch(`http://localhost:3001/profile/pending`, {
-    headers: {
-     newItemUserId: `${sessionStorage.getItem('token')}`,
-    },
-   });
+   const response = await fetch(
+    `https://halamanan-197e9734b120.herokuapp.com/profile/pending`,
+    {
+     headers: {
+      newItemUserId: `${sessionStorage.getItem('token')}`,
+     },
+    }
+   );
 
    try {
     const pendingItems = await response.json();
@@ -113,7 +120,7 @@ const UserProfile = () => {
  const handleDelete = async (itemId) => {
   try {
    const response = await axios.delete(
-    `http://localhost:3001/profile/pending`,
+    `https://halamanan-197e9734b120.herokuapp.com/profile/pending`,
     {
      params: {
       id: itemId,
@@ -142,10 +149,11 @@ const UserProfile = () => {
 
  const textStyle = {
   color: 'rgba(255,255,255,0.8)',
-  width: '100px',
+  width: '120px',
   justifyContent: 'right',
   display: 'flex',
   mr: 1,
+  //   bgcolor: 'pink',
  };
 
  const handleSave = async () => {
@@ -153,7 +161,7 @@ const UserProfile = () => {
 
   try {
    const response = await axios.patch(
-    `http://localhost:3001/profile/${token}`,
+    `https://halamanan-197e9734b120.herokuapp.com/profile/${token}`,
     userData
    );
    if (response) {
@@ -273,7 +281,14 @@ const UserProfile = () => {
            Account Information
           </Typography>
           <Grow in={showProfile}>
-           <Box sx={{}}>
+           <Box
+            sx={
+             {
+              //  bgcolor: 'white',
+              //  width: '400px',
+             }
+            }
+           >
             <Box sx={boxStyle}>
              <Typography sx={textStyle}>First Name:</Typography>
              {editing && (
@@ -397,196 +412,233 @@ const UserProfile = () => {
          </Box>
         )}
         {value === 1 && (
-         <Box
+         <Grid
+          container
           sx={{
-           p: 3,
-           overflowY: 'auto',
-           height: '500px',
+           ml: 1,
           }}
          >
-          <Typography
-           variant="h6"
-           sx={{ color: 'orange' }}
-          >
-           Pending Items
-          </Typography>
-          <Box
+          <Grid
+           xs={5}
            sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            height: '10vh',
-            flexWrap: 'wrap',
+            mr: 3,
+            p: 1,
+            height: '600px',
            }}
           >
-           <Modal
-            open={open}
-            onClose={handleClose}
+           <Typography
+            variant="h6"
+            sx={{ color: 'orange' }}
            >
-            <Box
-             sx={{
-              position: 'absolute',
-              left: '50%',
-              top: '50%',
-              transform: 'translate(-50%, -50%)',
-              display: 'flex',
-              flexDirection: 'column',
-              bgcolor: 'orange',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 2,
-              borderRadius: 2,
-              boxShadow: 10,
-             }}
+            Pending Items
+           </Typography>
+           <Box
+            sx={{
+             display: 'flex',
+             flexDirection: 'row',
+             height: '10vh',
+             flexWrap: 'wrap',
+            }}
+           >
+            <Modal
+             open={open}
+             onClose={handleClose}
             >
              <Box
               sx={{
-               color: 'primary.main',
-               fontSize: '20px',
-              }}
-             >
-              Are you sure you want to delete request for{' '}
-              {selectedItem.newItemName}?
-             </Box>
-             <Box
-              sx={{
+               position: 'absolute',
+               left: '50%',
+               top: '50%',
+               transform: 'translate(-50%, -50%)',
                display: 'flex',
-               justifyContent: 'space-evenly',
-               width: '60%',
-               mt: 2,
-              }}
-             >
-              <Button
-               onClick={() => handleDelete(selectedItem._id)}
-               sx={{
-                bgcolor: 'primary.main',
-                color: 'orange',
-                ':hover': {
-                 color: 'white',
-                 bgcolor: 'red',
-                },
-               }}
-              >
-               Yes
-              </Button>
-              <Button
-               onClick={handleClose}
-               sx={{
-                bgcolor: 'primary.main',
-                color: 'orange',
-                ':hover': {
-                 color: 'orange',
-                 bgcolor: 'primary.main',
-                 opacity: 0.9,
-                },
-               }}
-              >
-               No
-              </Button>
-             </Box>
-            </Box>
-           </Modal>
-           <Zoom
-            in={openAlert}
-            onClose={handleCloseAlert}
-           >
-            <Alert
-             onClose={handleCloseAlert}
-             severity={!error ? 'success' : 'error'}
-             sx={{
-              backgroundColor: !error ? 'primary.main' : 'red',
-              position: 'absolute',
-              zIndex: 1,
-              height: '40px',
-              left: '35%',
-              top: '9%',
-             }}
-            >
-             {!error ? 'Deleted Successfully' : error}
-            </Alert>
-           </Zoom>
-           {pendingItems.map((item, index) => (
-            <Grow
-             in={showItems}
-             key={index}
-            >
-             <Box
-              key={index}
-              sx={{
-               color: 'primary.main',
-               bgcolor: 'primary.main',
+               flexDirection: 'column',
+               bgcolor: 'orange',
+               alignItems: 'center',
+               justifyContent: 'center',
+               padding: 2,
                borderRadius: 2,
-               boxShadow: 5,
-               width: '300px',
-
-               m: 1,
-               p: 2,
+               boxShadow: 10,
               }}
              >
-              <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+              <Box
+               sx={{
+                color: 'primary.main',
+                fontSize: '20px',
+               }}
+              >
+               Are you sure you want to delete request for{' '}
+               {selectedItem.newItemName}?
+              </Box>
+              <Box
+               sx={{
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                width: '60%',
+                mt: 2,
+               }}
+              >
                <Button
-                title="Delete Request"
-                onClick={() => handleOpen(item)}
+                onClick={() => handleDelete(selectedItem._id)}
                 sx={{
-                 color: 'primary.main',
-                 bgcolor: 'orange',
-                 mb: 1,
+                 bgcolor: 'primary.main',
+                 color: 'orange',
                  ':hover': {
-                  backgroundColor: 'red',
-                  color: 'primary.main',
+                  color: 'white',
+                  bgcolor: 'red',
                  },
                 }}
                >
-                <DeleteOutlineIcon />
+                Yes
+               </Button>
+               <Button
+                onClick={handleClose}
+                sx={{
+                 bgcolor: 'primary.main',
+                 color: 'orange',
+                 ':hover': {
+                  color: 'orange',
+                  bgcolor: 'primary.main',
+                  opacity: 0.9,
+                 },
+                }}
+               >
+                No
                </Button>
               </Box>
-              <Box>
-               {item.newItemUrl && (
-                <Box
-                 sx={{
-                  height: '200px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: 'rgba(255,255,255,0.8)',
-                  borderRadius: 2,
-                  mb: 1,
-                  p: 2,
-                 }}
-                >
-                 <img
-                  src={item.newItemUrl}
-                  style={{
-                   maxHeight: '100%',
-                   objectFit: 'contain',
-                  }}
-                 />
-                </Box>
-               )}
-              </Box>
-              <Box> Item name: {item.newItemName} </Box>
-              <Box>
-               {item.newItemScientificName && (
-                <Box>
-                 Scientific Name:
-                 <em> {item.newItemScientificName}</em>
-                </Box>
-               )}
-              </Box>
-              <Box>
-               Item Description:{' '}
-               {item.newItemDescription && item.newItemDescription}
-              </Box>
-              <Box>
-               Item Category: {item.newItemCategory && item.newItemCategory}
-              </Box>
-              <Box>
-               {item.newItemType && <Box> Item Type: {item.newItemType} </Box>}
-              </Box>
              </Box>
-            </Grow>
-           ))}{' '}
-          </Box>
-         </Box>
+            </Modal>
+            <Zoom
+             in={openAlert}
+             onClose={handleCloseAlert}
+            >
+             <Alert
+              onClose={handleCloseAlert}
+              severity={!error ? 'success' : 'error'}
+              sx={{
+               backgroundColor: !error ? 'primary.main' : 'red',
+               position: 'absolute',
+               zIndex: 1,
+               height: '40px',
+               left: '35%',
+               top: '9%',
+              }}
+             >
+              {!error ? 'Deleted Successfully' : error}
+             </Alert>
+            </Zoom>
+            <Box
+             className="pendingItems"
+             sx={{
+              display: 'flex',
+              width: '100%',
+              flexDirection: 'column',
+              alignItems: 'center',
+              overflowY: 'auto',
+              height: '530px',
+             }}
+            >
+             {pendingItems.map((item, index) => (
+              <Grow
+               in={showItems}
+               key={index}
+              >
+               <Box
+                key={index}
+                sx={{
+                 color: 'primary.main',
+                 bgcolor: 'primary.main',
+                 borderRadius: 2,
+                 boxShadow: 5,
+                 width: '400px',
+
+                 m: 1,
+                 p: 2,
+                }}
+               >
+                <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+                 <Button
+                  title="Delete Request"
+                  onClick={() => handleOpen(item)}
+                  sx={{
+                   color: 'primary.main',
+                   bgcolor: 'orange',
+                   mb: 1,
+                   ':hover': {
+                    backgroundColor: 'red',
+                    color: 'primary.main',
+                   },
+                  }}
+                 >
+                  <DeleteOutlineIcon />
+                 </Button>
+                </Box>
+                <Box>
+                 {item.newItemUrl && (
+                  <Box
+                   sx={{
+                    height: '200px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: 'rgba(255,255,255,0.8)',
+                    borderRadius: 2,
+                    mb: 1,
+                    p: 2,
+                   }}
+                  >
+                   <img
+                    src={item.newItemUrl}
+                    style={{
+                     maxHeight: '100%',
+                     objectFit: 'contain',
+                    }}
+                   />
+                  </Box>
+                 )}
+                </Box>
+                <Box> Item name: {item.newItemName} </Box>
+                <Box>
+                 {item.newItemScientificName && (
+                  <Box>
+                   Scientific Name:
+                   <em> {item.newItemScientificName}</em>
+                  </Box>
+                 )}
+                </Box>
+                <Box>
+                 Item Description:{' '}
+                 {item.newItemDescription && item.newItemDescription}
+                </Box>
+                <Box>
+                 Item Category: {item.newItemCategory && item.newItemCategory}
+                </Box>
+                <Box>
+                 {item.newItemType && (
+                  <Box> Item Type: {item.newItemType} </Box>
+                 )}
+                </Box>
+               </Box>
+              </Grow>
+             ))}
+            </Box>
+           </Box>
+          </Grid>
+          <Grid
+           item
+           xs={5}
+          >
+           {' '}
+           <Typography
+            variant="h6"
+            sx={{ color: 'orange' }}
+           >
+            Approved Items
+           </Typography>
+           <Box>
+            <ApprovedItems />
+           </Box>
+          </Grid>
+         </Grid>
         )}
        </Box>
       </Grid>

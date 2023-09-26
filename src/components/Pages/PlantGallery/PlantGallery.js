@@ -37,7 +37,8 @@ const PlantGallery = ({ isGuest }) => {
  const [selectedFilters, setSelectedFilters] = useState([]);
  const [selectedCategory, setSelectedCategory] = useState('all');
  const [openMain, setOpenMain] = useState(false);
- const [color, setColor] = useState('#ECAB00');
+ // const [color, setColor] = useState('#ECAB00');
+ let color = '#ECAB00';
  const [error, setError] = useState([]);
  const mainContainerRef = useRef(null);
  const activeItemRef = useRef(null);
@@ -131,7 +132,7 @@ const PlantGallery = ({ isGuest }) => {
 
   if (
    mainContainer.scrollTop + mainContainer.clientHeight >=
-   mainContainer.scrollHeight
+   mainContainer.scrollHeight - 100
   ) {
    const totalPages = parseInt(totalPageRef.current);
    if (parseInt(page) < totalPages && isLoading === false) {

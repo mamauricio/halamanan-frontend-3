@@ -16,7 +16,8 @@ const UserDesigns = ({ handleSelectedDesign, renderAtHome }) => {
  const navigate = useNavigate();
  const { designs, dispatch } = useDesignContext();
  const [error, setError] = useState();
- const [color, setColor] = useState('#ECAB00');
+ // const [color, setColor] = useState('#ECAB00');
+ let color = '#ECAB00';
  const [fetching, setFetching] = useState(true);
  const [aspectRatio, setAspectRatio] = useState();
  const [show, setShow] = useState(false);

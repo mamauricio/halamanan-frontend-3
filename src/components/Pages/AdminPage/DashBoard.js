@@ -14,8 +14,8 @@ const DashBoard = ({ setValue }) => {
  const [adminCount, setAdminCount] = useState(0);
  const [userCount, setUserCount] = useState(0);
  const [fetching, setFetching] = useState(true);
- const [color, setColor] = useState('#ECAB00');
-
+ //  // const [color, setColor] = useState('#ECAB00');
+ let color = '#ECAB00';
  const [error, setError] = useState('');
 
  useEffect(() => {
@@ -326,12 +326,9 @@ const DashBoard = ({ setValue }) => {
                 />
                </Box>
               )}
-              {/* </Grid> */}
-              {/* </Grid> */}
              </Box>
             ))}
           </Box>
-          {/* </Box> */}
          </Box>
         </Box>
        </Grid>
@@ -343,8 +340,8 @@ const DashBoard = ({ setValue }) => {
      >
       <Box
        sx={{
-        bgcolor: 'white',
-        height: '300px',
+        // bgcolor: 'white',
+        height: '200px',
         bgcolor: 'rgba(255,255,255,0.2)',
         borderRadius: 1,
         p: 2,
@@ -368,15 +365,15 @@ const DashBoard = ({ setValue }) => {
          display: 'flex',
          justifyContent: 'center',
          alignItems: 'center',
-         height: '80%',
+         height: '70%',
          m: 2,
-         bgcolor: 'primary.main',
+         //  bgcolor: 'primary.main',
          borderRadius: 1,
         }}
        >
         <Typography
          variant="h5"
-         sx={{ color: 'white' }}
+         sx={{ color: 'primary.main' }}
         >
          No quote requests as of the moment (future feature)
         </Typography>

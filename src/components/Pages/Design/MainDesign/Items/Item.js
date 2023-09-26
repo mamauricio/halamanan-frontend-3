@@ -134,7 +134,7 @@ const Item = (props) => {
     disableDragging={isDraggingDisabledRef.current}
     lockAspectRatio={true}
     onTouchStart={() => {
-     console.log('hello touching item');
+     //  console.log('hello touching item');
     }}
     onMouseEnter={() => {
      enableDrag();
@@ -335,7 +335,6 @@ const Item = (props) => {
        />
       </>
      )}
-     {/* {console.log(`${props.itemName} ${props.selected}`)} */}
      <img
       className="image"
       key={props.itemKey}

@@ -177,7 +177,7 @@ const AdminGallery = () => {
 
   if (
    mainContainer.scrollTop + mainContainer.clientHeight >=
-   mainContainer.scrollHeight
+   mainContainer.scrollHeight - 100
   ) {
    const totalPages = parseInt(totalPageRef.current);
    if (parseInt(page) < totalPages && isLoading === false) {

@@ -86,11 +86,15 @@ const NavBar = ({ handleLogout, isGuest }) => {
        //     className="no-decoration"
        //     to="/login"
        //    >
-       <NavLink to="/login">
+       <NavLink
+        to="/login"
+        style={{ borderTop: 'null' }}
+       >
         <Button
          variant="contained"
          //  onClick={() => handleJoin()}
          sx={{
+          // border: 'white',
           bgcolor: 'orange',
           height: '40px',
           color: 'primary.main',

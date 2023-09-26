@@ -69,7 +69,7 @@ const DesignPage = () => {
 
  const handleEditDesign = (design) => {
   navigate(`/designs/${design._id}`, { state: { design } });
-  console.log(design);
+  // console.log(design);
  };
 
  const handleSelectedDesign = (design) => {

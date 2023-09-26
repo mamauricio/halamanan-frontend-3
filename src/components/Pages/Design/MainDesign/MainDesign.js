@@ -32,8 +32,8 @@ const MainDesign = () => {
  const [designThumbnail, setDesignThumbnail] = useState(null);
  const [selectedItems, setSelectedItems] = useState([]);
  const [fetching, setFetching] = useState(true);
- const [color, setColor] = useState('#ECAB00');
-
+ // const [color, setColor] = useState('#ECAB00');
+ let color = '#ECAB00';
  const [showDesign, setShowDesign] = useState(false);
  const [aspectRatio, setAspectRatio] = useState('');
 
@@ -52,7 +52,7 @@ const MainDesign = () => {
       `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`
      );
      const fetchedItem = response.data;
-     console.log(fetchedItem.items);
+     //  console.log(fetchedItem.items);
      setDesignName(fetchedItem.designName);
      dispatch({ type: 'GET_ITEMS', payload: fetchedItem.items });
 
@@ -116,7 +116,7 @@ const MainDesign = () => {
   mouseOffsetY,
  }) => {
   const droppableArea = document.getElementById('background');
-
+  // console.log(itemKey);
   // const droppableArea = document.getElementById('backgroundImageContainer');
   const droppableAreaRect = droppableArea.getBoundingClientRect();
   if (

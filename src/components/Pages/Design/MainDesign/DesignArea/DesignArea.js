@@ -45,12 +45,12 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
 
  const handleSelect = (index, designAreaItem) => {
   setSelectedItem(index);
-  console.log(designAreaItem);
+  //   console.log(designAreaItem);
 
-  console.log(index);
+  //   console.log(index);
   const updatedItems = reorderItems(items, index);
   dispatch({ type: 'GET_ITEMS', payload: updatedItems });
-  console.log(designAreaItem);
+  //   console.log(designAreaItem);
  };
 
  const checkSelected = (index) => {
@@ -96,7 +96,7 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
      {items.map((designAreaItem, index) => (
       <Box
        onTouchStart={() => {
-        console.log('touching item');
+        // console.log('touching item');
        }}
        key={designAreaItem.itemKey}
        onDrag={() => handleSelect(index, designAreaItem)}
@@ -106,7 +106,7 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
         zIndex: index === selectedItem ? 1 : 'auto',
        }}
       >
-       {console.log('selected Item: ' + selectedItem)}
+       {/* {console.log('selected Item: ' + selectedItem)} */}
        <Item
         handleCloseItem={handleCloseItem}
         index={index}

@@ -7,8 +7,8 @@ const RequestedItems = ({ handleSelectedItem }) => {
  const { newItems, dispatch } = useNewItemsContext();
  const [fetchingItems, setFetchingItems] = useState(true);
  const [showItems, setShowItems] = useState(false);
- const [color, setColor] = useState('#ECAB00');
-
+ // const [color, setColor] = useState('#ECAB00');
+ let color = '#ECAB00';
  useEffect(() => {
   const fetchNewItems = async () => {
    try {

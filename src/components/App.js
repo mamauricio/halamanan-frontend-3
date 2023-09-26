@@ -18,6 +18,7 @@ const App = () => {
   sessionStorage.getItem('authenticated')
  );
  const handleAuthenticate = (id) => {
+  //   console.log(id);
   if (id === 'admin') {
    sessionStorage.setItem('adminAuth', true);
    sessionStorage.setItem('authenticated', true);
@@ -80,7 +81,7 @@ const App = () => {
           left: '50%',
           top: '50%',
           transform: 'translate(-50%, -50%)',
-          overflowY: 'scroll',
+          //   overflowY: 'hidden',
          }}
         >
          <NavBar handleLogout={handleLogout} />
@@ -96,7 +97,7 @@ const App = () => {
           left: '50%',
           top: '50%',
           transform: 'translate(-50%, -50%)',
-          overflowY: 'scroll',
+          overflowY: 'hidden',
          }}
         >
          <NavBar isGuest />
