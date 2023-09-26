@@ -304,14 +304,15 @@ const HowTo = () => {
                <ImageContainer image="/Design/ItemInformation2" />
               </Box>
               <br />
-              4) Items in the design area are resizable and draggable.
+              4) Items in the design area are resizable and draggable. They
+              could also be flipped and rotated.
               <ImageContainer image="/Design/Item" />
               <br />
               <a></a>4a.) Hover onto an item and there would be indicators on
               the top right, bottom right, and bottom left corners <br />
               <a />
               <a />
-              where the item could be resized.
+              where the item could be dragged to be resized.
               <br />
               <a></a>4b.) Click on an item and hold down the mouse pointer to
               drag item across the design. <br />
@@ -320,11 +321,30 @@ const HowTo = () => {
                <a></a>**Dragging an item would bring it on top of other items
               </strong>
               <br />
+              <a></a>4c.)Click the Flip button to flip an item.
+              <ImageContainer image="/Design/ItemFlip" />
+              <br />
+              <a></a>4d.)Click the Rotate button to open the rotate slider.
+              <br />
+              <strong style={{ color: 'orange' }}>
+               <a></a>
+               <a></a>**Drag the slider to the right to rotate item clockwise,
+               and to the left to rotate counter-clockwise.
+              </strong>
+              <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
+               <ImageContainer image="/Design/ItemRotate" />
+               <ImageContainer image="/Design/ItemRotate2" />
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
+               <ImageContainer image="/Design/ItemRotate3" />
+               <ImageContainer image="/Design/ItemRotate4" />
+              </Box>
+              <br />
               5) To delete an item, hover over desired item to be deleted and a
               white delete icon would appear at the top left corner. Hovering
               over the icon would turn it to orange. Clicking the icon would
               remove the item from the design.
-              <ImageContainer image="/Design/Item2" />
+              <ImageContainer image="/Design/ItemRemove" />
              </CustomBody>
             </Box>
 
