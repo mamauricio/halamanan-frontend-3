@@ -237,10 +237,9 @@ const HowTo = () => {
             <Header>Future Developments</Header>
             <CustomBody>
              1) Adding more functionalities to managing items (bring up, bring
-             down, flip, and rotate)
+             down)
              <br />
-             2) Future developments would include sending a request for a Design
-             Quote from the User to the Admin.
+             2) Sending a request for a Design Quote from the User to the Admin.
              <br />
              3) Add account recovery features (password reset, etc.)
             </CustomBody>
