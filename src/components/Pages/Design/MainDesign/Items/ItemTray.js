@@ -25,6 +25,7 @@ import axios from 'axios';
 
 const ItemTray = ({ handleAddItem }) => {
  const xl = useMediaQuery((theme) => theme.breakpoints.down('xl'));
+ const lg = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
  const [mouseOffsetX, setMouseOffsetX] = useState(0);
  const [mouseOffsetY, setMouseOffsetY] = useState(0);
@@ -50,8 +51,8 @@ const ItemTray = ({ handleAddItem }) => {
   height: null,
  });
 
- const [color, setColor] = useState('#ECAB00');
-
+ // const [color, setColor] = useState('#ECAB00');
+ let color = '#ECAB00';
  const openAlert = () => {
   setShowAlert(true);
   const timer = setTimeout(() => {
@@ -88,7 +89,7 @@ const ItemTray = ({ handleAddItem }) => {
   if (selectedCategory === 'favorites') {
    const token = sessionStorage.getItem('token');
    axios
-    .get(`https://halamanan-197e9734b120.herokuapp.com/favorites`, {
+    .get(`http://localhost:3001/favorites`, {
      params: { token },
     })
     .then((response) => {
@@ -102,7 +103,7 @@ const ItemTray = ({ handleAddItem }) => {
   } else {
    axios
     .get(
-     `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10&category=${selectedCategory}&type=${selectedFilters}`
+     `http://localhost:3001/gallery?page=${page}&limit=10&category=${selectedCategory}&type=${selectedFilters}`
     )
     .then((response) => {
      const fetchedItems = response.data.items;
@@ -143,7 +144,7 @@ const ItemTray = ({ handleAddItem }) => {
 
   if (
    mainContainer.scrollTop + mainContainer.clientHeight >=
-   mainContainer.scrollHeight
+   mainContainer.scrollHeight - 100
   ) {
    const totalPages = parseInt(totalPageRef.current);
    if (parseInt(page) < totalPages && isLoading === false) {
@@ -165,14 +166,11 @@ const ItemTray = ({ handleAddItem }) => {
  const fetchUserFavoritesId = async () => {
   try {
    const token = sessionStorage.getItem('token');
-   const response = await axios(
-    'https://halamanan-197e9734b120.herokuapp.com/favorites-id',
-    {
-     headers: {
-      token: token,
-     },
-    }
-   ).then((response) => {
+   const response = await axios('http://localhost:3001/favorites-id', {
+    headers: {
+     token: token,
+    },
+   }).then((response) => {
     setFavoritesId(response.data);
    });
   } catch (error) {
@@ -198,17 +196,14 @@ const ItemTray = ({ handleAddItem }) => {
   event.stopPropagation();
 
   try {
-   const response = await fetch(
-    'https://halamanan-197e9734b120.herokuapp.com/favorites',
-    {
-     method: 'POST',
-     headers: {
-      'Content-Type': 'application/json',
-      token: sessionStorage.getItem('token'),
-     },
-     body: JSON.stringify({ itemId }),
-    }
-   );
+   const response = await fetch('http://localhost:3001/favorites', {
+    method: 'POST',
+    headers: {
+     'Content-Type': 'application/json',
+     token: sessionStorage.getItem('token'),
+    },
+    body: JSON.stringify({ itemId }),
+   });
 
    if (response.ok) {
     const updated = [...favoritesId, itemId];
@@ -224,17 +219,14 @@ const ItemTray = ({ handleAddItem }) => {
  const removeFromFavorites = async (event, itemId) => {
   event.stopPropagation();
   try {
-   const response = await fetch(
-    'https://halamanan-197e9734b120.herokuapp.com/favorites',
-    {
-     method: 'DELETE',
-     headers: {
-      'Content-Type': 'application/json',
-      token: sessionStorage.getItem('token'),
-     },
-     body: JSON.stringify({ itemId }),
-    }
-   );
+   const response = await fetch('http://localhost:3001/favorites', {
+    method: 'DELETE',
+    headers: {
+     'Content-Type': 'application/json',
+     token: sessionStorage.getItem('token'),
+    },
+    body: JSON.stringify({ itemId }),
+   });
 
    if (response.ok) {
     const updated = favoritesId.filter((favorite) => favorite !== itemId);
@@ -254,7 +246,7 @@ const ItemTray = ({ handleAddItem }) => {
 
   handleAddItem({
    designAreaItem: item,
-   itemKey: item._id + items.length + index,
+   itemKey: item._id + items.length.toString() + index.toString(),
    height: newHeight,
    mouseOffsetX: mouseOffsetX,
    mouseOffsetY: mouseOffsetY,
@@ -295,11 +287,11 @@ const ItemTray = ({ handleAddItem }) => {
    </Box>
    <ImageList
     ref={mainContainerRef}
-    cols={xl ? 6 : 2}
+    cols={xl || lg ? 4 : 2}
     rowHeight={260}
     gap={11}
     sx={{
-     width: xl ? '90vw' : null,
+     width: xl || lg ? '90vw' : null,
      height: '80vh',
      pr: 2,
      bgcolor: 'rgba(255,255,255,0.2)',
@@ -476,6 +468,7 @@ const ItemTray = ({ handleAddItem }) => {
            </span>
            {item.itemInformation}
           </Box>
+          <Box>Item Type: {item.type}</Box>
           <Box>
            <span style={{ color: 'orange' }}>
             <strong>Hardiness Zone: </strong>
