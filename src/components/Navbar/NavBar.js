@@ -29,19 +29,6 @@ const NavBar = ({ handleLogout, isGuest }) => {
         Login{' '}
        </NavLink>
       )}
-      {/* //   : 
-      
-    //   (
-
-
-    //    //  <LoginPage />
-    //    <NavLink
-    //     to="/home"
-    //     underline="none"
-    //    >
-    //     Home
-    //    </NavLink>
-    //   )} */}
 
       {!isGuest && (
        <NavLink
@@ -82,23 +69,18 @@ const NavBar = ({ handleLogout, isGuest }) => {
       )}
 
       {isGuest && (
-       //    <NavLink
-       //     className="no-decoration"
-       //     to="/login"
-       //    >
        <NavLink
         to="/login"
-        style={{ borderTop: 'null' }}
+        style={{ textDecoration: 'none', border: 'none' }}
        >
         <Button
          variant="contained"
-         //  onClick={() => handleJoin()}
+         title="Sign Up"
          sx={{
-          // border: 'white',
           bgcolor: 'orange',
           height: '40px',
           color: 'primary.main',
-          ':hover': { bgcolor: 'white', color: 'primary.main' },
+          ':hover': { bgcolor: 'rgba(255,165,0, 0.85)', color: 'primary.main' },
          }}
         >
          Sign Up
