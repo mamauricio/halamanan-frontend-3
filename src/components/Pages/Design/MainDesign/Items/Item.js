@@ -133,6 +133,9 @@ const Item = (props) => {
     enableResizing={{ bottomRight: true, topRight: true, bottomLeft: true }}
     disableDragging={isDraggingDisabledRef.current}
     lockAspectRatio={true}
+    onTouchStart={() => {
+     console.log('hello touching item');
+    }}
     onMouseEnter={() => {
      enableDrag();
     }}
@@ -158,7 +161,7 @@ const Item = (props) => {
        <Box
         sx={{
          position: 'absolute',
-         left: -70,
+         left: -90,
          top: -40,
          display: 'flex',
          flexDirection: 'row',
@@ -222,7 +225,7 @@ const Item = (props) => {
            sx={{
             //    ml: 2,
             position: 'absolute',
-            ml: 9,
+            ml: 11.5,
             width: `${scrollPosition + 17}px`,
             // width: `${rotate / scrollRatio + 15}px`,
             bgcolor: 'rgba(255,165,0, 0.8)',
@@ -238,7 +241,7 @@ const Item = (props) => {
            className="scrollbar"
            sx={{
             //    ml: 2,
-            ml: 1,
+            ml: 2,
             mb: 4,
             // pr: 2,
             width: `192px`,
@@ -256,6 +259,7 @@ const Item = (props) => {
             dragAxis="x"
             maxWidth={100}
             bounds="parent"
+            // bounds={{ top: 0, bottom: 0, left: 200, right: 180 }}
             resizable="false"
             disableDragging={!isDraggingDisabledRef.current}
             onMouseEnter={(event) => disableDrag(event)}
