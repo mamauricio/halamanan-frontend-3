@@ -41,18 +41,16 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
 
  useEffect(() => {
   const isSelected = checkSelected();
-  {
-   console.log('checking if item is selected: ' + isSelected);
-  }
  }, [selectedItem]);
 
- const handleSelect = (index) => {
+ const handleSelect = (index, designAreaItem) => {
   setSelectedItem(index);
-  console.log('handling item select: ' + selectedItem);
+  console.log(designAreaItem);
 
+  console.log(index);
   const updatedItems = reorderItems(items, index);
   dispatch({ type: 'GET_ITEMS', payload: updatedItems });
-  //   }
+  console.log(designAreaItem);
  };
 
  const checkSelected = (index) => {
@@ -61,7 +59,7 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
   } else return false;
  };
 
- const handleCloseItem = (index) => {
+ const handleCloseItem = () => {
   setSelectedItem('');
  };
 
@@ -81,8 +79,6 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
   };
  }, []);
 
- const handleClick = (event) => {};
-
  return (
   <>
    <Box
@@ -91,34 +87,30 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
     sx={mainContainerStyle}
    >
     <Box
-     onClick={(event) => handleClick(event)}
      id="background"
      droppable="true"
      sx={backgroundImageStyle}
      onDrop={handleDrop}
      onDragOver={(event) => event.preventDefault()}
     >
-     {console.log(selectedItem)}
      {items.map((designAreaItem, index) => (
       <Box
+       onTouchStart={() => {
+        console.log('touching item');
+       }}
        key={designAreaItem.itemKey}
-       onDrag={() => handleSelect(index)}
+       onDrag={() => handleSelect(index, designAreaItem)}
        sx={{
         width: '100px',
         backgroundColor: 'orange',
         zIndex: index === selectedItem ? 1 : 'auto',
-        // zIndex: index === selectedItemRef.current ? 1 : 'auto',
        }}
       >
-       {console.log('index: ' + index)}
        {console.log('selected Item: ' + selectedItem)}
        <Item
-        // handleSelect = {handleSelect}
-        // checkSelected={checkSelected}
         handleCloseItem={handleCloseItem}
         index={index}
         selected={selectedItem === index}
-        // selected={selectedItemRef.current === index}
         itemKey={designAreaItem.itemKey}
         itemName={designAreaItem.itemName}
         imageUrl={designAreaItem.imageUrl}
