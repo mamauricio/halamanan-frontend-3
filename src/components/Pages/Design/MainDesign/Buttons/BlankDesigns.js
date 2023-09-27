@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
+import {
+ Box,
+ ImageList,
+ ImageListItem,
+ ImageListItemBar,
+ Typography,
+} from '@mui/material';
 import axios from 'axios';
 const blankDesigns = [
  {
@@ -15,6 +21,10 @@ const blankDesigns = [
   source: 'Provided by client',
  },
  {
+  src: '/Sample_blanks/blank2.jpg',
+  source: 'https://www.facebook.com/Casteldinelandscapes/',
+ },
+ {
   src: '/Sample_blanks/blank3.jpg',
   source: 'https://www.facebook.com/Casteldinelandscapes/',
  },
@@ -22,18 +32,14 @@ const blankDesigns = [
   src: '/Sample_blanks/blank4.jpg',
   source: 'https://www.facebook.com/Casteldinelandscapes/',
  },
- {
-  src: '/Sample_blanks/blank2.jpg',
-  source: 'Provided by client',
- },
 ];
 const ExistingDesigns = ({ handleTemplate }) => {
  return (
   <Box
    sx={{
     height: '450px',
-    width: '600px',
-
+    // width: '600px',
+    // bgcolor: 'green',
     borderTop: 'solid 1px',
     borderBottom: 'solid 1px',
     borderColor: 'primary.main',
@@ -47,7 +53,7 @@ const ExistingDesigns = ({ handleTemplate }) => {
      gap={20}
      height={350}
      cols={1}
-     // sx={{ m: 1 }}
+     sx={{ m: 1 }}
     >
      {blankDesigns.map((item, index) => (
       <ImageListItem
@@ -57,7 +63,7 @@ const ExistingDesigns = ({ handleTemplate }) => {
         bgcolor: 'rgba(255,255,255,0.3)',
         p: 2,
         borderRadius: 1,
-        mr: 1,
+        // mr: 1,
        }}
       >
        <img
@@ -66,15 +72,22 @@ const ExistingDesigns = ({ handleTemplate }) => {
         onClick={() => handleTemplate(item.src)}
         style={{
          height: '350px',
-         width: 'auto',
+         //  width: 'auto',
          objectFit: 'contain',
         }}
        />
-       <ImageListItemBar
+       {/* <ImageListItemBar
         position="below"
-        sx={{}}
         title={`image source: ` + item.source}
+        // style={{ color: 'black' }}
        />
+        */}
+       <Typography
+        variant="caption"
+        sx={{ color: 'primary.main' }}
+       >
+        Image Source: {item.source}
+       </Typography>
       </ImageListItem>
      ))}
     </ImageList>

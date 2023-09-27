@@ -24,7 +24,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  useEffect(() => {
   setTimeout(() => {
    setOpen(false);
-  }, 400);
+  }, 1000);
  }, [open]);
 
  const handleClose = () => {

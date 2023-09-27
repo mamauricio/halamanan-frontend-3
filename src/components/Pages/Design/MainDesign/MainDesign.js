@@ -52,7 +52,6 @@ const MainDesign = () => {
       `https://halamanan-197e9734b120.herokuapp.com/designs/${id}`
      );
      const fetchedItem = response.data;
-     //  console.log(fetchedItem.items);
      setDesignName(fetchedItem.designName);
      dispatch({ type: 'GET_ITEMS', payload: fetchedItem.items });
 
@@ -116,8 +115,6 @@ const MainDesign = () => {
   mouseOffsetY,
  }) => {
   const droppableArea = document.getElementById('background');
-  // console.log(itemKey);
-  // const droppableArea = document.getElementById('backgroundImageContainer');
   const droppableAreaRect = droppableArea.getBoundingClientRect();
   if (
    coordinates.x - mouseOffsetX > 0 &&
@@ -128,9 +125,7 @@ const MainDesign = () => {
     droppableAreaRect.bottom - droppableAreaRect.top
   ) {
    if (designAreaItem) {
-    // console.log(designAreaItem);
     const newItem = {
-     selected: true,
      itemKey: itemKey,
      itemName: designAreaItem.itemName,
      width: 200,

@@ -89,7 +89,7 @@ const ItemTray = ({ handleAddItem }) => {
   if (selectedCategory === 'favorites') {
    const token = sessionStorage.getItem('token');
    axios
-    .get(`http://localhost:3001/favorites`, {
+    .get(`https://halamanan-197e9734b120.herokuapp.com/favorites`, {
      params: { token },
     })
     .then((response) => {
@@ -103,7 +103,7 @@ const ItemTray = ({ handleAddItem }) => {
   } else {
    axios
     .get(
-     `http://localhost:3001/gallery?page=${page}&limit=10&category=${selectedCategory}&type=${selectedFilters}`
+     `https://halamanan-197e9734b120.herokuapp.com/gallery?page=${page}&limit=10&category=${selectedCategory}&type=${selectedFilters}`
     )
     .then((response) => {
      const fetchedItems = response.data.items;
@@ -166,11 +166,14 @@ const ItemTray = ({ handleAddItem }) => {
  const fetchUserFavoritesId = async () => {
   try {
    const token = sessionStorage.getItem('token');
-   const response = await axios('http://localhost:3001/favorites-id', {
-    headers: {
-     token: token,
-    },
-   }).then((response) => {
+   const response = await axios(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites-id',
+    {
+     headers: {
+      token: token,
+     },
+    }
+   ).then((response) => {
     setFavoritesId(response.data);
    });
   } catch (error) {
@@ -196,14 +199,17 @@ const ItemTray = ({ handleAddItem }) => {
   event.stopPropagation();
 
   try {
-   const response = await fetch('http://localhost:3001/favorites', {
-    method: 'POST',
-    headers: {
-     'Content-Type': 'application/json',
-     token: sessionStorage.getItem('token'),
-    },
-    body: JSON.stringify({ itemId }),
-   });
+   const response = await fetch(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites',
+    {
+     method: 'POST',
+     headers: {
+      'Content-Type': 'application/json',
+      token: sessionStorage.getItem('token'),
+     },
+     body: JSON.stringify({ itemId }),
+    }
+   );
 
    if (response.ok) {
     const updated = [...favoritesId, itemId];
@@ -219,14 +225,17 @@ const ItemTray = ({ handleAddItem }) => {
  const removeFromFavorites = async (event, itemId) => {
   event.stopPropagation();
   try {
-   const response = await fetch('http://localhost:3001/favorites', {
-    method: 'DELETE',
-    headers: {
-     'Content-Type': 'application/json',
-     token: sessionStorage.getItem('token'),
-    },
-    body: JSON.stringify({ itemId }),
-   });
+   const response = await fetch(
+    'https://halamanan-197e9734b120.herokuapp.com/favorites',
+    {
+     method: 'DELETE',
+     headers: {
+      'Content-Type': 'application/json',
+      token: sessionStorage.getItem('token'),
+     },
+     body: JSON.stringify({ itemId }),
+    }
+   );
 
    if (response.ok) {
     const updated = favoritesId.filter((favorite) => favorite !== itemId);

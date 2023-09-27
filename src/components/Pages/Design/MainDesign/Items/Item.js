@@ -75,6 +75,8 @@ const Item = (props) => {
  }, [flip, props.itemKey, dispatch]);
 
  const changePosition = (e, item) => {
+  // console.log('dragging');
+  // console.log(item);
   setX(item.x);
   setY(item.y);
  };
@@ -83,13 +85,15 @@ const Item = (props) => {
   setWidth(ref.style.width);
   setHeight(ref.style.height);
   setX(position.x);
+  setY(position.y);
  };
 
  const handleClick = (itemKey) => {
   setIsHovered(true);
  };
 
- const removeItem = (itemKey) => {
+ const removeItem = (event, itemKey) => {
+  event.stopPropagation();
   dispatch({
    type: 'REMOVE_ITEM',
    payload: { itemKey },
@@ -130,7 +134,12 @@ const Item = (props) => {
     className="item"
     size={{ height: height, width: width }}
     position={{ x, y }}
-    enableResizing={{ bottomRight: true, topRight: true, bottomLeft: true }}
+    enableResizing={{
+     bottomRight: true,
+     topRight: true,
+     bottomLeft: true,
+     topLeft: true,
+    }}
     disableDragging={isDraggingDisabledRef.current}
     lockAspectRatio={true}
     onTouchStart={() => {
@@ -139,9 +148,9 @@ const Item = (props) => {
     onMouseEnter={() => {
      enableDrag();
     }}
-    onDragStop={changePosition}
+    onDrag={changePosition}
     onResize={handleResize}
-    resizeHandleClasses={['bottomRight', 'topRight', 'bottomLeft']}
+    resizeHandleClasses={['bottomRight', 'topRight', 'bottomLeft', 'topLeft']}
     onClick={() => {
      handleClick();
     }}
@@ -178,8 +187,11 @@ const Item = (props) => {
         >
          <Button
           title="Close Options"
-          onClick={() => {
-           handleCloseItem();
+          onTouchEnd={(event) => {
+           handleCloseItem(event);
+          }}
+          onClick={(event) => {
+           handleCloseItem(event);
           }}
           sx={{
            bgcolor: 'rgba(255,255,255,1)',
@@ -192,7 +204,10 @@ const Item = (props) => {
          </Button>
          <Button
           title="Remove Item"
-          onClick={() => removeItem(props.itemKey)}
+          onTouchEnd={(event) => {
+           removeItem(event, props.itemKey);
+          }}
+          onClick={(event) => removeItem(event, props.itemKey)}
           sx={{
            bgcolor: 'rgba(255,255,255,1)',
            mb: 1,
@@ -204,6 +219,9 @@ const Item = (props) => {
          </Button>
          <Button
           title="Flip Item"
+          onTouchEnd={() => {
+           handleFlip();
+          }}
           onClick={() => handleFlip()}
           sx={{ bgcolor: 'white', mb: 1, ':hover': { bgcolor: 'orange' } }}
          >
@@ -211,6 +229,9 @@ const Item = (props) => {
          </Button>
          <Button
           title="Open rotate slider"
+          onTouchEnd={() => {
+           setIsRotating(!isRotating);
+          }}
           onClick={() => setIsRotating(!isRotating)}
           sx={{ bgcolor: 'white', ':hover': { bgcolor: 'orange' } }}
          >
@@ -219,15 +240,12 @@ const Item = (props) => {
          </Button>
         </Box>
         {isRotating && (
-         //  <Grow in={isRotating}>
          <>
           <Box
            sx={{
-            //    ml: 2,
             position: 'absolute',
             ml: 11.5,
             width: `${scrollPosition + 17}px`,
-            // width: `${rotate / scrollRatio + 15}px`,
             bgcolor: 'rgba(255,165,0, 0.8)',
             height: '10px',
             display: 'flex',
@@ -240,10 +258,8 @@ const Item = (props) => {
           <Box
            className="scrollbar"
            sx={{
-            //    ml: 2,
             ml: 2,
             mb: 4,
-            // pr: 2,
             width: `192px`,
             bgcolor: 'rgba(37,57,38, 0.2)',
             height: '10px',
@@ -259,12 +275,13 @@ const Item = (props) => {
             dragAxis="x"
             maxWidth={100}
             bounds="parent"
-            // bounds={{ top: 0, bottom: 0, left: 200, right: 180 }}
             resizable="false"
             disableDragging={!isDraggingDisabledRef.current}
             onMouseEnter={(event) => disableDrag(event)}
+            onTouchStart={(event) => disableDrag(event)}
             onDrag={(event, item) => handleRotate(event, item)}
             onDragStop={() => enableDrag()}
+            onTouchEnd={() => enableDrag()}
             onMouseLeave={() => enableDrag()}
            >
             <Box
@@ -300,6 +317,22 @@ const Item = (props) => {
          color: 'primary.main',
          zIndex: 0,
          transform: 'rotate(45deg)',
+         fontSize: '50px',
+         ':hover': {
+          cursorSize: '300px',
+         },
+        }}
+       />
+
+       <KeyboardArrowRightIcon
+        className="arrowIcon"
+        sx={{
+         position: 'absolute',
+         left: -18,
+         top: -18,
+         color: 'primary.main',
+         zIndex: 0,
+         transform: 'rotate(225deg)',
          fontSize: '50px',
          ':hover': {
           cursorSize: '300px',

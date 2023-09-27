@@ -38,9 +38,9 @@ const HowTo = () => {
 
  const CustomBody = (props) => {
   return (
-   <Typography sx={{ color: 'rgba(255,255,255,0.8)', fontSize: '23px', mt: 1 }}>
+   <Box sx={{ color: 'rgba(255,255,255,0.8)', fontSize: '23px', mt: 1 }}>
     {props.children}
-   </Typography>
+   </Box>
   );
  };
 

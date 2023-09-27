@@ -13,6 +13,12 @@ const ApprovedItems = () => {
 
  return (
   <Box>
+   <Typography
+    variant="h6"
+    sx={{ color: 'orange' }}
+   >
+    Approved Items
+   </Typography>
    <Typography>No Approved Items Yet (Under Construction)</Typography>
   </Box>
  );

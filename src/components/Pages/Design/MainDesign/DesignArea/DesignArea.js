@@ -6,8 +6,9 @@ import { useItemsContext } from '../../../../hooks/useItemsContext';
 
 const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
  const [selectedItem, setSelectedItem] = useState(null);
- const selectedItemRef = useRef('');
  const { items, dispatch } = useItemsContext();
+ const [itemCount, setItemCount] = useState(items.length);
+ //  const itemCountRef = useRef(items.length);
  const [backgroundSize, setBackgroundSize] = useState({ width: 0, height: 0 });
 
  const mainContainerStyle = {
@@ -24,11 +25,11 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
   height: '100%',
   backgroundImage: `url(${backgroundImage})`,
   backgroundPosition: 'center',
-  backgroundSize: 'contain',
+  backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
-
   overflow: 'hidden',
   maxHeight: '80vh',
+  bgcolor: 'white',
  };
 
  const reorderItems = (array, selectedIndex) => {
@@ -40,26 +41,20 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
  };
 
  useEffect(() => {
-  const isSelected = checkSelected();
- }, [selectedItem]);
+  setItemCount(items.length);
+  setSelectedItem(itemCount - 1);
+ }, [items]);
 
- const handleSelect = (index, designAreaItem) => {
+ const handleSelect = (index) => {
+  //   event.stoppropagation();
   setSelectedItem(index);
-  //   console.log(designAreaItem);
 
-  //   console.log(index);
   const updatedItems = reorderItems(items, index);
   dispatch({ type: 'GET_ITEMS', payload: updatedItems });
-  //   console.log(designAreaItem);
  };
 
- const checkSelected = (index) => {
-  if (selectedItem === index) {
-   return true;
-  } else return false;
- };
-
- const handleCloseItem = () => {
+ const handleCloseItem = (event) => {
+  event.stopPropagation();
   setSelectedItem('');
  };
 
@@ -96,10 +91,11 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
      {items.map((designAreaItem, index) => (
       <Box
        onTouchStart={() => {
-        // console.log('touching item');
+        handleSelect(index);
        }}
        key={designAreaItem.itemKey}
-       onDrag={() => handleSelect(index, designAreaItem)}
+       onDrag={() => handleSelect(index)}
+       onClick={() => handleSelect(index)}
        sx={{
         width: '100px',
         backgroundColor: 'orange',
@@ -110,6 +106,7 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
        <Item
         handleCloseItem={handleCloseItem}
         index={index}
+        // selected={selectedItem === index}
         selected={selectedItem === index}
         itemKey={designAreaItem.itemKey}
         itemName={designAreaItem.itemName}
