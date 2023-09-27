@@ -97,7 +97,7 @@ const LoginPage = ({ handleAuthenticate }) => {
     password: password,
    },
    withCredentials: true,
-   url: 'https://halamanan.netlify.app/signup',
+   url: 'https://sprightly-douhua-6bb24c.netlify.app/signup',
   })
    .then((response) => {
     setAlertMessage('Signed up succesfully. Loggin in.');
@@ -132,7 +132,7 @@ const LoginPage = ({ handleAuthenticate }) => {
    },
    withCredentials: true,
    credentials: 'include',
-   url: 'https://halamanan.netlify.app/login',
+   url: 'https://sprightly-douhua-6bb24c.netlify.app/login',
   })
    .then((response) => {
     setAlertMessage('Authenticating');

@@ -22,7 +22,8 @@ const App = () => {
   if (id === 'admin') {
    sessionStorage.setItem('adminAuth', true);
    sessionStorage.setItem('authenticated', true);
-   window.location.href = 'https://halamanan.netlify.app/admin/dashboard';
+   window.location.href =
+    'https://sprightly-douhua-6bb24c.netlify.app/admin/dashboard';
    return;
   }
 

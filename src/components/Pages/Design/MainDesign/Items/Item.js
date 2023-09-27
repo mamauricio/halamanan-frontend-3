@@ -244,7 +244,9 @@ const Item = (props) => {
           <Box
            sx={{
             position: 'absolute',
-            ml: 11.5,
+            // ml: 11.5,
+            ml: 10,
+
             width: `${scrollPosition + 17}px`,
             bgcolor: 'rgba(255,165,0, 0.8)',
             height: '10px',
