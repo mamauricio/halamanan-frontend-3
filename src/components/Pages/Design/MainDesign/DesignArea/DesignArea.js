@@ -13,7 +13,6 @@ const DesignArea = ({
  const [selectedItem, setSelectedItem] = useState(null);
  const { items, dispatch } = useItemsContext();
  const [itemCount, setItemCount] = useState(items.length);
- //  const itemCountRef = useRef(items.length);
  const [backgroundSize, setBackgroundSize] = useState({ width: 0, height: 0 });
 
  const mainContainerStyle = {
@@ -112,11 +111,9 @@ const DesignArea = ({
         zIndex: index === selectedItem ? 1 : 'auto',
        }}
       >
-       {/* {console.log('selected Item: ' + selectedItem)} */}
        <Item
         handleCloseItem={handleCloseItem}
         index={index}
-        // selected={selectedItem === index}
         selected={selectedItem === index}
         itemKey={designAreaItem.itemKey}
         itemName={designAreaItem.itemName}

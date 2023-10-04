@@ -13,7 +13,6 @@ const ProfileSideBar = ({ handleChange, value }) => {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'start',
-    // bgcolor: 'white',
    }}
   >
    <Box

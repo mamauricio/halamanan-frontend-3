@@ -8,10 +8,8 @@ import Grow from '@mui/material/Grow';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 import RemoveIcon from '@mui/icons-material/Remove';
 import FlipIcon from '@mui/icons-material/Flip';
-// import CircleIcon from '@mui/icons-material/Circle';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-// const Item = (props) => {
 const Item = (props) => {
  const indexRef = useRef(props.index);
  const [width, setWidth] = useState(props.width);
@@ -75,8 +73,6 @@ const Item = (props) => {
  }, [flip, props.itemKey, dispatch]);
 
  const changePosition = (e, item) => {
-  // console.log('dragging');
-  // console.log(item);
   setX(item.x);
   setY(item.y);
  };
@@ -102,7 +98,6 @@ const Item = (props) => {
 
  const handleRotate = (event, item) => {
   event.stopPropagation();
-  //   console.log(item.x);
   isDraggingDisabledRef.current = true;
   const ratio = 180 / (192 + 15);
   const offset = item.x - 192 / 2 + 15;
@@ -124,7 +119,6 @@ const Item = (props) => {
  };
 
  const enableDrag = () => {
-  //   setIsHovered(true);
   isDraggingDisabledRef.current = false;
  };
 
@@ -142,9 +136,7 @@ const Item = (props) => {
     }}
     disableDragging={isDraggingDisabledRef.current}
     lockAspectRatio={true}
-    onTouchStart={() => {
-     //  console.log('hello touching item');
-    }}
+    onTouchStart={() => {}}
     onMouseEnter={() => {
      enableDrag();
     }}
@@ -181,7 +173,6 @@ const Item = (props) => {
           bgcolor: 'white',
           display: 'flex',
           flexDirection: 'column',
-          //   ':hover': { bgcolor: 'orange' },
           bgcolor: 'null',
          }}
         >
@@ -244,7 +235,6 @@ const Item = (props) => {
           <Box
            sx={{
             position: 'absolute',
-            // ml: 11.5,
             ml: 10,
 
             width: `${scrollPosition + 17}px`,
@@ -293,20 +283,16 @@ const Item = (props) => {
               top: -4,
               height: '15px',
               width: '15px',
-              //   bgcolor: 'rgba(255,165,0, 0.8)',
               bgcolor: 'rgba(37,57,38, 0.8)',
 
-              //   bgcolor: 'primary.main',
               border: 'solid white 2px',
               borderRadius: '20px',
               ':hover': { cursor: 'grab' },
              }}
             />
            </Rnd>
-           {/* </Box> */}
           </Box>
          </>
-         //  </Grow>
         )}
        </Box>
 
@@ -361,7 +347,6 @@ const Item = (props) => {
          position: 'absolute',
          bottom: -18,
          left: -18,
-         //  p: -3,
          color: 'primary.main',
          zIndex: 0,
          transform: 'rotate(135deg)',

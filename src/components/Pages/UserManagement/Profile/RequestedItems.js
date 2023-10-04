@@ -9,7 +9,6 @@ const RequestedItems = () => {
    container
    sx={{
     ml: 4,
-    // bgcolor: 'white',
    }}
   >
    <Grid

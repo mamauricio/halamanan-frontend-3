@@ -117,7 +117,6 @@ const Filters = ({ onFilterChange, isGuest }) => {
      'aria-labelledby': 'basic-button',
     }}
    >
-    {/* {console.log(isAuthenticated)} */}
     <MenuItem>
      <Box sx={{ display: 'flex', flexDirection: 'column', width: '450px' }}>
       <FormControl sx={{ width: '100%' }}>
@@ -126,7 +125,6 @@ const Filters = ({ onFilterChange, isGuest }) => {
         labelId="category-label"
         id="category-selector"
         value={selectedCategory}
-        // defaultValue={'all'}
         label={selectedCategory}
         onChange={handleCategoryChange}
        >
@@ -166,13 +164,10 @@ const Filters = ({ onFilterChange, isGuest }) => {
        display: 'flex',
        flexDirection: 'column',
        maxWidth: '480px',
-       //  bgcolor: 'orange',
-       //  color: 'pink',
       }}
      >
       {selectedCategory !== 'all' ? (
        <Box sx={{ maxWidth: ' inherit' }}>
-        {/* {console.log(selectedFilters)} */}
         {selectedFilters.length >= 1 && (
          <Box
           sx={{
@@ -197,12 +192,8 @@ const Filters = ({ onFilterChange, isGuest }) => {
              color="primary"
              variant="filed"
              sx={{
-              // backgroundColor: 'white',
-              // width: 'fullWidth',
-              // width: '100%',
               m: 1,
               width: '30%',
-              //  marginLeft: 'auto',
              }}
             />
            ))}
@@ -224,7 +215,6 @@ const Filters = ({ onFilterChange, isGuest }) => {
            }}
            variant="outlined"
            sx={{
-            // display: 'flex',
             width: '30%',
             m: 1,
             backgroundColor: 'white',

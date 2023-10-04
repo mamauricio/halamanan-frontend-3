@@ -5,7 +5,6 @@ import {
  Navigate,
 } from 'react-router-dom';
 import React from 'react';
-// import HomePage from '../Pages/Home/Home';
 import GalleryPage from '../Pages/PlantGallery/PlantGallery';
 import HowTo from '../Pages/About/HowTo';
 import MainDesignPage from '../Pages/Design/MainDesign/MainDesign';
@@ -23,14 +22,7 @@ const UserRoutes = () => {
     path="/"
     element={<Navigate to="/designs" />}
    ></Route>
-   {/* <Route
-    path={`/home`}
-    element={
-     <DesignsContextProvider>
-      <HomePage />
-     </DesignsContextProvider>
-    }
-   /> */}
+
    {/* Item Gallery */}
    <Route
     path="/gallery"

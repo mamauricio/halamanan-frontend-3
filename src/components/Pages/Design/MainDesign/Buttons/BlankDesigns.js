@@ -38,12 +38,9 @@ const ExistingDesigns = ({ handleTemplate }) => {
   <Box
    sx={{
     height: '450px',
-    // width: '600px',
-    // bgcolor: 'green',
     borderTop: 'solid 1px',
     borderBottom: 'solid 1px',
     borderColor: 'primary.main',
-    // borderRadius: 1,
     p: 1,
     m: 1,
    }}
@@ -63,7 +60,6 @@ const ExistingDesigns = ({ handleTemplate }) => {
         bgcolor: 'rgba(255,255,255,0.3)',
         p: 2,
         borderRadius: 1,
-        // mr: 1,
        }}
       >
        <img
@@ -72,16 +68,10 @@ const ExistingDesigns = ({ handleTemplate }) => {
         onClick={() => handleTemplate(item.src)}
         style={{
          height: '350px',
-         //  width: 'auto',
          objectFit: 'contain',
         }}
        />
-       {/* <ImageListItemBar
-        position="below"
-        title={`image source: ` + item.source}
-        // style={{ color: 'black' }}
-       />
-        */}
+
        <Typography
         variant="caption"
         sx={{ color: 'primary.main' }}

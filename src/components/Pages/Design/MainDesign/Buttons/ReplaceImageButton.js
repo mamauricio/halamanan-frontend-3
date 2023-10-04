@@ -3,10 +3,8 @@ import { Button, Box, Modal, Grow, Fade } from '@mui/material';
 import FindReplaceIcon from '@mui/icons-material/FindReplace';
 import ExistingDesigns from './BlankDesigns';
 
-// import './ReplaceImageButton.css';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 const ReplaceImageButton = ({ handleReplaceBackground }) => {
- //  const navigate = useNavigate();
  const { items, dispatch } = useItemsContext();
  const [open, setOpen] = useState(false);
  const [openSecond, setOpenSecond] = useState(false);
@@ -122,7 +120,6 @@ const ReplaceImageButton = ({ handleReplaceBackground }) => {
          transition: 'background-color ease-in-out 0.2s',
          ':hover': {
           bgcolor: 'rgba(0,0,0,0.6)',
-          //   backgroundColor: 'rgba(255,255,255,0.7)',
          },
         }}
        >

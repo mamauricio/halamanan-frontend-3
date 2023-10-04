@@ -124,11 +124,8 @@ const ItemManagement = () => {
         overflowY: 'auto',
         height: '82vh',
         borderRight: 'solid 1px black',
-        // borderColor: 'primary.main',
         pr: 2,
-        // borderRadius: 1,
         borderColor: 'rgba(0,0,0,0.2)',
-        // mr: 2,
         width: '100%',
         mt: 2,
        }}
