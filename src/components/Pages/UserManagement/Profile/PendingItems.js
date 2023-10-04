@@ -129,20 +129,25 @@ const PendingItems = ({}) => {
       height: '70vh',
      }}
     >
-     {pendingItems.map((item, index) => (
-      <Grow
-       in={showItems}
-       key={index}
+     {pendingItems.length === 0 ? (
+      <Typography
+       variant="h6"
+       sx={{ mt: 2 }}
       >
-       <Box>
-        <PendingItem
-         index={index}
-         handleOpen={handleOpen}
-         item={item}
-        />
-       </Box>
-      </Grow>
-     ))}
+       {' '}
+       No requested items{' '}
+      </Typography>
+     ) : (
+      pendingItems.map((item, index) => (
+       <PendingItem
+        index={index}
+        handleOpen={handleOpen}
+        item={item}
+        approved={item.approved}
+        showItems={showItems}
+       />
+      ))
+     )}
     </Box>
    </Box>
   </Box>

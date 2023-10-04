@@ -4,7 +4,12 @@ import './DesignArea.css';
 import Item from '../Items/Item';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 
-const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
+const DesignArea = ({
+ backgroundImage,
+ backgroundAspectRatio,
+ handleDrop,
+ saving,
+}) => {
  const [selectedItem, setSelectedItem] = useState(null);
  const { items, dispatch } = useItemsContext();
  const [itemCount, setItemCount] = useState(items.length);
@@ -18,6 +23,12 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
   display: 'flex',
   maxHeight: '80vh',
  };
+
+ useEffect(() => {
+  if (saving) {
+   setSelectedItem('');
+  }
+ }, [saving]);
 
  const backgroundImageStyle = {
   position: 'absolute',
@@ -46,7 +57,6 @@ const DesignArea = ({ backgroundImage, backgroundAspectRatio, handleDrop }) => {
  }, [items]);
 
  const handleSelect = (index) => {
-  //   event.stoppropagation();
   setSelectedItem(index);
 
   const updatedItems = reorderItems(items, index);

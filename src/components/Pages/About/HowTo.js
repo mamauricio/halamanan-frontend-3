@@ -120,13 +120,11 @@ const HowTo = () => {
        item
        xs={2}
        sx={{
-        // color: '212121',
         display: 'flex',
         flexDirection: 'column',
         borderRight: 'solid',
         borderWidth: '1px',
         borderColor: 'rgba(255,255,255,0.5)',
-        //    borderRadius: 1,
         p: '10px 0 0 0',
        }}
       >
@@ -142,7 +140,6 @@ const HowTo = () => {
            color: value === '1' ? 'orange' : 'rgba(255, 255, 255, 0.8)',
            backgroundColor: value === '1' ? 'rgba(255,255,255,0.2)' : null,
            borderRadius: 10,
-           //  transition: 'background-color: ease-in-out 0.3s',
            fontSize: '18px',
           }}
          />
@@ -163,7 +160,6 @@ const HowTo = () => {
            color: value === '3' ? 'orange' : 'rgba(255, 255, 255, 0.8)',
            backgroundColor: value === '3' ? 'rgba(255,255,255,0.2)' : null,
            borderRadius: 10,
-           //  transition: 'background-color: ease-in-out 0.3s',
            fontSize: '18px',
           }}
          />
@@ -172,7 +168,6 @@ const HowTo = () => {
           value="4"
           style={{
            color: value === '4' ? 'orange' : 'rgba(255, 255, 255, 0.8)',
-           //  opacity: '87%',
            backgroundColor: value === '4' ? 'rgba(255,255,255,0.2)' : null,
            borderRadius: 10,
            fontSize: '18px',
@@ -183,7 +178,6 @@ const HowTo = () => {
           value="5"
           style={{
            color: value === '5' ? 'orange' : 'rgba(255, 255, 255, 0.8)',
-           //  opacity: '87%',
            backgroundColor: value === '5' ? 'rgba(255,255,255,0.2)' : null,
            borderRadius: 10,
            fontSize: '18px',
@@ -199,12 +193,11 @@ const HowTo = () => {
        <Box
         sx={{
          height: '78vh',
-         overflowY: 'scroll',
+         overflowY: 'auto',
          bgcolor: 'rgba(255,255,255,0.3)',
          borderRadius: 1,
         }}
        >
-        {/* sx={{ height: '60vh', scrollY: 'auto' }} */}
         <TabPanel value="1">
          <Fade in={show}>
           <Box>
@@ -257,7 +250,6 @@ const HowTo = () => {
              and you will find existing designs in this page, if there are any.
              <Box
               sx={{
-               //  bgcolor: 'white',
                display: 'flex',
                justifyContent: 'space-evenly',
               }}
@@ -273,7 +265,6 @@ const HowTo = () => {
              <Box
               sx={{
                display: 'flex',
-               //  bgcolor: 'white',
                justifyContent: 'space-evenly',
               }}
              >
@@ -454,7 +445,7 @@ const HowTo = () => {
         </TabPanel>
         <TabPanel value="5">
          <Fade in={show}>
-          <Box sx={{ mt: 3 }}>
+          <Box sx={{}}>
            <Header>Requesting for new Items</Header>
            <CustomBody>
             1) Click the Gallery tab on the navigation bar.
@@ -468,7 +459,7 @@ const HowTo = () => {
             that the user wants to be added onto the database
             <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
              <ImageContainer image="/New/Form" />
-             <ImageContainer image="/New/Form2" />
+             <ImageContainer image="/New/Request" />
             </Box>
             <br />
             4) Upon submission, the request would then be sent to the Admin and
@@ -487,14 +478,19 @@ const HowTo = () => {
             <ImageContainer image="/New/Profile" />
             <br />
             3) Pending requests could be seen in this tab.
-            <ImageContainer image="/New/Pending" />
+            <ImageContainer image="/New/User1" />
             <br />
-            4) Pending requests could also be deleted by the user.
+            4) Pending requests could be deleted by the user.
             <br />
             <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
              <ImageContainer image="/New/Delete" />
              <ImageContainer image="/New/Delete2" />
             </Box>
+            <br />
+            5) Requested items that are successfully approved by the admin would
+            appear on the right hand side of the page under Approved Items
+            column
+            <ImageContainer image="New/User2" />
            </CustomBody>
           </Box>
          </Fade>

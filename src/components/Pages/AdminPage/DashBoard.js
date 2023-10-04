@@ -1,9 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-// import { useState } from 'react';
 import { Box, Container, Typography, Grid, Button } from '@mui/material';
-// import { MotionConfig } from 'framer-motion';
 import { motion } from 'framer-motion';
-// import EastIcon from '@mui/icons-material/East';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import QuestionMark from '@mui/icons-material/QuestionMark';
 import FadeLoader from 'react-spinners/FadeLoader';
@@ -14,7 +11,6 @@ const DashBoard = ({ setValue }) => {
  const [adminCount, setAdminCount] = useState(0);
  const [userCount, setUserCount] = useState(0);
  const [fetching, setFetching] = useState(true);
- //  // const [color, setColor] = useState('#ECAB00');
  let color = '#ECAB00';
  const [error, setError] = useState('');
 
@@ -55,8 +51,7 @@ const DashBoard = ({ setValue }) => {
      <>
       {user.role === 'admin'
        ? setAdminCount((adminCountPrev) => adminCountPrev + 1)
-       : //  <>{(userCountRef.current = userCountRef.current + 1)}</>
-         setUserCount((userCountPrev) => userCountPrev + 1)}
+       : setUserCount((userCountPrev) => userCountPrev + 1)}
      </>
     ));
   }
@@ -154,7 +149,6 @@ const DashBoard = ({ setValue }) => {
           }}
          >
           {users && (
-           //    <>
            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Box
              sx={{ width: 'inherit', display: 'flex', p: 1, maxWidth: '100%' }}
@@ -171,7 +165,6 @@ const DashBoard = ({ setValue }) => {
             <Box>
              <Box sx={{ height: '300px', overflow: 'auto' }}>
               {users.map((user, index) => (
-               //  <>
                <Box
                 key={index}
                 sx={{
@@ -194,7 +187,6 @@ const DashBoard = ({ setValue }) => {
               ))}
              </Box>
             </Box>
-            {/* </> */}
            </Box>
           )}
          </Box>
@@ -252,7 +244,7 @@ const DashBoard = ({ setValue }) => {
             width: '100%',
             bgcolor: 'primary.main',
             height: '320px',
-            overflowY: 'scroll',
+            overflowY: 'auto',
             justifyContent: 'space-around',
            }}
           >
@@ -280,7 +272,6 @@ const DashBoard = ({ setValue }) => {
              />
             </Box>
            )}
-           {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', width: 'inherit' }}> */}
            {itemRequests &&
             itemRequests.map((items, index) => (
              <Box
@@ -293,7 +284,6 @@ const DashBoard = ({ setValue }) => {
                width: '320px',
                borderRadius: 1,
                display: 'flex',
-               //    justifyContent: 'center',
                flexDirection: 'column',
                alignItems: 'center',
               }}
@@ -301,9 +291,7 @@ const DashBoard = ({ setValue }) => {
               <Typography sx={{ mb: 2 }}>
                Item Name: {items.newItemName}
               </Typography>
-              {/* </Grid> */}
 
-              {/* <Grid item> */}
               {!items.newItemUrl ? (
                <Box>
                 <QuestionMark />
@@ -340,7 +328,6 @@ const DashBoard = ({ setValue }) => {
      >
       <Box
        sx={{
-        // bgcolor: 'white',
         height: '200px',
         bgcolor: 'rgba(255,255,255,0.2)',
         borderRadius: 1,
@@ -367,7 +354,6 @@ const DashBoard = ({ setValue }) => {
          alignItems: 'center',
          height: '70%',
          m: 2,
-         //  bgcolor: 'primary.main',
          borderRadius: 1,
         }}
        >

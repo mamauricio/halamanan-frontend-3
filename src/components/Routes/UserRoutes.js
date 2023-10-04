@@ -5,7 +5,7 @@ import {
  Navigate,
 } from 'react-router-dom';
 import React from 'react';
-import HomePage from '../Pages/Home/Home';
+// import HomePage from '../Pages/Home/Home';
 import GalleryPage from '../Pages/PlantGallery/PlantGallery';
 import HowTo from '../Pages/About/HowTo';
 import MainDesignPage from '../Pages/Design/MainDesign/MainDesign';

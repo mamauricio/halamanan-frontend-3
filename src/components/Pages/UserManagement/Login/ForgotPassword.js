@@ -16,7 +16,6 @@ const ForgotPassword = ({ handleBack }) => {
    `https://halamanan-197e9734b120.herokuapp.com/reset-password?${email}`
   );
   if (response) {
-   //    setEmailSent(true);
   } else {
   }
  };
@@ -26,13 +25,9 @@ const ForgotPassword = ({ handleBack }) => {
   color: 'rgba(255,255,255,0.9)',
   px: 2,
   mb: 1,
-  //   width: '400px',
-  // fontSize: 20,
   ':hover': {
    color: 'primary.main',
-   //  opacity: 0.9,
    backgroundColor: 'rgba(0,0,0,0.18)',
-   //  bgcolor: 'rgba(255,255,255,0.18)',
   },
  };
 
@@ -66,11 +61,8 @@ const ForgotPassword = ({ handleBack }) => {
     <Box
      sx={{
       display: 'flex',
-      //   justifyContent: 'center',
       flexDirection: 'column',
       alignItems: 'center',
-      //   width: '100%',
-      //   bgcolor: 'white',
      }}
     >
      <Typography
@@ -94,33 +86,16 @@ const ForgotPassword = ({ handleBack }) => {
        width: '90%',
        display: 'flex',
        justifyContent: 'space-around',
-       //    bgcolor: 'pink',
       }}
      >
       <Button
        onClick={handleBack}
-       //    sx={{
-       //     bgcolor: 'primary.main',
-       //     color: 'white',
-       //     mr: 2,
-       //     px: 2,
-       //     py: 1,
-       //     ':hover': { color: 'primary.main', opacity: 0.9 },
-       //    }}
        sx={buttonStyle}
       >
        Return to Login
       </Button>
       <Button
        type="submit"
-       //    sx={{
-       //     bgcolor: 'primary.main',
-       //     color: 'white',
-       //     mr: 2,
-       //     px: 2,
-       //     py: 1,
-       //     ':hover': { color: 'primary.main', opacity: 0.9 },
-       //    }}
        sx={buttonStyle}
       >
        Send Reset Code

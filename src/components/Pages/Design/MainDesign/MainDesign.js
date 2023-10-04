@@ -32,11 +32,11 @@ const MainDesign = () => {
  const [designThumbnail, setDesignThumbnail] = useState(null);
  const [selectedItems, setSelectedItems] = useState([]);
  const [fetching, setFetching] = useState(true);
- // const [color, setColor] = useState('#ECAB00');
  let color = '#ECAB00';
  const [showDesign, setShowDesign] = useState(false);
  const [aspectRatio, setAspectRatio] = useState('');
-
+ const [saving, setSaving] = useState(false);
+ const [saved, setSaved] = useState(false);
  const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
 
  const isValidObjectId = (objectId) => {
@@ -98,7 +98,6 @@ const MainDesign = () => {
 
  const handleDrop = (event) => {
   event.preventDefault();
-  // const droppableArea = document.getElementById('backgroundImageContainer');
   const droppableArea = document.getElementById('background');
 
   const offsetX = event.clientX - droppableArea.getBoundingClientRect().left;
@@ -169,6 +168,10 @@ const MainDesign = () => {
 
  const selectAll = (event) => {
   event.target.select();
+ };
+
+ const handleSaving = (boolean) => {
+  setSaving(boolean);
  };
 
  return (
@@ -269,6 +272,8 @@ const MainDesign = () => {
              backgroundImage={backgroundImage}
              items={items}
              aspectRatio={aspectRatio}
+             saved={saved}
+             handleSaving={handleSaving}
             />
             <ReplaceImageButton
              handleReplaceBackground={handleReplaceBackground}
@@ -297,7 +302,6 @@ const MainDesign = () => {
           <Box
            sx={{
             mt: 2,
-            // bgcolor: 'white',
             display: 'flex',
             flexDirection: 'row',
             width: '100%',
@@ -310,6 +314,7 @@ const MainDesign = () => {
             items={items ? items : ''}
             backgroundAspectRatio={aspectRatio}
             handleDrop={handleDrop}
+            saving={saving}
            />
           </Box>
          </>

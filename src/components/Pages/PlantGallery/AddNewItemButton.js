@@ -66,6 +66,7 @@ const AddNewItemButton = ({ handleSuccess }) => {
     newItemType: itemData.newItemType,
     newItemScientificName: itemData.newItemScientificName,
     newItemUrl: itemData.newItemUrl,
+    approved: false,
    };
    const response = fetch(
     `https://halamanan-197e9734b120.herokuapp.com/gallery/newItem`,

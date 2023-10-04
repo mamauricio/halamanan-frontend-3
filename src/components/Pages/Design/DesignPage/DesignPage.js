@@ -3,20 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import Fade from '@mui/material/Fade';
-import Modal from '@mui/material/Modal';
+
 import Alert from '@mui/material/Alert';
 import Grow from '@mui/material/Grow';
 import Typography from '@mui/material/Typography';
-import UserDesigns from '../UserDesigns/UserDesigns';
+import UserDesigns from './UserDesigns/UserDesigns';
 import axios from 'axios';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteOutline';
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import ModeEditRoundedIcon from '@mui/icons-material/ModeEditRounded';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useDesignContext } from '../../../hooks/useDesignContext';
 import { motion } from 'framer-motion';
+import Design from './Design';
 
 const DesignPage = () => {
  const navigate = useNavigate();
@@ -69,7 +64,6 @@ const DesignPage = () => {
 
  const handleEditDesign = (design) => {
   navigate(`/designs/${design._id}`, { state: { design } });
-  // console.log(design);
  };
 
  const handleSelectedDesign = (design) => {
@@ -117,13 +111,6 @@ const DesignPage = () => {
   link.href = selectedDesign.designThumbnail;
   link.download = `${selectedDesign.designName}.png`;
   link.click();
- };
-
- const copyToClipboard = (e) => {
-  var copyText = document.querySelector('#itemList');
-  navigator.clipboard.writeText(copyText.innerText);
-  setAlertMessage('Copied to Clipboard');
-  handleOpenAlert();
  };
 
  return (
@@ -199,229 +186,19 @@ const DesignPage = () => {
        }}
       >
        {selectedDesign ? (
-        <Fade in={openDesign}>
-         <Box className="designInformation">
-          <Box
-           sx={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-           }}
-          >
-           <Box sx={{ ml: 2, py: 2, fontSize: '25px' }}>
-            Design Name: {selectedDesign.designName}
-           </Box>
-           <Box
-            sx={{
-             display: 'flex',
-             flexDirection: 'row',
-             height: '40px',
-             width: '220px',
-             mt: 1,
-             mr: 1,
-             justifyContent: 'space-evenly',
-            }}
-           >
-            <Button
-             title="Save to Device"
-             onClick={() => handleSaveToDevice(selectedDesign)}
-             sx={{
-              color: 'primary.main',
-              bgcolor: 'white',
-              ':hover': { bgcolor: 'green', color: 'white' },
-             }}
-            >
-             <SaveAltIcon />
-            </Button>
-            <Button
-             title="Edit Design"
-             sx={{
-              backgroundColor: 'white',
-
-              ':hover': {
-               color: 'primary.main',
-               backgroundColor: 'orange',
-              },
-             }}
-             onClick={() => handleEditDesign(selectedDesign)}
-            >
-             <ModeEditRoundedIcon label="Edit Design" />
-            </Button>
-            <Button
-             title="Delete design"
-             sx={{
-              backgroundColor: 'white',
-
-              ':hover': {
-               color: 'white',
-               backgroundColor: 'red',
-              },
-             }}
-             onClick={handleOpen}
-            >
-             <DeleteRoundedIcon />
-            </Button>
-            <Modal
-             open={open}
-             onClose={handleClose}
-             aria-labelledby="modal-modal-title"
-             aria-describedby="modal-modal-description"
-             sx={{}}
-            >
-             <Box
-              sx={{
-               position: 'absolute',
-               left: '50%',
-               top: '50%',
-               transform: 'translate(-50%, -50%)',
-
-               backgroundColor: 'orange',
-               borderRadius: 2,
-               p: 2,
-              }}
-             >
-              <Box
-               sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-               }}
-              >
-               <Box sx={{ fontSize: '20px', color: 'primary.main' }}>
-                Are you sure you want to delete {selectedDesign.designName} ?
-               </Box>
-               <Box
-                sx={{
-                 mt: 2,
-                 display: 'flex',
-                 //  bgcolor: 'white',
-                 width: '50%',
-                 flexDirection: 'row',
-                 justifyContent: 'space-between',
-                }}
-               >
-                <Button
-                 sx={{
-                  bgcolor: 'red',
-                  transition: 'opacity ease-in-out 0.2s',
-                  ':hover': {
-                   backgroundColor: 'red',
-                   color: 'white',
-                   opacity: 0.8,
-                  },
-                 }}
-                 onClick={() => handleDelete(selectedDesign)}
-                >
-                 Yes
-                </Button>
-                <Button
-                 sx={{
-                  color: 'white',
-                  backgroundColor: 'primary.main',
-                  transition: 'opacity ease-in-out 0.2s ',
-                  ':hover': { bgcolor: 'primary.main', opacity: 0.8 },
-                 }}
-                 onClick={handleClose}
-                >
-                 No
-                </Button>
-               </Box>
-              </Box>
-             </Box>
-            </Modal>
-           </Box>
-          </Box>
-
-          <Box
-           className="thumbnail-container"
-           sx={{
-            backgroundColor: 'white',
-            py: 1,
-            alignContent: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            borderRadius: 2,
-            mx: 2,
-            maxHeight: '600px',
-           }}
-          >
-           <Box
-            sx={{
-             display: 'flex',
-             justifyContent: 'center',
-             alignContent: 'center',
-            }}
-           >
-            <img
-             src={selectedDesign.designThumbnail}
-             width="inherit"
-             height="inherit"
-            />
-           </Box>
-          </Box>
-
-          <Box
-           className="design-info"
-           sx={{
-            mt: 1,
-            display: 'flex',
-            flexWrap: 'true',
-            height: '100%',
-            justifyContent: 'space-around',
-           }}
-          >
-           <Box
-            className="item-list"
-            sx={{
-             height: 'auto',
-             overflow: 'auto',
-             maxWidth: 'auto',
-             minWidth: '500px',
-             mt: 1,
-            }}
-           >
-            <Box
-             sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-             }}
-            >
-             <Typography>Items: </Typography>
-             <Button
-              title="Copy to Clipboard"
-              onClick={copyToClipboard}
-              sx={{ mr: 4 }}
-             >
-              <ContentCopyIcon sx={{ color: 'white' }} />
-             </Button>
-            </Box>
-            <ul style={{ columnCount: 2, columnGap: '30px' }}>
-             {Object.entries(itemList).length > 0 ? (
-              <>
-               <Box id="itemList">
-                {Object.entries(itemList).map(([itemName, count]) => (
-                 <div
-                  key={itemName}
-                  ref={itemListRef}
-                 >
-                  <li>
-                   {itemName}: {count}
-                  </li>
-                 </div>
-                ))}
-               </Box>
-              </>
-             ) : (
-              <Typography>No items yet</Typography>
-             )}
-            </ul>
-           </Box>
-          </Box>
-         </Box>
-        </Fade>
+        <Design
+         openDesign={openDesign}
+         selectedDesign={selectedDesign}
+         handleSaveToDevice={handleSaveToDevice}
+         handleEditDesign={handleEditDesign}
+         itemList={itemList}
+         handleDelete={handleDelete}
+         handleOpen={handleOpen}
+         handleClose={handleClose}
+         setAlertMessage={setAlertMessage}
+         open={open}
+         handleOpenAlert={handleOpenAlert}
+        />
        ) : (
         <Box
          sx={{

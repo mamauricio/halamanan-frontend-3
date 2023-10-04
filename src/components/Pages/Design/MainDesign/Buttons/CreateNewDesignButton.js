@@ -50,6 +50,7 @@ const CreateNewDesignButton = ({ handleCreateNewDesign }) => {
  return (
   <Box sx={{ width: '100%' }}>
    <Button
+    title="Create a new design"
     sx={{
      mt: 2,
      width: 'inherit',
@@ -57,17 +58,13 @@ const CreateNewDesignButton = ({ handleCreateNewDesign }) => {
      bgcolor: 'orange',
      color: 'primary.main',
      ':hover': {
-      opacity: 0.9,
-      border: 'solid',
-      borderWidth: 1,
-      borderColor: 'white',
-      color: 'white',
+      bgcolor: 'rgba(255,165,0,0.8)',
      },
     }}
     onClick={handleOpen}
    >
     <ParkIcon />
-    Add new Design
+    Create new design
     <ParkIcon />
    </Button>
 
@@ -141,7 +138,6 @@ const CreateNewDesignButton = ({ handleCreateNewDesign }) => {
         sx={{
          display: 'flex',
          flexDirection: 'column',
-         //  bgcolor: 'white',
          justifyContent: 'space-evenly',
          alignItems: 'center',
         }}

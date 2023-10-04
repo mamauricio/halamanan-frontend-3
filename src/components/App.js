@@ -18,7 +18,6 @@ const App = () => {
   sessionStorage.getItem('authenticated')
  );
  const handleAuthenticate = (id) => {
-  //   console.log(id);
   if (id === 'admin') {
    sessionStorage.setItem('adminAuth', true);
    sessionStorage.setItem('authenticated', true);
@@ -51,68 +50,65 @@ const App = () => {
  };
 
  return (
-  <>
-   <TransitionGroup>
-    <ThemeProvider theme={theme}>
-     {sessionStorage.getItem('adminAuth') ? (
-      <Box
-       sx={{
-        bgcolor: 'primary.main',
-        height: '100%',
-        width: '100%',
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        transform: 'translate(-50%, -50%)',
-        overflowY: 'hidden',
-       }}
-      >
-       <AdminNavBar handleLogout={handleLogout} />
-       <AdminRoutes />
-      </Box>
-     ) : (
-      <>
-       {isAuthenticated && !sessionStorage.getItem('adminAuth') ? (
-        <Box
-         sx={{
-          bgcolor: 'primary.main',
-          height: '100%',
-          width: '100%',
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          //   overflowY: 'hidden',
-         }}
-        >
-         <NavBar handleLogout={handleLogout} />
-         <UserRoutes />
-        </Box>
-       ) : (
-        <Box
-         sx={{
-          bgcolor: 'primary.main',
-          height: '100%',
-          width: '100%',
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          overflowY: 'hidden',
-         }}
-        >
-         <NavBar isGuest />
-         <GuestRoutes
-          handleAuthenticate={handleAuthenticate}
-          isGuest
-         />
-        </Box>
-       )}
-      </>
-     )}
-    </ThemeProvider>
-   </TransitionGroup>
-  </>
+  <TransitionGroup>
+   <ThemeProvider theme={theme}>
+    {sessionStorage.getItem('adminAuth') ? (
+     <Box
+      sx={{
+       bgcolor: 'primary.main',
+       height: '100%',
+       width: '100%',
+       position: 'absolute',
+       left: '50%',
+       top: '50%',
+       transform: 'translate(-50%, -50%)',
+       overflowY: 'hidden',
+      }}
+     >
+      <AdminNavBar handleLogout={handleLogout} />
+      <AdminRoutes />
+     </Box>
+    ) : (
+     <>
+      {isAuthenticated && !sessionStorage.getItem('adminAuth') ? (
+       <Box
+        sx={{
+         bgcolor: 'primary.main',
+         height: '100%',
+         width: '100%',
+         position: 'absolute',
+         left: '50%',
+         top: '50%',
+         transform: 'translate(-50%, -50%)',
+        }}
+       >
+        <NavBar handleLogout={handleLogout} />
+        <UserRoutes />
+       </Box>
+      ) : (
+       <Box
+        sx={{
+         bgcolor: 'primary.main',
+         height: '100%',
+         width: '100%',
+         position: 'absolute',
+         left: '50%',
+         top: '50%',
+         transform: 'translate(-50%, -50%)',
+         overflowY: 'hidden',
+        }}
+       >
+        <NavBar isGuest />
+        <GuestRoutes
+         handleAuthenticate={handleAuthenticate}
+         isGuest
+        />
+       </Box>
+      )}
+     </>
+    )}
+   </ThemeProvider>
+  </TransitionGroup>
  );
 };
 

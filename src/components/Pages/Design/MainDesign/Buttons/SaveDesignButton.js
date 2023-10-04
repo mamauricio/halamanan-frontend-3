@@ -7,7 +7,13 @@ import SaveIcon from '@mui/icons-material/Save';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 
-const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
+const SaveDesignButton = ({
+ designName,
+ items,
+ backgroundImage,
+ saved,
+ handleSaving,
+}) => {
  const [open, setOpen] = useState(false);
  const { designs, dispatch } = useDesignContext();
  const { id } = useParams();
@@ -32,8 +38,12 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
  };
 
  const handleClick = async () => {
-  await handleSave();
-  handleOpen();
+  await handleSaving(true);
+  setIsSaving(true);
+  const timer = setTimeout(() => {
+   handleSave();
+   handleOpen();
+  }, 2000);
  };
 
  const handleSave = async () => {
@@ -71,17 +81,19 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
    });
    const saved = await response2;
    if (saved) {
-    // console.log('hello');
+    handleSaving(false);
     setIsSaving(false);
     setError(null);
    }
   } catch (error) {
    setIsSaving(false);
+   handleSaving(false);
    setError(error.message);
   }
+  //   }
  };
 
- React.useEffect(() => {
+ useEffect(() => {
   const autosave = setInterval(function () {
    setAutosave(true);
   }, 60 * 1000);
@@ -91,9 +103,9 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
   };
  }, []);
 
- React.useEffect(() => {
+ useEffect(() => {
   if (autosave && items !== saved) {
-   handleSave();
+   handleClick();
    setAutosave(false);
   }
  }, [autosave, items, id, handleSave]);
@@ -139,10 +151,7 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
     </Grow>
    )}
    {open && (
-    <Grow
-     in={open}
-     // sx={{ height: '30px' }}
-    >
+    <Grow in={open}>
      <Alert
       onClose={handleClose}
       severity={!error ? 'success' : 'error'}
@@ -153,7 +162,6 @@ const SaveDesignButton = ({ designName, items, backgroundImage, saved }) => {
        height: '40px',
        left: '40%',
        top: '11%',
-       //   height: '30px',
        overflowY: 'hidden',
       }}
      >

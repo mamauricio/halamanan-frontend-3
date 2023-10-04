@@ -37,7 +37,6 @@ const PlantGallery = ({ isGuest }) => {
  const [selectedFilters, setSelectedFilters] = useState([]);
  const [selectedCategory, setSelectedCategory] = useState('all');
  const [openMain, setOpenMain] = useState(false);
- // const [color, setColor] = useState('#ECAB00');
  let color = '#ECAB00';
  const [error, setError] = useState([]);
  const mainContainerRef = useRef(null);
@@ -204,7 +203,6 @@ const PlantGallery = ({ isGuest }) => {
     setFavoritesId(updated);
     setAlertMessage('Successfully added item to favorites');
     openAlert();
-    // closeAlert();
    } else {
    }
   } catch (error) {}
@@ -230,7 +228,6 @@ const PlantGallery = ({ isGuest }) => {
     setFavoritesId(updated);
     setAlertMessage('Successfully removed item from favorites');
     openAlert();
-    // closeAlert();
    }
   } catch {}
  };
@@ -321,7 +318,6 @@ const PlantGallery = ({ isGuest }) => {
        overflowWrap: 'break-word',
        wordBreak: 'break-word',
        hyphens: 'auto',
-       //  bgcolor: 'pink',
       }}
      >
       <Box
@@ -403,7 +399,7 @@ const PlantGallery = ({ isGuest }) => {
           flexWrap="wrap"
           sx={{
            height: 'inherit',
-           overflowY: 'scroll',
+           overflowY: 'auto',
            m: 3,
           }}
          >
@@ -522,6 +518,7 @@ const PlantGallery = ({ isGuest }) => {
                   p: 1,
                   width: '250px',
                   height: '250px',
+                  borderRadius: 1,
                  }}
                 >
                  <img
@@ -566,11 +563,13 @@ const PlantGallery = ({ isGuest }) => {
                  ref={activeItemRef}
                  className="itemContainer"
                  sx={{
+                  border: null,
+                  outlined: null,
                   position: 'absolute',
                   left: '50%',
                   top: '50%',
                   height: ' 750px',
-                  overflowY: 'scroll',
+                  overflowY: 'auto',
                   transform: 'translate(-50%, -50%)',
                   bgcolor: 'primary.main',
                   color: 'primary.main',

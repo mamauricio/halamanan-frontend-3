@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, Typography } from '@mui/material';
-import axios from 'axios';
+import { Grid, Box } from '@mui/material';
 import ApprovedItems from './ApprovedItems';
 import PendingItems from './PendingItems';
 
@@ -9,7 +8,8 @@ const RequestedItems = () => {
   <Grid
    container
    sx={{
-    ml: 1,
+    ml: 4,
+    // bgcolor: 'white',
    }}
   >
    <Grid
@@ -18,7 +18,9 @@ const RequestedItems = () => {
     sx={{
      mr: 3,
      p: 1,
-     height: '600px',
+     height: '75vh',
+     borderRight: 'solid 1px',
+     borderColor: 'rgba(0,0,0,0.3)',
     }}
    >
     <PendingItems />

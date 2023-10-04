@@ -86,7 +86,6 @@ const AccountInformation = () => {
   justifyContent: 'right',
   display: 'flex',
   mr: 1,
-  //   bgcolor: 'pink',
  };
 
  return (
@@ -105,14 +104,7 @@ const AccountInformation = () => {
     Account Information
    </Typography>
    <Grow in={showProfile}>
-    <Box
-     sx={
-      {
-       //  bgcolor: 'white',
-       //  width: '400px',
-      }
-     }
-    >
+    <Box>
      <Box sx={boxStyle}>
       <Typography sx={textStyle}>First Name:</Typography>
       {editing && (
@@ -197,7 +189,6 @@ const AccountInformation = () => {
          width: '80%',
          display: 'flex',
          justifyContent: 'space-evenly',
-         // bgcolor: 'orange',
         }}
        >
         <Button

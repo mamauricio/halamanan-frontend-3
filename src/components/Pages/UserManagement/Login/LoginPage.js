@@ -340,7 +340,7 @@ const LoginPage = ({ handleAuthenticate }) => {
             }}
            >
             <TextField
-             error={userNameError}
+             error={userNameError ? true : false}
              helperText={errorMessage}
              type="email"
              value={email}
@@ -568,7 +568,6 @@ const LoginPage = ({ handleAuthenticate }) => {
      </Container>
     </Box>
    </motion.div>
-   {/* </Fade> */}
   </ThemeProvider>
  );
 };

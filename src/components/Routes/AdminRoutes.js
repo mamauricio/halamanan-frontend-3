@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
-import AdminDashboard from '../Pages/AdminPage/AdminDashboard';
+import AdminLanding from '../Pages/AdminPage/AdminLanding';
 import LoginPage from '../Pages/UserManagement/Login/LoginPage';
 
 import { NewItemsContextProvider } from '../context/NewItemsContext';
@@ -17,7 +17,7 @@ const AdminRoutes = () => {
     path={'/admin/dashboard'}
     element={
      <NewItemsContextProvider>
-      <AdminDashboard />
+      <AdminLanding />
      </NewItemsContextProvider>
     }
    />

@@ -2,26 +2,20 @@ import { React, useState, useEffect, useRef, useCallback } from 'react';
 import {
  ImageList,
  ImageListItem,
- Button,
  ImageListItemBar,
  IconButton,
  Typography,
- Modal,
  Box,
  Grow,
  Alert,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
-
-// import Box from '@mui/material/';
 import InfoIcon from '@mui/icons-material/Info';
 import Filters from '../../../PlantGallery/Filters';
 import { useItemsContext } from '../../../../hooks/useItemsContext';
 import { useMediaQuery } from '@mui/material';
 import FadeLoader from 'react-spinners/FadeLoader';
 import axios from 'axios';
+import ItemModal from './ItemModal';
 
 const ItemTray = ({ handleAddItem }) => {
  const xl = useMediaQuery((theme) => theme.breakpoints.down('xl'));
@@ -45,13 +39,7 @@ const ItemTray = ({ handleAddItem }) => {
  const [error, setError] = useState([]);
  const [showAlert, setShowAlert] = useState(false);
  const [alertMessage, setAlertMessage] = useState('');
- // const [fetching, isFetching] = useState(true);
- const [imageDimensions, setImageDimensions] = useState({
-  width: null,
-  height: null,
- });
 
- // const [color, setColor] = useState('#ECAB00');
  let color = '#ECAB00';
  const openAlert = () => {
   setShowAlert(true);
@@ -388,123 +376,16 @@ const ItemTray = ({ handleAddItem }) => {
          }
         />
        </ImageListItem>
-       <Modal
-        open={selectedItem._id === item._id}
-        onClose={handleClose}
-       >
-        <Box
-         sx={{
-          position: 'absolute',
-          transform: 'translate(-50%, -50%)',
-          width: '800px',
-          top: '50%',
-          left: '50%',
-          bgcolor: 'rgba(12, 35, 13, 0.6)',
-
-          borderRadius: 1,
-         }}
-        >
-         {showAlert && (
-          <CustomAlert
-           showAlert={showAlert}
-           closeAlert={closeAlert}
-          />
-         )}
-         <Box
-          sx={{
-           bgcolor: 'rgba(255,255,255,0.2)',
-           p: 2,
-           borderRadius: 1,
-          }}
-         >
-          <Box
-           sx={{
-            bgcolor: 'rgba(255,255,255,0.9)',
-            justifyContent: 'space-between',
-            display: 'flex',
-            p: 2,
-            borderRadius: 1,
-           }}
-          >
-           <Button
-            title={
-             isItemInFavorites(item._id)
-              ? 'Remove from Favorites'
-              : 'Add to Favorites ko.'
-            }
-            onClick={
-             isItemInFavorites(item._id)
-              ? (event) => {
-                 removeFromFavorites(event, item._id);
-                }
-              : (event) => {
-                 addToFavorites(event, item._id);
-                }
-            }
-            sx={{
-             height: '50px',
-             width: '50px',
-             ':hover': { bgcolor: 'rgba(0,0,0,0.1)' },
-            }}
-           >
-            {isItemInFavorites(item._id) ? <StarIcon /> : <StarBorderIcon />}
-           </Button>
-           <Box sx={{ height: '400px' }}>
-            <img
-             src={item.imageUrl}
-             style={{ objectFit: 'contain', height: '100%', width: '100%' }}
-            />
-           </Box>
-           <Button
-            sx={{
-             height: '50px',
-             width: '50px',
-             ':hover': { bgcolor: 'rgba(0,0,0,0.1)' },
-            }}
-           >
-            <CloseIcon
-             title="Close"
-             onClick={handleClose}
-            />
-           </Button>
-          </Box>
-          <Box
-           className="itemInformation"
-           sx={{ py: 1 }}
-          >
-           <span style={{ color: 'orange' }}>
-            <strong>Item Description: </strong>
-           </span>
-           {item.itemInformation}
-          </Box>
-          <Box>Item Type: {item.type}</Box>
-          <Box>
-           <span style={{ color: 'orange' }}>
-            <strong>Hardiness Zone: </strong>
-           </span>{' '}
-           Lorem Ipsum
-          </Box>
-          <Box sx={{ py: 1 }}>
-           <span style={{ color: 'orange' }}>
-            <strong>Height: </strong>
-           </span>{' '}
-           Lorem Ipsum
-          </Box>
-          <Box>
-           <span style={{ color: 'orange' }}>
-            <strong>Watering: </strong>
-           </span>{' '}
-           Lorem Ipsum
-          </Box>
-          <Box sx={{ pt: 1 }}>
-           <span style={{ color: 'orange' }}>
-            <strong>Lighting: </strong>
-           </span>{' '}
-           Lorem Ipsum
-          </Box>
-         </Box>
-        </Box>
-       </Modal>
+       <ItemModal
+        selectedItem={selectedItem}
+        item={item}
+        handleClose={handleClose}
+        showAlert={showAlert}
+        closeAlert={closeAlert}
+        addToFavorites={addToFavorites}
+        isItemInFavorites={isItemInFavorites}
+        removeFromFavorites={removeFromFavorites}
+       />
       </div>
      ))
     )}
