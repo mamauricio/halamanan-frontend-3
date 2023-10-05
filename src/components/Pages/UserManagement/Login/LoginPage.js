@@ -97,7 +97,7 @@ const LoginPage = ({ handleAuthenticate }) => {
     password: password,
    },
    withCredentials: true,
-   url: 'https://sprightly-douhua-6bb24c.netlify.app/signup',
+   url: 'https://halamanan-197e9734b120.herokuapp.com/signup',
   })
    .then((response) => {
     setAlertMessage('Signed up succesfully. Logging in.');
@@ -132,7 +132,7 @@ const LoginPage = ({ handleAuthenticate }) => {
    },
    withCredentials: true,
    credentials: 'include',
-   url: 'https://sprightly-douhua-6bb24c.netlify.app/login',
+   url: 'https://halamanan-197e9734b120.herokuapp.com/login',
   })
    .then((response) => {
     setAlertMessage('Authenticating');
