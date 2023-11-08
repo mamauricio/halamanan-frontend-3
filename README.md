@@ -1,70 +1,46 @@
-# Getting Started with Create React App
+# Halamanan 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Information
+Halamanan, filipino word for garden, is a CRUD web application that was built to help homeowners in visualizing 
+their landscaping projects. 
+The web application could be accessed using a browser that supports modern javascript through 
+https://sprightly-douhua-6bb24c.netlify.app/ using a laptop, desktop, or tablet (that is equipped with a mouse). 
 
-## Available Scripts
+## Features
+### Account creation
+   
+   Halamanan allows guests to create accounts which then allows them to create their designs.
+   The web application has two types of users -- *admin* and *user*. Passport.js was used for implementing
+   user management.
+   
+### Design creation
+   
+   After creating an account, *users* are given the privilege to create their designs. They could upload
+   an image of a landscape from their device OR select an image from the *templates*. Designs created by users
+   could be edited, deleted, or saved onto their devices with a PNG format.
+   
+### Drag and Drop
+   
+   Upon creating a design, the user would be able to drag and drop items from an item tray. These items are
+   draggable and resizable. The package called react-rnd was utilized for the development of this feature.
 
-In the project directory, you can run:
+   
+### Expandable gallery
+   
+   Halamanan only has an initial database composed of 40 items. Thirty softscape items and ten hardscape items.
+   Most items in the database are common ornamental plants that are used and found in the Philippines.
+   To fully help *users* virtualize their designs, they could submit images of their own items that they
+   wish to be added onto the databse.
 
-### `npm start`
+   Items are then reviewed by *admins* to ensure information accuracy. After approval, it would then be added
+   onto the database, which could then be used by all *users*. 
 
-Runs the app in the development mode.\
-Open [https://halamanan-197e9734b120.herokuapp.com/designs](https://halamanan-197e9734b120.herokuapp.com/designs) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Technologies used
+Halamanan was created using the MERN stack. 
+React JS was used for the frontend. 
+Express and Node.js for the backend. 
+MongoDB Atlas was used for database management. 
+Postman was used for testing all the routes.
+Github was used for project management.
+The frontend of the application is deployed on Netlify.
+The backend is deployed on Heroku.
